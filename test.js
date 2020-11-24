@@ -1,0 +1,1 @@
+document.getElementById("naver_webtoon").innerHTML = 3;
