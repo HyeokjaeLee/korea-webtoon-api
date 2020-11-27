@@ -1,13 +1,16 @@
-	body{
-	background-color:#181818;
-	position: relative;
-	padding: 0%;
-	}
-	
-  	.basic_form {
-	background-color: #242424;
-	margin-top:2%;
-	padding: 2% 2%;
-	border-radius: 5px;
-	position: relative;
-	}
+body {
+  background-color: #181818;
+  position: relative;
+  padding: 0%;
+}
+
+.basic_form {
+  background-color: #242424;
+  margin-top: 2%;
+  padding: 2% 2%;
+  border-radius: 5px;
+  position: relative;
+}
+.img {
+  object-fit: cover;
+}
