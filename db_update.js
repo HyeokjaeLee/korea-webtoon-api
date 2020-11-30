@@ -1,58 +1,227 @@
 const request = require("request");
 const cheerio = require("cheerio");
+const mysql = require("mysql");
+
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+function ajax_get(url, callback) {
+  //ajax 구현을 위한 함수
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+      console.log("responseText:" + xmlhttp.responseText);
+      try {
+        var data = JSON.parse(xmlhttp.responseText);
+      } catch (err) {
+        console.log(err.message + " in " + xmlhttp.responseText);
+        return;
+      }
+      callback(data);
+    }
+  };
+  xmlhttp.open("GET", url, false); //true는 비동기식, false는 동기식 true로 할시 변수 변경전에 웹페이지가 떠버림
+  xmlhttp.send();
+}
 
 var naver_comic_url = "https://comic.naver.com";
 //request 모듈 사용
 var naver_artist_url = naver_comic_url + "/webtoon/artist.nhn";
 var naver_info = [];
-var index_num = 0;
+var daum_info = [];
 var $;
-request(naver_artist_url, function (err, response, body) {
-  $ = cheerio.load(body);
-  var naver_artist_count = $(".section").find(".work_list").find("h5").length;
-  for (i = 0; i < naver_artist_count; i++) {
-    var naver_artist = $(".section").find(".work_list").find("h5").eq(i).text();
-    var naver_artist_webtoon_count = $(".section")
-      .find(".work_list")
-      .find("ul")
-      .eq(i)
-      .find("li").length;
-    for (k = 0; k < naver_artist_webtoon_count; k++) {
-      var info = {};
-      info.title = $(".section")
+var index_num;
+function naver_all_webtoon() {
+  index_num = 0;
+  request(naver_artist_url, function (err, response, body) {
+    $ = cheerio.load(body);
+    var naver_artist_count = $(".section").find(".work_list").find("h5").length;
+    for (i = 0; i < naver_artist_count; i++) {
+      var naver_artist = $(".section")
+        .find(".work_list")
+        .find("h5")
+        .eq(i)
+        .text();
+      var naver_artist_webtoon_count = $(".section")
         .find(".work_list")
         .find("ul")
         .eq(i)
-        .find("li")
-        .eq(k)
-        .find("a")
-        .attr("title");
-      info.artist = naver_artist;
-      info.url =
-        naver_comic_url +
-        $(".section")
+        .find("li").length;
+      for (k = 0; k < naver_artist_webtoon_count; k++) {
+        var info = {};
+        info.title = $(".section")
           .find(".work_list")
           .find("ul")
           .eq(i)
           .find("li")
           .eq(k)
           .find("a")
-          .attr("href");
-      info.img = $(".section")
-        .find(".work_list")
-        .find("ul")
-        .eq(i)
-        .find("li")
-        .eq(k)
-        .find(".thumb")
-        .find("img")
-        .attr("src");
-      info.service = "1";
-      info.state = "0";
-      info.weekday = "0";
-      naver_info[index_num] = info;
-      index_num++;
+          .attr("title");
+        info.artist = naver_artist;
+        info.url =
+          naver_comic_url +
+          $(".section")
+            .find(".work_list")
+            .find("ul")
+            .eq(i)
+            .find("li")
+            .eq(k)
+            .find("a")
+            .attr("href");
+        info.img = $(".section")
+          .find(".work_list")
+          .find("ul")
+          .eq(i)
+          .find("li")
+          .eq(k)
+          .find(".thumb")
+          .find("img")
+          .attr("src");
+        info.service = "1"; //네이버
+        info.state = -1; //완결
+        info.weekday = 7; //완결
+        naver_info[index_num] = info;
+        index_num++;
+      }
     }
+    console.log(naver_info);
+  });
+}
+var naver_weekday_info = [];
+var naver_weekday_url = naver_comic_url + "/webtoon/weekday.nhn";
+function naver_weekday_webtoon() {
+  index_num = 0;
+  request(naver_weekday_url, function (err, response, body) {
+    $ = cheerio.load(body);
+    for (week_num = 0; week_num < 7; week_num++) {
+      var naver_weekday_count = $(".col").eq(week_num).find(".title").length;
+      for (webtoon_num = 0; webtoon_num < naver_weekday_count; webtoon_num++) {
+        var info = {};
+        info.title = $(".col")
+          .eq(week_num)
+          .find(".thumb")
+          .eq(webtoon_num)
+          .find("img")
+          .attr("title");
+        info.weekday = week_num;
+        var state_variable = $(".col")
+          .eq(week_num)
+          .find(".thumb")
+          .eq(webtoon_num)
+          .find("a")
+          .find("em")
+          .attr("class");
+        switch (state_variable) {
+          case "ico_updt": //신규화 업데이트
+            info.state = 1;
+            break;
+          case "ico_break": //휴재중
+            info.state = 2;
+            break;
+          default:
+            info.state = 0; //연재중
+            break;
+        }
+        naver_weekday_info[index_num] = info;
+        index_num++;
+      }
+    }
+    console.log(naver_weekday_info);
+  });
+}
+
+function daum_webtoon() {
+  index_num = 0;
+  var daum_json_url = "http://webtoon.daum.net/data/pc/webtoon";
+  var url_package = [
+    "/list_serialized/mon",
+    "/list_serialized/tue",
+    "/list_serialized/wed",
+    "/list_serialized/thu",
+    "/list_serialized/fri",
+    "/list_serialized/sat",
+    "/list_serialized/sun",
+    "/list_finished/free",
+    "/list_finished/pay",
+  ];
+  for (i = 0; i < 10; i++) {
+    ajax_get(daum_json_url + url_package[i], function (data) {
+      for (k = 0; k < data.data.length; k++) {
+        var info = {};
+        info.title = data.data[k].title;
+        info.artist = data.data[k].cartoon.artists[0].penName;
+        info.url =
+          "http://webtoon.daum.net/webtoon/view/" + data.data[k].nickname;
+        info.img = data.data[k].thumbnailImage2.url;
+        info.service = "2"; //다음
+        var state_variable = data.data[k].restYn;
+        var day_variable;
+        if (6 < i) {
+          info.state = -1;
+          info.weekday = 7;
+        } else {
+          switch (i) {
+            case 0:
+              day_variable = 1;
+              break;
+            case 1:
+              day_variable = 2;
+              break;
+            case 2:
+              day_variable = 3;
+              break;
+            case 3:
+              day_variable = 4;
+              break;
+            case 4:
+              day_variable = 5;
+              break;
+            case 5:
+              day_variable = 6;
+              break;
+            case 6:
+              day_variable = 0;
+              break;
+            default:
+              day_variable = 7;
+              break;
+          }
+          if (new Date().getDay() == day_variable && state_variable == "N") {
+            info.state = 1;
+          } else if (state_variable == "Y") {
+            info.state = 2;
+          } else {
+            info.state = 0;
+          }
+          info.weekday = i;
+        }
+        daum_info[index_num] = info;
+        index_num++;
+      }
+    });
   }
-  console.log(naver_info);
+  console.log(daum_info);
+}
+//naver_all_webtoon();
+var conn = mysql.createConnection({
+  host: "localhost",
+  user: "leehyeokjae",
+  password: "9390",
+  database: "webtoon_hub",
 });
+daum_webtoon();
+conn.connect();
+var test = daum_info.map(
+  (item) =>
+    "(${item.title},${item.artist},${item.url},${item.img},${item.service},${item.state},${item.weekday})"
+);
+var sql;
+sql =
+  "INSERT INTO webtoon_info (title,artist,url,img,service,state,weekday) VALUES" +
+  test;
+conn.query(sql, function (err, rows, fields) {
+  if (err) {
+    console.log(err);
+  }
+});
+
+conn.end();
