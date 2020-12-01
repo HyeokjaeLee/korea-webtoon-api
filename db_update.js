@@ -210,11 +210,6 @@ var conn = mysql.createConnection({
 });
 daum_webtoon();
 conn.connect();
-var test = daum_info.map(
-  (item) =>
-    "(${item.title},${item.artist},${item.url},${item.img},${item.service},${item.state},${item.weekday})"
-);
-var sql;
 sql =
   "INSERT INTO webtoon_info (title,artist,url,img,service,state,weekday) VALUES" +
   test;
