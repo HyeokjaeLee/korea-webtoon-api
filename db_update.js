@@ -231,6 +231,9 @@ function naver_webtoon(naver_weekday_info, naver_finished_info) {
 
 async function webtoon_info() {
   var app = express();
+  app.get("/", function (request, response) {
+    response.send("test"); // HelloWorld를 전송한다.
+  });
   naver_finished_info = await naver_all_webtoon();
   naver_weekday_info = await naver_weekday_webtoon();
   var naver_info = await naver_webtoon(naver_finished_info, naver_weekday_info);
