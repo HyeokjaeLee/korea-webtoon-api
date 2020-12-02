@@ -2,7 +2,7 @@ const request = require("request");
 const cheerio = require("cheerio");
 const express = require("express");
 
-/*var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 function ajax_get(url, callback) {
   //ajax 구현을 위한 함수
@@ -228,32 +228,34 @@ function naver_webtoon(naver_weekday_info, naver_finished_info) {
     resolve(naver_finished_info);
   });
 }
-*/
+
 async function webtoon_info() {
-  var app = express();
-  app.get("/", function (request, response) {
-    response.send("webtoon_json_data"); // HelloWorld를 전송한다.
-  });
-  /*naver_finished_info = await naver_all_webtoon();
+  naver_finished_info = await naver_all_webtoon();
   naver_weekday_info = await naver_weekday_webtoon();
   var naver_info = await naver_webtoon(naver_finished_info, naver_weekday_info);
   var daum_info = await daum_webtoon();
   var webtoon = naver_info.concat(daum_info);
   var webtoon_json_data = JSON.stringify(webtoon);
-   app.get("/", function (request, response) {
-    response.send(webtoon_json_data); // HelloWorld를 전송한다.
-  });*/
-  app.get("/", function (request, response) {
-    response.send("webtoon_json_data"); // HelloWorld를 전송한다.
-    setTimeout(function () {
-      response.send("webtoon_json_datatimetest");
-    }, 20000);
-  });
+  test1 = webtoon_json_data;
+}
 
+async function update() {
+  var app = express();
+  var test1 = 0;
+  //setInterval(function () {test1++;}, 1000);
+  app.get("/", function (request, response) {
+    response.send(
+      "<div id='test'>loading...</div><script>setInterval(function () {document.getElementById('test').innerHTML =" +
+        test1 +
+        "}, 1000);</script>"
+    );
+  });
   app.listen(process.env.PORT || 8080, function () {
     console.log("webtoon api hosting started on port 8080.");
     //3000번 포트에서 Express서버를 시작하고 시작했다는 로그 기록
   });
 }
-
-webtoon_info();
+update();
+setTimeout(function () {
+  webtoon_info();
+}, 10000);
