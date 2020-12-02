@@ -1,0 +1,21 @@
+{
+  "name": "webtoon_hub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "db_update.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node db_update.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HyeokjaeLee/Webtoon_hub.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HyeokjaeLee/Webtoon_hub/issues"
+  },
+  "homepage": "https://github.com/HyeokjaeLee/Webtoon_hub#readme"
+}
