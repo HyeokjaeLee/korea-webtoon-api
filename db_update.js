@@ -245,12 +245,11 @@ async function webtoon_info() {
   });*/
   app.get("/", function (request, response) {
     response.send("webtoon_json_data"); // HelloWorld를 전송한다.
+    setTimeout(function () {
+      response.send("webtoon_json_datatimetest");
+    }, 20000);
   });
-  setTimeout(function () {
-    app.get("/", function (request, response) {
-      response.send("webtoon_json_data_testtime"); // HelloWorld를 전송한다.
-    });
-  }, 20000);
+
   app.listen(process.env.PORT || 8080, function () {
     console.log("webtoon api hosting started on port 8080.");
     //3000번 포트에서 Express서버를 시작하고 시작했다는 로그 기록
