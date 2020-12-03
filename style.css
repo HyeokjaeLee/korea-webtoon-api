@@ -1,6 +1,5 @@
 body {
   background-color: #181818;
-  position: relative;
   padding: 0%;
 }
 
@@ -9,8 +8,13 @@ body {
   margin-top: 2%;
   padding: 2% 2%;
   border-radius: 5px;
-  position: relative;
+  overflow: hidden;
 }
-.img {
+.webtoon_img {
+  width: 25%;
   object-fit: cover;
+  padding-left: 4%;
+  padding-right: 4%;
+  padding-bottom: 3%;
+  border: #181818;
 }
