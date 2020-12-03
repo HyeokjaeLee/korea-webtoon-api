@@ -2,12 +2,6 @@ const path = require("path");
 const { Worker } = require("worker_threads");
 const express = require("express");
 var cors = require("cors");
-const http = require("http");
-
-//호스팅서버 슬립 방지
-setInterval(function () {
-  http.get("https://korean-webtoon-hub-project.herokuapp.com/");
-}, 600000);
 
 var naver_info = [];
 var daum_info = [];
