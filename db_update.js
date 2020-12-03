@@ -1,7 +1,6 @@
 const path = require("path");
 const { Worker } = require("worker_threads");
 const express = require("express");
-var webtoon = [];
 var naver_info = [];
 var daum_info = [];
 var webtoon_json_data;
