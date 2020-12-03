@@ -3,7 +3,26 @@ const { Worker } = require("worker_threads");
 const express = require("express");
 var naver_info = [];
 var daum_info = [];
-var timestamp = [{}];
+var weekday_num = {
+  category: "weekday",
+  월요일: 0,
+  화요일: 1,
+  수요일: 2,
+  목요일: 3,
+  금요일: 4,
+  토요일: 5,
+  일요일: 6,
+  완결: 7,
+};
+var state_num = {
+  category: "state",
+  완결: -1,
+  연재중: 0,
+  업로드: 1,
+  휴재중: 2,
+};
+var timestamp = { category: "timestamp" };
+var api_info = [timestamp, weekday_num, state_num];
 var webtoon_info;
 var api_data;
 let workerPath_1 = path.join(__dirname, "./worker/naver_finished.js");
@@ -51,7 +70,7 @@ function naver_overall_update() {
   naver_finished.on("message", (result_1) => {
     naver_info = result_1;
   });
-  timestamp[0].naver_overall_update = new Date();
+  api_info[0].naver_overall_update = new Date();
 }
 
 //네이버 연재중 data 업데이트
@@ -69,7 +88,7 @@ function naver_partial_update() {
       };
     }
   });
-  timestamp[0].naver_partial_update = new Date();
+  api_info[0].naver_partial_update = new Date();
 }
 
 //다음 완결 포함 전체 data 업데이트
@@ -78,13 +97,13 @@ function daum_overall_update() {
   daum_all.on("message", (result_3) => {
     daum_info = result_3;
   });
-  timestamp[0].daum_overall_update = new Date();
+  api_info[0].daum_overall_update = new Date();
 }
 
 //data api화
 function integrate_db() {
   webtoon_info = naver_info.concat(daum_info);
-  api_data = timestamp.concat(webtoon_info);
+  api_data = api_info.concat(webtoon_info);
 }
 
 function min(sec) {
