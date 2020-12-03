@@ -1,6 +1,24 @@
+a:link {
+  text-decoration: none;
+  color: #999696;
+}
+a:visited {
+  text-decoration: none;
+  color: #999696;
+}
+a:active {
+  text-decoration: none;
+  color: #999696;
+}
+a:hover {
+  text-decoration: underline;
+  color: #bfbcbc;
+}
+
 body {
   background-color: #181818;
   padding: 0%;
+  font-family: "Gugi", cursive;
 }
 
 .basic_form {
@@ -58,13 +76,10 @@ body {
   line-height: 80%;
 }
 
-.square .content {
+.square .icon {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 13%;
+  left: 35%;
   transform: translate(-50%, -50%);
-  font-size: 5rem;
-  color: white;
   z-index: 2;
-  text-align: center;
 }
