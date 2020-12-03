@@ -8,7 +8,6 @@ const http = require("http");
 setInterval(function () {
   http.get("https://korean-webtoon-hub-project.herokuapp.com/");
 }, 600000);
-
 var naver_info = [];
 var daum_info = [];
 var weekday_num = {
