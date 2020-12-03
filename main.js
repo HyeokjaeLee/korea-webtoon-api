@@ -55,10 +55,10 @@ ajax_get(api_url, function (data) {
     new_dd.innerHTML = "<h3>" + data[1][i].title + "</h3>" + data[1][i].artist;
 
     switch (data[1][i].service) {
-      case "1":
+      case 1:
         img_text.innerHTML = "Naver";
         break;
-      case "2":
+      case 2:
         img_text.innerHTML = "Daum";
         break;
     }
