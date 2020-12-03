@@ -44,16 +44,29 @@ setInterval(function () {
   });
 }, 300000);
 
+function webtoon() {
+  return new Promise(function (resolve, reject) {
+    var webtoon_info = naver_info.concat(daum_info);
+    resolve(webtoon_info);
+  });
+}
+
+async function update_json() {
+  var webtoon_info = await webtoon();
+  webtoon_json_data = JSON.stringify(webtoon_info);
+}
+
 setInterval(function () {
-  webtoon = naver_info.concat(daum_info);
-  webtoon_json_data = JSON.stringify(webtoon);
+  update_json();
 }, 60000);
 
-function update() {
+function upload() {
   var app = express();
   app.get("/", function (request, response) {
     response.send(
-      "<div id='test'>loading...</div><script>setInterval(function () {document.getElementById('test').innerHTML =" +
+      "<div id='test'>loading...</div><script>document.getElementById('test').innerHTML =" +
+        webtoon_json_data +
+        ";setInterval(function () {document.getElementById('test').innerHTML =" +
         webtoon_json_data +
         "}, 60000);</script>"
     );
@@ -63,4 +76,4 @@ function update() {
   });
 }
 
-update();
+upload();
