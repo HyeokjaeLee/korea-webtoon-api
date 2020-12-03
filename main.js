@@ -25,25 +25,31 @@ ajax_get(api_url, function (data) {
   for (i = 3; i < data.length; i++) {
     var webtoon_contents = document.getElementById("webtoon_contents");
     var new_dt = document.createElement("dt");
+    new_dt.classList.add("square");
+    var new_div = document.createElement("div");
+    new_div.classList.add("content");
+
     var new_dd = document.createElement("dd");
-    new_dt.style.objectFit = "cover";
+
+    /*new_dt.style.objectFit = "cover";
     new_dt.classList.add("webtoon_img");
     new_dt.style.float = "left";
-    new_dd.style.textAlign = "center";
-    new_dd.style.fontSize = "30px";
+    new_dt.style.textAlign = "center";
+    new_dt.style.fontSize = "30px";
     new_dt.style.marginBottom = "1%";
-    new_dd.style.margin = 0;
+    new_dt.style.margin = 0;*/
     if (data[i].img == null) {
-      new_dt.innerHTML =
+      new_div.innerHTML =
         "<img style='object-fit:cover;width:100%;margin-bottom:5%'src=img/noimg.jpg width=25% height=15%>";
     } else {
-      new_dt.innerHTML =
+      new_div.innerHTML =
         "<img style='object-fit:cover;width:100%;margin-bottom:5%'src=" +
         data[i].img +
         ">";
     }
     new_dd.innerHTML = data[i].title;
     webtoon_contents.appendChild(new_dt);
+    new_dt.appendChild(new_div);
     new_dt.appendChild(new_dd);
   }
 });

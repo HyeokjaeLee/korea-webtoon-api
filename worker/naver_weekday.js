@@ -15,12 +15,30 @@ function naver_weekday_webtoon() {
       var naver_weekday_count = $(".col").eq(week_num).find(".title").length;
       for (webtoon_num = 0; webtoon_num < naver_weekday_count; webtoon_num++) {
         var info = {};
+
         info.title = $(".col")
           .eq(week_num)
           .find(".thumb")
           .eq(webtoon_num)
           .find("img")
           .attr("title");
+
+        info.img = $(".col")
+          .eq(week_num)
+          .find(".thumb")
+          .eq(webtoon_num)
+          .find("img")
+          .attr("src");
+
+        info.url =
+          naver_comic_url +
+          $(".col")
+            .eq(week_num)
+            .find(".thumb")
+            .eq(webtoon_num)
+            .find("a")
+            .attr("href");
+
         info.weekday = week_num;
         var state_variable = $(".col")
           .eq(week_num)

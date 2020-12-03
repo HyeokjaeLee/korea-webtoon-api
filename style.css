@@ -10,11 +10,46 @@ body {
   border-radius: 5px;
   overflow: hidden;
 }
+
 .webtoon_img {
-  width: 25%;
+  width: 100%;
   object-fit: cover;
+  border: #181818;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5%;
+}
+
+.webtoon_img:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+  overflow: hidden;
+}
+
+.contents {
+  width: 25%;
   padding-left: 4%;
   padding-right: 4%;
   padding-bottom: 3%;
-  border: #181818;
+  float: left;
+}
+
+.square {
+  position: relative;
+  width: 25%;
+}
+
+.square:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }

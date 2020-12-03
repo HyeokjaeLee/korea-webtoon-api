@@ -89,6 +89,23 @@ function naver_weekday_webtoon() {
             .eq(webtoon_num)
             .find("img")
             .attr("title");
+
+          info.img = $(".col")
+            .eq(week_num)
+            .find(".thumb")
+            .eq(webtoon_num)
+            .find("img")
+            .attr("src");
+
+          info.url =
+            naver_comic_url +
+            $(".col")
+              .eq(week_num)
+              .find(".thumb")
+              .eq(webtoon_num)
+              .find("a")
+              .attr("href");
+
           info.weekday = week_num;
           var state_variable = $(".col")
             .eq(week_num)

@@ -2,6 +2,12 @@ const path = require("path");
 const { Worker } = require("worker_threads");
 const express = require("express");
 var cors = require("cors");
+const http = require("http");
+
+//호스팅서버 슬립 방지
+setInterval(function () {
+  http.get("https://korean-webtoon-hub-project.herokuapp.com/");
+}, 600000);
 
 var naver_info = [];
 var daum_info = [];
@@ -106,7 +112,10 @@ function daum_overall_update() {
 //data api화
 function integrate_db() {
   webtoon_info = naver_info.concat(daum_info);
-  api_data = api_info.concat(webtoon_info);
+  webtoon_info.sort(function (a, b) {
+    return a.title < b.title ? -1 : 1;
+  });
+  api_data = [api_info, webtoon_info];
 }
 
 function min(sec) {
