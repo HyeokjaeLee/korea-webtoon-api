@@ -20,16 +20,21 @@ function ajax_get(url, callback) {
 }
 
 ajax_get(api_url, function (data) {
-  var test = data[3].title;
   //document.getElementById("webtoon_contents").innerHTML = test;
-  for (i = 3; i < data.length; i++) {
+  for (i = 0; i < data[1].length; i++) {
     var webtoon_contents = document.getElementById("webtoon_contents");
     var new_dt = document.createElement("dt");
-    new_dt.classList.add("square");
+    new_dt.classList.add("webtoon_container");
     var new_div = document.createElement("div");
-    new_div.classList.add("content");
+    new_div.classList.add("square");
+    var img_container = document.createElement("div");
+    img_container.classList.add("content");
+    var img_cover = document.createElement("div");
 
+    var img_text = document.createElement("div");
+    img_text.classList.add("content");
     var new_dd = document.createElement("dd");
+    new_dd.classList.add("webtoon_info");
 
     /*new_dt.style.objectFit = "cover";
     new_dt.classList.add("webtoon_img");
@@ -38,18 +43,30 @@ ajax_get(api_url, function (data) {
     new_dt.style.fontSize = "30px";
     new_dt.style.marginBottom = "1%";
     new_dt.style.margin = 0;*/
-    if (data[i].img == null) {
-      new_div.innerHTML =
+    if (data[1][i].img == null) {
+      img_container.innerHTML =
         "<img style='object-fit:cover;width:100%;margin-bottom:5%'src=img/noimg.jpg width=25% height=15%>";
     } else {
-      new_div.innerHTML =
+      img_container.innerHTML =
         "<img style='object-fit:cover;width:100%;margin-bottom:5%'src=" +
-        data[i].img +
+        data[1][i].img +
         ">";
     }
-    new_dd.innerHTML = data[i].title;
+    new_dd.innerHTML = "<h3>" + data[1][i].title + "</h3>" + data[1][i].artist;
+
+    switch (data[1][i].service) {
+      case "1":
+        img_text.innerHTML = "Naver";
+        break;
+      case "2":
+        img_text.innerHTML = "Daum";
+        break;
+    }
+
     webtoon_contents.appendChild(new_dt);
     new_dt.appendChild(new_div);
+    new_div.appendChild(img_container);
+    img_container.appendChild(img_text);
     new_dt.appendChild(new_dd);
   }
 });

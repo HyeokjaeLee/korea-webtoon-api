@@ -56,7 +56,7 @@ function naver_all_webtoon() {
             .find(".thumb")
             .find("img")
             .attr("src");
-          info.service = "1"; //네이버
+          info.service = 1; //네이버
           info.state = -1; //완결 삭제 예정
           info.weekday = 7; //완결 삭제 예정
           naver_finished_info[index_num] = info;

@@ -35,6 +35,7 @@ let workerPath_3 = path.join(__dirname, "./worker/daum_all.js");
 //호스팅 시작과 동시에 전체 데이터 1회 업데이트
 hosting_start();
 naver_overall_update();
+naver_partial_update();
 daum_overall_update();
 
 //2시간 간격으로 전체 네이버 data 업데이트

@@ -44,7 +44,7 @@ function daum_webtoon() {
         info.url =
           "http://webtoon.daum.net/webtoon/view/" + data.data[k].nickname;
         info.img = data.data[k].thumbnailImage2.url;
-        info.service = "2"; //다음
+        info.service = 2; //다음
         var state_variable = data.data[k].restYn;
         var day_variable;
         if (6 < i) {
