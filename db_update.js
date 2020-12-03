@@ -59,13 +59,7 @@ setInterval(function () {
 function upload() {
   var app = express();
   app.get("/", function (request, response) {
-    response.send(
-      "<div id='test'>loading...</div><script>document.getElementById('test').innerHTML =" +
-        JSON.stringify(webtoon_info) +
-        ";setInterval(function () {document.getElementById('test').innerHTML =" +
-        JSON.stringify(webtoon_info) +
-        "}, 60000);</script>"
-    );
+    response.json(webtoon_info);
   });
   app.listen(process.env.PORT || 8080, function () {
     console.log("webtoon api hosting started on port 8080.");
