@@ -1,6 +1,8 @@
 const path = require("path");
 const { Worker } = require("worker_threads");
 const express = require("express");
+var cors = require("cors");
+
 var naver_info = [];
 var daum_info = [];
 var weekday_num = {
@@ -55,6 +57,7 @@ setInterval(function () {
 //json 형식으로 웹에 배포
 function hosting_start() {
   var app = express();
+  app.use(cors());
   app.get("/", function (request, response) {
     response.json(api_data);
   });
