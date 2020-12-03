@@ -8,6 +8,7 @@ const http = require("http");
 setInterval(function () {
   http.get("https://korean-webtoon-hub-project.herokuapp.com/");
 }, 600000);
+
 var naver_info = [];
 var daum_info = [];
 var weekday_num = {
@@ -45,19 +46,19 @@ daum_overall_update();
 setInterval(function () {
   naver_overall_update();
 }, min(30));
-//3분 간격으로 연재중 네이버 data 업데이트
+//5분 간격으로 연재중 네이버 data 업데이트
 setInterval(function () {
   naver_partial_update();
-}, min(3));
-//6분 간격으로 전체 다음 data 업데이트
+}, min(5));
+//10분 간격으로 전체 다음 data 업데이트
 setInterval(function () {
   daum_overall_update();
-}, min(6));
-//1분 간격으로 전체 data 통합 & log 출력
+}, min(10));
+//2분 간격으로 전체 data 통합 & log 출력
 setInterval(function () {
   integrate_db();
   console.log(api_data);
-}, min(1));
+}, min(2));
 
 //json 형식으로 웹에 배포
 function hosting_start() {
