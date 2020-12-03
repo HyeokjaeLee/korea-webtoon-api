@@ -4,6 +4,7 @@ const express = require("express");
 var cors = require("cors");
 
 var naver_info = [];
+var naver_weekday_info = [];
 var daum_info = [];
 var weekday_num = {
   category: "weekday",
@@ -36,18 +37,18 @@ hosting_start();
 naver_overall_update();
 daum_overall_update();
 
-//30분 간격으로 전체 네이버 data 업데이트
+//2시간 간격으로 전체 네이버 data 업데이트
 setInterval(function () {
   naver_overall_update();
-}, min(30));
-//5분 간격으로 연재중 네이버 data 업데이트
+}, min(120));
+//4분 간격으로 연재중 네이버 data 업데이트
 setInterval(function () {
   naver_partial_update();
-}, min(5));
-//10분 간격으로 전체 다음 data 업데이트
+}, min(4));
+//4분 간격으로 전체 다음 data 업데이트
 setInterval(function () {
   daum_overall_update();
-}, min(10));
+}, min(4));
 //2분 간격으로 전체 data 통합 & log 출력
 setInterval(function () {
   integrate_db();
@@ -67,7 +68,6 @@ function hosting_start() {
 }
 
 //네이버 완결 포함 전체 data 업데이트
-//contains naver_partial_update
 function naver_overall_update() {
   let naver_finished = new Worker(workerPath_1);
   naver_finished.on("message", (result_1) => {
@@ -81,17 +81,21 @@ function naver_partial_update() {
   let naver_weekday = new Worker(workerPath_2);
   naver_weekday.on("message", (result_2) => {
     naver_weekday_info = result_2;
-    for (n = 0; n < naver_weekday_info.length; n++) {
-      var index_num = naver_info.findIndex(
-        (i) => i.title == naver_weekday_info[n].title
-      );
-      naver_info[index_num] = {
-        ...naver_info[index_num],
-        ...naver_weekday_info[n],
-      };
-    }
   });
   api_info[0].naver_partial_update = new Date();
+}
+
+//네이버 웹툰 정보 통합
+function intergrate_naver_info() {
+  for (n = 0; n < naver_weekday_info.length; n++) {
+    var index_num = naver_info.findIndex(
+      (i) => i.title == naver_weekday_info[n].title
+    );
+    naver_info[index_num] = {
+      ...naver_info[index_num],
+      ...naver_weekday_info[n],
+    };
+  }
 }
 
 //다음 완결 포함 전체 data 업데이트
@@ -105,6 +109,7 @@ function daum_overall_update() {
 
 //data api화
 function integrate_db() {
+  intergrate_naver_info();
   webtoon_info = naver_info.concat(daum_info);
   webtoon_info.sort(function (a, b) {
     return a.title < b.title ? -1 : 1;
