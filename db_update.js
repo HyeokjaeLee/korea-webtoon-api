@@ -3,13 +3,10 @@ const { Worker } = require("worker_threads");
 const express = require("express");
 var naver_info = [];
 var daum_info = [];
-var webtoon_json_data;
-
+var webtoon_info;
 let workerPath_1 = path.join(__dirname, "./worker/naver_finished.js");
 let workerPath_2 = path.join(__dirname, "./worker/naver_weekday.js");
 let workerPath_3 = path.join(__dirname, "./worker/daum_all.js");
-
-function naver_webtoon(naver_weekday_info, naver_finished_info) {}
 
 setInterval(function () {
   let naver_finished = new Worker(workerPath_1);
@@ -51,12 +48,12 @@ function webtoon() {
 }
 
 async function update_json() {
-  var webtoon_info = await webtoon();
-  webtoon_json_data = JSON.stringify(webtoon_info);
+  webtoon_info = await webtoon();
 }
 
 setInterval(function () {
   update_json();
+  console.log(webtoon_info);
 }, 60000);
 
 function upload() {
@@ -64,9 +61,9 @@ function upload() {
   app.get("/", function (request, response) {
     response.send(
       "<div id='test'>loading...</div><script>document.getElementById('test').innerHTML =" +
-        webtoon_json_data +
+        JSON.stringify(webtoon_info) +
         ";setInterval(function () {document.getElementById('test').innerHTML =" +
-        webtoon_json_data +
+        JSON.stringify(webtoon_info) +
         "}, 60000);</script>"
     );
   });
