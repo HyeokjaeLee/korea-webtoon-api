@@ -12,6 +12,7 @@ setInterval(function () {
 var naver_info = [];
 var naver_weekday_info = [];
 var daum_info = [];
+var webtoon_count = 0;
 var weekday_num = {
   0: "mon",
   1: "tue",
@@ -45,11 +46,11 @@ var webtoon_info_all;
 
 var timestamp = {};
 var api_info = {
-  "Update time": timestamp,
-  "Weekday num": weekday_num,
-  "State num": state_num,
-  "API Category": api_category,
-  "Data count": webtoon_info_all.length,
+  UpdateTime: timestamp,
+  Weekday: weekday_num,
+  State: state_num,
+  APIcategory: api_category,
+  TotalCount: webtoon_count,
 };
 let workerPath_1 = path.join(__dirname, "./worker/naver_finished.js");
 let workerPath_2 = path.join(__dirname, "./worker/naver_weekday.js");
@@ -145,6 +146,7 @@ function daum_overall_update() {
 function integrate_db() {
   intergrate_naver_info();
   webtoon_info_all = naver_info.concat(daum_info);
+  webtoon_count = webtoon_info_all.length;
   webtoon_info_all.sort(function (a, b) {
     return a.title < b.title ? -1 : 1;
   });
