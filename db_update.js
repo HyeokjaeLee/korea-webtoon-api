@@ -3,31 +3,54 @@ const { Worker } = require("worker_threads");
 const express = require("express");
 var cors = require("cors");
 
+//호스팅 서버 슬립 방지
+const http = require("http");
+setInterval(function () {
+  http.get("http://korean-webtoon-hub-project.herokuapp.com");
+}, min(15));
+
 var naver_info = [];
 var naver_weekday_info = [];
 var daum_info = [];
 var weekday_num = {
-  category: "weekday",
-  월요일: 0,
-  화요일: 1,
-  수요일: 2,
-  목요일: 3,
-  금요일: 4,
-  토요일: 5,
-  일요일: 6,
-  완결: 7,
+  0: "mon",
+  1: "tue",
+  2: "wed",
+  3: "thu",
+  4: "fri",
+  5: "sat",
+  6: "sun",
+  7: "finished",
 };
 var state_num = {
-  category: "state",
-  완결: -1,
-  연재중: 0,
-  업로드: 1,
-  휴재중: 2,
+  0: "연재중",
+  1: "업로드",
+  2: "휴재중",
+  3: "완결",
 };
-var timestamp = { category: "timestamp" };
-var api_info = [timestamp, weekday_num, state_num];
-var webtoon_info;
-var api_data;
+var api_category = {
+  "/": "API INFO",
+  "/mon": "월요일 웹툰",
+  "/tue": "화요일 웹툰",
+  "/wed": "수요일 웹툰",
+  "/thu": "목요일 웹툰",
+  "/fri": "금요일 웹툰",
+  "/sat": "토요일 웹툰",
+  "/sun": "일요일 웹툰",
+  "/finished": "완결 웹툰",
+  "/all": "전체 웹툰",
+};
+var webtoon_info_weekday = [];
+var webtoon_info_all;
+
+var timestamp = {};
+var api_info = {
+  "Update time": timestamp,
+  "Weekday num": weekday_num,
+  "State num": state_num,
+  "API Category": api_category,
+  "Data count": webtoon_info_all.length,
+};
 let workerPath_1 = path.join(__dirname, "./worker/naver_finished.js");
 let workerPath_2 = path.join(__dirname, "./worker/naver_weekday.js");
 let workerPath_3 = path.join(__dirname, "./worker/daum_all.js");
@@ -53,7 +76,7 @@ setInterval(function () {
 //2분 간격으로 전체 data 통합 & log 출력
 setInterval(function () {
   integrate_db();
-  console.log(api_data);
+  console.log(timestamp);
 }, min(2));
 
 //json 형식으로 웹에 배포
@@ -61,8 +84,18 @@ function hosting_start() {
   var app = express();
   app.use(cors());
   app.get("/", function (request, response) {
-    response.json(api_data);
+    response.json(api_info);
   });
+  app.get("/all", function (request, response) {
+    response.json(webtoon_info_all);
+  });
+
+  for (var k in weekday_num) {
+    app.get("/" + weekday_num[k], function (request, response) {
+      response.json(webtoon_info_weekday[k]);
+    });
+  }
+
   app.listen(process.env.PORT || 8080, function () {
     console.log("webtoon api hosting started on port 8080.");
   });
@@ -74,7 +107,7 @@ function naver_overall_update() {
   naver_finished.on("message", (result_1) => {
     naver_info = result_1;
   });
-  api_info[0].naver_overall_update = new Date();
+  timestamp.naver_overall_update = new Date();
 }
 
 //네이버 연재중 data 업데이트
@@ -83,7 +116,7 @@ function naver_partial_update() {
   naver_weekday.on("message", (result_2) => {
     naver_weekday_info = result_2;
   });
-  api_info[0].naver_partial_update = new Date();
+  timestamp.naver_partial_update = new Date();
 }
 
 //네이버 웹툰 정보 통합
@@ -105,19 +138,24 @@ function daum_overall_update() {
   daum_all.on("message", (result_3) => {
     daum_info = result_3;
   });
-  api_info[0].daum_overall_update = new Date();
+  timestamp.daum_overall_update = new Date();
 }
 
-//data api화
+//data 분류
 function integrate_db() {
   intergrate_naver_info();
-  webtoon_info = naver_info.concat(daum_info);
-  webtoon_info.sort(function (a, b) {
+  webtoon_info_all = naver_info.concat(daum_info);
+  webtoon_info_all.sort(function (a, b) {
     return a.title < b.title ? -1 : 1;
   });
-  api_data = [api_info, webtoon_info];
+  for (var k in weekday_num) {
+    webtoon_info_weekday[k] = webtoon_info_all.filter(function (element) {
+      return element.weekday == k;
+    });
+  }
 }
 
+//초단위 분단위로 변환
 function min(sec) {
   return sec * 60000;
 }

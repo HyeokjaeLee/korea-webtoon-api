@@ -21,6 +21,7 @@
     "cheerio": "^1.0.0-rc.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "http": "^0.0.1-security",
     "request": "^2.88.2",
     "xmlhttprequest": "^1.8.0"
   }

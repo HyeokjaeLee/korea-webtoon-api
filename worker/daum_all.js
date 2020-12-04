@@ -48,7 +48,7 @@ function daum_webtoon() {
         var state_variable = data.data[k].restYn;
         var day_variable;
         if (6 < i) {
-          info.state = -1;
+          info.state = 3;
           info.weekday = 7;
         } else {
           switch (i) {
