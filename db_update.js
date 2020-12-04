@@ -78,6 +78,7 @@ setInterval(function () {
 setInterval(function () {
   integrate_db();
   console.log(timestamp);
+  console.log("Total Count : " + api_info.TotalCount);
 }, min(2));
 
 //json 형식으로 웹에 배포
