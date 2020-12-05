@@ -42,7 +42,7 @@ function daum_webtoon() {
         info.title = data.data[k].title;
         info.artist = data.data[k].cartoon.artists[0].penName;
         info.url =
-          "http://webtoon.daum.net/webtoon/view/" + data.data[k].nickname;
+          "http://webtoon.daum.net/m/webtoon/view/" + data.data[k].nickname;
         info.img = data.data[k].thumbnailImage2.url;
         info.service = 2; //다음
         var state_variable = data.data[k].restYn;

@@ -1,4 +1,4 @@
-const api_url = "https://korean-webtoon-hub-project.herokuapp.com/mon";
+const api_url = "https://korean-webtoon-hub-project.herokuapp.com/";
 
 function ajax_get(url, callback) {
   //ajax 구현을 위한 함수
@@ -19,7 +19,8 @@ function ajax_get(url, callback) {
   xmlhttp.send();
 }
 
-ajax_get(api_url, function (data) {
+var target_api = api_url + "mon";
+ajax_get(target_api, function (data) {
   //document.getElementById("webtoon_contents").innerHTML = test;
   for (i = 0; i < data.length; i++) {
     var webtoon_contents = document.getElementById("webtoon_contents");
