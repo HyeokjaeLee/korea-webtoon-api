@@ -12,7 +12,6 @@ setInterval(function () {
 var naver_info = [];
 var naver_weekday_info = [];
 var daum_info = [];
-var webtoon_count = 0;
 var weekday_num = {
   0: "mon",
   1: "tue",
@@ -50,7 +49,6 @@ var api_info = {
   Weekday: weekday_num,
   State: state_num,
   APIcategory: api_category,
-  TotalCount: webtoon_count,
 };
 let workerPath_1 = path.join(__dirname, "./worker/naver_finished.js");
 let workerPath_2 = path.join(__dirname, "./worker/naver_weekday.js");
@@ -74,12 +72,11 @@ setInterval(function () {
 setInterval(function () {
   daum_overall_update();
 }, min(4));
-//2분 간격으로 전체 data 통합 & log 출력
+//1분 간격으로 전체 data 통합 & log 출력
 setInterval(function () {
   integrate_db();
   console.log(timestamp);
-  console.log("Total Count : " + api_info.TotalCount);
-}, min(2));
+}, min(1));
 
 //json 형식으로 웹에 배포
 function hosting_start() {
@@ -91,12 +88,31 @@ function hosting_start() {
   app.get("/all", function (request, response) {
     response.json(webtoon_info_all);
   });
-
-  for (var k in weekday_num) {
-    app.get("/" + weekday_num[k], function (request, response) {
-      response.json(webtoon_info_weekday[k]);
-    });
-  }
+  //왜인지 모르겠으나 for문으로 돌릴시 주소는 생성되나 값이 제대로 안들어감
+  app.get("/" + weekday_num[0], function (request, response) {
+    response.json(webtoon_info_weekday[0]);
+  });
+  app.get("/" + weekday_num[1], function (request, response) {
+    response.json(webtoon_info_weekday[1]);
+  });
+  app.get("/" + weekday_num[2], function (request, response) {
+    response.json(webtoon_info_weekday[2]);
+  });
+  app.get("/" + weekday_num[3], function (request, response) {
+    response.json(webtoon_info_weekday[3]);
+  });
+  app.get("/" + weekday_num[4], function (request, response) {
+    response.json(webtoon_info_weekday[4]);
+  });
+  app.get("/" + weekday_num[5], function (request, response) {
+    response.json(webtoon_info_weekday[5]);
+  });
+  app.get("/" + weekday_num[6], function (request, response) {
+    response.json(webtoon_info_weekday[6]);
+  });
+  app.get("/" + weekday_num[7], function (request, response) {
+    response.json(webtoon_info_weekday[7]);
+  });
 
   app.listen(process.env.PORT || 8080, function () {
     console.log("webtoon api hosting started on port 8080.");
@@ -147,13 +163,12 @@ function daum_overall_update() {
 function integrate_db() {
   intergrate_naver_info();
   webtoon_info_all = naver_info.concat(daum_info);
-  webtoon_count = webtoon_info_all.length;
   webtoon_info_all.sort(function (a, b) {
     return a.title < b.title ? -1 : 1;
   });
-  for (var k in weekday_num) {
-    webtoon_info_weekday[k] = webtoon_info_all.filter(function (element) {
-      return element.weekday == k;
+  for (i = 0; i < 8; i++) {
+    webtoon_info_weekday[i] = webtoon_info_all.filter(function (element) {
+      return element.weekday == i;
     });
   }
 }

@@ -1,5 +1,4 @@
-const api_url = "https://korean-webtoon-hub-project.herokuapp.com/";
-var test;
+const api_url = "https://korean-webtoon-hub-project.herokuapp.com/mon";
 
 function ajax_get(url, callback) {
   //ajax 구현을 위한 함수
@@ -22,10 +21,10 @@ function ajax_get(url, callback) {
 
 ajax_get(api_url, function (data) {
   //document.getElementById("webtoon_contents").innerHTML = test;
-  for (i = 0; i < data[1].length; i++) {
+  for (i = 0; i < data.length; i++) {
     var webtoon_contents = document.getElementById("webtoon_contents");
     var webtoon_link = document.createElement("a");
-    webtoon_link.href = data[1][i].url;
+    webtoon_link.href = data[i].url;
     var new_dt = document.createElement("dt");
     new_dt.classList.add("webtoon_container");
     var new_div = document.createElement("div");
@@ -36,20 +35,20 @@ ajax_get(api_url, function (data) {
     img_text.classList.add("icon");
     var new_dd = document.createElement("dd");
     new_dd.classList.add("webtoon_info");
-    if (data[1][i].img == null) {
+    if (data[i].img == null) {
       img_container.innerHTML = "<img src=img/noimg.jpg width=25% height=15%>";
     } else {
       img_container.innerHTML =
-        "<img style='object-fit:cover;width:100%;'src=" + data[1][i].img + ">";
+        "<img style='object-fit:cover;width:100%;'src=" + data[i].img + ">";
     }
     new_dd.innerHTML =
       "<p style=font-size:1.3em; text-align:center; margin:0; color:#E50914>" +
-      data[1][i].title +
+      data[i].title +
       "</p><p style=font-size:1em; text-align:center; color:#E50914>" +
-      data[1][i].artist +
+      data[i].artist +
       "</p>";
 
-    switch (data[1][i].service) {
+    switch (data[i].service) {
       case 1:
         img_text.innerHTML = "<img src=img/naver.png width=30%>";
         break;
