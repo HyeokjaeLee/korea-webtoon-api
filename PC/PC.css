@@ -87,23 +87,12 @@ a:hover {
 
 .top_display_menu_contain {
   /*최상단 바 밑에 들어가는 메뉴 컨테이너*/
-  font-family: "Jal_Onuel", sans-serif;
   background-color: #ffffff;
   perspective: 1000px;
   height: 125px;
   max-width: 100%;
   position: relative;
   margin: 0px;
-}
-
-.top_display_menu_info {
-  /*최상단 바 밑에 들어가는 메뉴 컨테이너에 들어가는 텍스트*/
-  position: absolute;
-  left: 25%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 30px;
-  letter-spacing: -0.05em;
 }
 
 .top_display_menu_contain2 {
@@ -230,10 +219,4 @@ section {
   column-width: 15em;
   background: #dadadf;
   padding: 2em 12em;
-}
-
-.weekday {
-  float: left;
-  padding: 1em;
-  color: black;
 }

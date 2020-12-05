@@ -1,0 +1,184 @@
+@import url("https://fonts.googleapis.com/css2?family=Megrim&family=Sunflower:wght@300&display=swap");
+
+a:link {
+  text-decoration: none;
+  color: #999696;
+}
+a:visited {
+  text-decoration: none;
+  color: #999696;
+}
+a:active {
+  text-decoration: none;
+  color: #999696;
+}
+a:hover {
+  color: #bfbcbc;
+}
+.page_title {
+  width: 0em;
+  font-family: "Megrim", cursive;
+  font-weight: 1000;
+  font-size: 5.5em;
+  letter-spacing: 0.01em;
+  margin-top: 0.2em;
+  float: left;
+  color: white;
+  line-height: 0.9em;
+  word-break: keep-all;
+}
+
+body {
+  background-color: #181818;
+  padding: 0%;
+  font-family: "Sunflower", sans-serif;
+}
+
+.basic_form {
+  background-color: #242424;
+  padding: 5% 2%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.webtoon_container {
+  width: 30%;
+  float: left;
+  padding-left: 2.5%;
+  padding-bottom: 10%;
+}
+
+/* .webtoon_img {
+  width: 100%;
+  object-fit: cover;
+  border: #181818;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5%;
+}
+
+.webtoon_img:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+  overflow: hidden;
+} */
+
+.square {
+  position: relative;
+  width: 100%;
+}
+
+.square:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.content {
+  position: absolute;
+  width: 100%;
+  height: 95%;
+  overflow: hidden;
+}
+
+.webtoon_info {
+  left: -1em;
+  top: -2em;
+  line-height: 0;
+  text-align: left;
+  word-break: keep-all;
+  height: 0.2em;
+  width: 20em;
+  position: relative;
+}
+
+.square .icon {
+  position: absolute;
+  top: 13%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.main-menu > li {
+  top: -4em;
+  float: left;
+  position: relative;
+  left: 35%;
+  transform: translate(0%, 100%);
+  list-style-type: none;
+}
+
+.main-menu > li > a {
+  font-weight: 800;
+  font-size: 3.5rem;
+  color: white;
+  text-align: left;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  display: block;
+  padding: 14px 0.4em;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.sub-menu {
+  text-align: left;
+  font-size: 3em;
+  position: absolute;
+  background: #222222;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.15s ease-in;
+}
+
+.sub-menu > li {
+  color: white;
+  padding: 16px 28px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  list-style-type: none;
+}
+
+.sub-menu > li > a {
+  color: #bfbcbc;
+  text-decoration: none;
+}
+
+.main-menu > li:hover #sub-menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sub-menu > li > a:hover {
+  text-decoration: underline;
+}
+
+section {
+  column-width: 15em;
+  padding: 2em 12em;
+}
+
+.top_display_menu_contain {
+  /*최상단 바 밑에 들어가는 메뉴 컨테이너*/
+  perspective: 1000px;
+  height: 125px;
+  max-width: 100%;
+  position: relative;
+  margin: 0px;
+}
+
+.weekday {
+  position: relative;
+  top: 3em;
+  height: 3em;
+  font-size: 2em;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+}
+.weekday > a {
+  padding: 1em;
+}
