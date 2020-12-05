@@ -1,16 +1,41 @@
 <!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Sunflower:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&family=Sunflower:wght@300&display=swap" rel="stylesheet">
 <head style="color:white;">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=">
 	<link rel="stylesheet" href="style.css">
 </head>
-<body text="#FFFFFF">
-<ul style="list-style-type:none; -webkit-padding-start:0px;">
-  <dl id="webtoon_contents" class="basic_form" style="width:95%; height:auto; margin:0.5%"><p style="font-size:5em; text-align:center; color:#737171">WEBTOONHUB<p>
-  </dl>
-</ul>
+<body text="#FFFFFF" style="margin:0px;">
+	<div class="top_display">
+		<ul class="top_display_title_contain">
+			<span class="top_display_info1">Daum WEBTOON</span>
+		</ul>
+		<ul class="top_display_menu_contain" ul style="z-index: 2;">
+			<span class="top_display_menu_info" style="color: black;">WEBTOON HUB
+			</span>
+			<ul id="main-menu" class="main-menu">
+				<li><a href="#">HOME</a></li>
+				<li><a href="#">WEBTOON</a>
+				  <ul id="sub-menu" class="sub-menu" >
+					<li><a href="#" aria-label="Naver WebToon">Naver WebToon</a></li>
+					<li><a href="#" aria-label="Daum WebToon">Daum WebToon</a></li>
+				  </ul>
+				</li>
+				<li><a href="#">ABOUT</a>
+				  <ul id="sub-menu" class="sub-menu" >
+					<li><a href="#" aria-label="submenu">Develop</a></li>
+					<li><a href="#" aria-label="submenu">Info</a></li>
+					<li><a href="#" aria-label="subemnu">Origin</a></li>
+				  </ul>
+				</li>
+			  </ul>
+		</ul>
+	</div>
+	<ul class="top_display_menu_contain2"></ul>
+	<dl id="webtoon_contents" class="basic_form" style="z-index: 1;">	
+	</dl>	
 <div>
 </div>
 <script src="main.js"></script>
