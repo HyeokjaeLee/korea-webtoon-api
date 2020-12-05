@@ -19,8 +19,9 @@
 				<li><a href="#">HOME</a></li>
 				<li><a href="#">WEBTOON</a>
 				  <ul id="sub-menu" class="sub-menu" >
-					<li><a href="#" aria-label="Naver WebToon">Naver WebToon</a></li>
-					<li><a href="#" aria-label="Daum WebToon">Daum WebToon</a></li>
+				  <li><a aria-label="Naver WebToon" onclick="get_webtoon_by_service(0);">All WebToon</a></li>
+				  <li><a aria-label="Naver WebToon" onclick="get_webtoon_by_service(1);">Naver WebToon</a></li>
+					<li><a aria-label="Daum WebToon" onclick="get_webtoon_by_service(2);">Daum WebToon</a></li>
 				  </ul>
 				</li>
 				<li><a href="#">ABOUT</a>
@@ -34,10 +35,8 @@
 		</ul>
 	</div>
 	<ul class="top_display_menu_contain2"></ul>
-	<dl id="webtoon_contents" class="basic_form" style="z-index: 1;">	
-	</dl>	
-<div>
-</div>
+	<dl id="webtoon_contents" class="basic_form" style="z-index: 1; float:block">
+	</dl>
 <script src="main.js"></script>
 </body>
 

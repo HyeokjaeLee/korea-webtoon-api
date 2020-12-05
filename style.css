@@ -19,9 +19,13 @@
 
 p {
   letter-spacing: -0.15em;
+  color: black;
 }
 body {
   font-family: "GmarketSansMedium";
+}
+a {
+  text-decoration: none;
 }
 a:link {
   text-decoration: none;
@@ -36,16 +40,17 @@ a:active {
   color: #999696;
 }
 a:hover {
-  text-decoration: underline;
   color: #bfbcbc;
 }
 
 .basic_form {
+  position: relative;
   background-color: #ffffff; /*기존 색상코드 242424 > 화이트로 수정*/
   margin-top: 2%;
   padding-left: 17.7%;
   padding-right: 17.7%;
   overflow: hidden;
+  float: block;
 }
 
 .webtoon_container {
@@ -160,7 +165,8 @@ a:hover {
 
 .webtoon_info {
   line-height: 110%;
-  white-space: nowrap;
+  word-break: keep-all;
+  height: 1em;
 }
 
 .square .icon {
@@ -224,4 +230,10 @@ section {
   column-width: 15em;
   background: #dadadf;
   padding: 2em 12em;
+}
+
+.weekday {
+  float: left;
+  padding: 1em;
+  color: black;
 }
