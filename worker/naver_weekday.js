@@ -6,6 +6,9 @@ var naver_comic_url = "https://comic.naver.com";
 var $;
 var index_num;
 var naver_weekday_url = naver_comic_url + "/webtoon/weekday.nhn";
+
+naver_weekday_webtoon();
+
 function naver_weekday_webtoon() {
   index_num = 0;
   request(naver_weekday_url, function (err, response, body) {

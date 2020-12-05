@@ -1,5 +1,10 @@
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const { parentPort } = require("worker_threads");
+var daum_overall_info = [];
+var title = [];
+var index_num;
+
+daum_webtoon();
 
 function ajax_get(url, callback) {
   //ajax 구현을 위한 함수
@@ -19,7 +24,6 @@ function ajax_get(url, callback) {
   xmlhttp.send();
 }
 
-var index_num;
 function daum_webtoon() {
   var daum_info = [];
   index_num = 0;
@@ -40,6 +44,7 @@ function daum_webtoon() {
       for (k = 0; k < data.data.length; k++) {
         var info = {};
         info.title = data.data[k].title;
+        title[index_num] = info.title;
         info.artist = data.data[k].cartoon.artists[0].penName;
         info.url =
           "http://webtoon.daum.net/m/webtoon/view/" + data.data[k].nickname;
@@ -91,9 +96,15 @@ function daum_webtoon() {
       }
     });
   }
-  var result_3 = daum_info;
+  const set = new Set(title);
+  const unique_title = [...set];
+  for (i = 0; i < unique_title.length; i++) {
+    var middle_array = daum_info.filter(function (element) {
+      return element.title == unique_title[i];
+    });
+    daum_overall_info[i] = middle_array[0];
+    var result_3 = daum_overall_info;
+  }
   parentPort.postMessage(result_3);
   parentPort.close();
 }
-
-daum_webtoon();

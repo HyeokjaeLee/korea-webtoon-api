@@ -9,6 +9,8 @@ var index_num;
 var naver_overall_info = [];
 var title = [];
 
+naver_info();
+
 function naver_all_webtoon() {
   index_num = 0;
   return new Promise(function (resolve, reject) {
@@ -73,6 +75,7 @@ function naver_all_webtoon() {
 
 async function naver_info() {
   naver_finished_info = await naver_all_webtoon();
+  //중복제거&작가 통합
   const set = new Set(title);
   const unique_title = [...set];
   for (i = 0; i < unique_title.length; i++) {
@@ -94,5 +97,3 @@ async function naver_info() {
   parentPort.postMessage(result_1);
   parentPort.close();
 }
-
-naver_info();

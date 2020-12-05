@@ -88,7 +88,8 @@ function hosting_start() {
   app.get("/all", function (request, response) {
     response.json(webtoon_info_all);
   });
-  //왜인지 모르겠으나 for문으로 돌릴시 주소는 생성되나 값이 제대로 안들어감
+
+  //왜인지 모르겠으나 for문으로 돌릴시 주소는 생성되나 값이 제대로 안들어감, 비동기식으로 돌아가거나 배열에 접근하지 못한듯..
   app.get("/" + weekday_num[0], function (request, response) {
     response.json(webtoon_info_weekday[0]);
   });
