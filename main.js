@@ -35,6 +35,7 @@ function get_webtoon_by_service(service_num) {
         get_webtoon();
       }
       function get_webtoon() {
+        //웹툰 정보 받아오기
         var webtoon_link = document.createElement("a");
         webtoon_link.href = data[i].url;
         var new_dt = document.createElement("dt");
