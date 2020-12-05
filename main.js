@@ -24,7 +24,6 @@ ajax_get(target_api, function (data) {
   //document.getElementById("webtoon_contents").innerHTML = test;
   for (i = 0; i < data.length; i++) {
     if (data[i].service == 1) {
-      //요부분만 1을 변수로 두고 naver이면 1 다음이면 2 이렇게 해주면 되요!
       var webtoon_contents = document.getElementById("webtoon_contents");
       var webtoon_link = document.createElement("a");
       webtoon_link.href = data[i].url;
@@ -46,9 +45,9 @@ ajax_get(target_api, function (data) {
           "<img style='object-fit:cover;width:100%;'src=" + data[i].img + ">";
       }
       new_dd.innerHTML =
-        "<p style=font-size:1.3em; text-align:center; margin:0; color:#E50914>" +
+        "<p style=font-size:0.8em; text-align:center; margin:0; color:#E50914>" +
         data[i].title +
-        "</p><p style=font-size:1em; text-align:center; color:#E50914>" +
+        "</p><p style=font-size:0.5em; text-align:center; color:#E50914>" +
         data[i].artist +
         "</p>";
 

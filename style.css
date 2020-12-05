@@ -1,22 +1,27 @@
 @font-face {
-  font-family: 'GmarketSansMedium';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-family: "GmarketSansMedium";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: 'Jal_Onuel';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/Jal_Onuel.woff') format('woff');
+  font-family: "Jal_Onuel";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/Jal_Onuel.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
-* { margin: 0; padding: 0; }
+* {
+  margin: 0;
+  padding: 0;
+}
 
-p{
+p {
   letter-spacing: -0.15em;
 }
-body{
-  font-family: 'GmarketSansMedium';
+body {
+  font-family: "GmarketSansMedium";
 }
 a:link {
   text-decoration: none;
@@ -24,7 +29,7 @@ a:link {
 }
 a:visited {
   text-decoration: none;
-  color: #999696; 
+  color: #999696;
 }
 a:active {
   text-decoration: none;
@@ -51,73 +56,71 @@ a:hover {
 }
 
 .main_name {
-  font-family: 'Rajdhani', sans-serif; /*기존 폰트 "Sunflower" > "Rajdhani"로 수정*/
+  font-family: "Rajdhani", sans-serif; /*기존 폰트 "Sunflower" > "Rajdhani"로 수정*/
   letter-spacing: 0.1em;
 }
 
-.top_display_title_contain {  
+.top_display_title_contain {
   /*최상단 검은색 바 컨테이너*/
-  font-family: 'Jal_Onuel', sans-serif;
+  font-family: "Jal_Onuel", sans-serif;
   background-color: #000000;
   perspective: 1000px;
   height: 45px;
   max-width: 100%;
   position: relative;
-  margin:0px;
+  margin: 0px;
 }
 
 .top_display_info1 {
   /*최상단 검은색 바 컨테이너에 들어가는 텍스트*/
   position: absolute;
-  left:50%;
-  top:50%;
-  font-size:23px;
-  transform:translate(-50%,-50%);
+  left: 50%;
+  top: 50%;
+  font-size: 23px;
+  transform: translate(-50%, -50%);
 }
 
 .top_display_menu_contain {
   /*최상단 바 밑에 들어가는 메뉴 컨테이너*/
-  font-family: 'Jal_Onuel', sans-serif;
+  font-family: "Jal_Onuel", sans-serif;
   background-color: #ffffff;
   perspective: 1000px;
   height: 125px;
   max-width: 100%;
   position: relative;
-  margin:0px;
+  margin: 0px;
 }
 
 .top_display_menu_info {
   /*최상단 바 밑에 들어가는 메뉴 컨테이너에 들어가는 텍스트*/
   position: absolute;
-  left:25%;
-  top:50%;
-  transform:translate(-50%,-50%);
+  left: 25%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   font-size: 30px;
   letter-spacing: -0.05em;
 }
 
 .top_display_menu_contain2 {
   /*최상단 바 밑에 들어가는 메뉴 컨테이너*/
-  font-family: 'Jal_Onuel', sans-serif;
+  font-family: "Jal_Onuel", sans-serif;
   background-color: white;
   perspective: 1000px;
   height: 150px;
   max-width: 100%;
   position: relative;
-  margin:0px;
+  margin: 0px;
 }
 
 .top_display_menu_info2 {
   /*최상단 바 밑에 들어가는 메뉴 컨테이너에 들어가는 텍스트*/
   position: relative;
-  top:50%;
-  left:40%;
-  transform:translate(0%,100%);
+  top: 50%;
+  left: 40%;
+  transform: translate(0%, 100%);
   font-size: 30px;
   letter-spacing: -0.05em;
 }
-
-
 
 /* .webtoon_img {
   width: 100%;
@@ -156,13 +159,14 @@ a:hover {
 }
 
 .webtoon_info {
-  line-height: 125%;
+  line-height: 110%;
+  white-space: nowrap;
 }
 
 .square .icon {
   position: absolute;
-  top: 13%;
-  left: 35%;
+  top: 18%;
+  left: 36%;
   transform: translate(-50%, -50%);
   z-index: 2;
 }
@@ -172,10 +176,10 @@ a:hover {
 .main-menu > li {
   float: left;
   position: relative;
-  top:50%;
-  left:40%;
-  transform:translate(0%,100%);
-  font-family: 'Jal_Onuel', sans-serif;
+  top: 50%;
+  left: 40%;
+  transform: translate(0%, 100%);
+  font-family: "Jal_Onuel", sans-serif;
 }
 
 .main-menu > li > a {
@@ -186,7 +190,7 @@ a:hover {
   letter-spacing: 0.05em;
   display: block;
   padding: 14px 36px;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .sub-menu {
@@ -199,10 +203,10 @@ a:hover {
 
 .sub-menu > li {
   padding: 16px 28px;
-  border-bottom: 1px solid rgba(0,0,0,0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.sub-menu > li >  a {
+.sub-menu > li > a {
   color: rgba(0, 0, 0, 0.6);
   text-decoration: none;
 }
@@ -212,8 +216,8 @@ a:hover {
   visibility: visible;
 }
 
-.sub-menu > li >  a:hover {
- text-decoration: underline;
+.sub-menu > li > a:hover {
+  text-decoration: underline;
 }
 
 section {
