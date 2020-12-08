@@ -1,8 +1,10 @@
 const api_url = "https://korean-webtoon-hub-project.herokuapp.com/";
 var today = new Date();
-var week = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+var week = ["sun", "mon", "tue", "wed", "thu", "fri", "sat", "finished", "all"];
+var service_num = 0;
+var week_num = today.getDay();
 
-get_webtoon_by_service(0);
+reload();
 
 function ajax_get(url, callback) {
   //ajax 구현을 위한 함수
@@ -23,10 +25,22 @@ function ajax_get(url, callback) {
   xmlhttp.send();
 }
 
-function get_webtoon_by_service(service_num) {
+function view_check() {}
+
+function get_weeknum_reload(get_week_num) {
+  week_num = get_week_num;
+  reload();
+}
+
+function get_service_num_reload(get_service_num) {
+  service_num = get_service_num;
+  reload();
+}
+
+function reload() {
   var webtoon_contents = document.getElementById("webtoon_contents");
   webtoon_contents.innerHTML = "";
-  var target_api = api_url + week[today.getDay()];
+  var target_api = api_url + week[week_num];
   ajax_get(target_api, function (data) {
     for (i = 0; i < data.length; i++) {
       if (service_num == 0) {
@@ -50,24 +64,24 @@ function get_webtoon_by_service(service_num) {
         new_dd.classList.add("webtoon_info");
         if (data[i].img == null) {
           img_container.innerHTML =
-            "<img src=img/noimg.jpg width=25% height=15%>";
+            "<img src=../img/noimg.jpg width=25% height=15%>";
         } else {
           img_container.innerHTML =
             "<img style='object-fit:cover;width:100%;'src=" + data[i].img + ">";
         }
         new_dd.innerHTML =
-          "<p style=font-size:0.8em; text-align:center; margin:0; color:#E50914>" +
+          "<p style='font-size:1.1em;line-height:120%;'>" +
           data[i].title +
-          "</p><p style=font-size:0.5em; text-align:center; color:#E50914>" +
+          "</p><p style='font-size:0.8em;'>" +
           data[i].artist +
           "</p>";
 
         switch (data[i].service) {
           case 1:
-            img_text.innerHTML = "<img src=img/naver.png width=30%>";
+            img_text.innerHTML = "<img src=../img/naver.png width=30%>";
             break;
           case 2:
-            img_text.innerHTML = "<img src=img/daum.png width=30%>";
+            img_text.innerHTML = "<img src=../img/daum.png width=30%>";
             break;
         }
         webtoon_contents.appendChild(webtoon_link);

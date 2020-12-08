@@ -173,8 +173,8 @@ section {
 .weekday {
   position: relative;
   top: 3em;
-  height: 3em;
-  font-size: 2em;
+  height: 4em;
+  font-size: 2.5em;
   width: 100%;
   text-align: center;
   text-decoration: none;

@@ -25,6 +25,8 @@ function ajax_get(url, callback) {
   xmlhttp.send();
 }
 
+function view_check() {}
+
 function get_weeknum_reload(get_week_num) {
   week_num = get_week_num;
   reload();
