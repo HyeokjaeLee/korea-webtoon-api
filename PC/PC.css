@@ -294,7 +294,13 @@ a:hover {
 }
 
 .webtoon_info {
-  line-height: 125%;
+  line-height: 0;
+  text-align: left;
+  word-break: keep-all;
+  height: 3em;
+  width: 7em;
+  position: relative;
+  line-height: 100%;
 }
 
 .square .icon {
@@ -325,7 +331,7 @@ a:hover {
   text-decoration: none;
   letter-spacing: 0em;
   display: block;
-  padding: 14px 36px;
+  padding: 14px 1em;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
