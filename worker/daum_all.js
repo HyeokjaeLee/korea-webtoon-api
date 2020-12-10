@@ -1,28 +1,10 @@
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var { ajax_get } = require("../modules/main_modules");
 const { parentPort } = require("worker_threads");
 var daum_overall_info = [];
 var title = [];
 var index_num;
 
 daum_webtoon();
-
-function ajax_get(url, callback) {
-  //ajax 구현을 위한 함수
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function () {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      try {
-        var data = JSON.parse(xmlhttp.responseText);
-      } catch (err) {
-        console.log(err.message + " in " + xmlhttp.responseText);
-        return;
-      }
-      callback(data);
-    }
-  };
-  xmlhttp.open("GET", url, false); //true는 비동기식, false는 동기식 true로 할시 변수 변경전에 웹페이지가 떠버림
-  xmlhttp.send();
-}
 
 function daum_webtoon() {
   var daum_info = [];

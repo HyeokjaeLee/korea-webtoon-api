@@ -1,72 +1,102 @@
 const request = require("request");
 const cheerio = require("cheerio");
 const { parentPort } = require("worker_threads");
-
-var naver_comic_url = "https://comic.naver.com";
+var { weekday } = require("../modules/main_modules");
+var naver_comic_url = "https://m.comic.naver.com";
+var naver_webtoon_url = naver_comic_url + "/webtoon/weekday.nhn?week=";
 var $;
-var index_num;
-var naver_weekday_url = naver_comic_url + "/webtoon/weekday.nhn";
+var naver_webtoon = [];
 
-naver_weekday_webtoon();
+get_webtoon_info();
+function_finish_check();
 
-function naver_weekday_webtoon() {
-  index_num = 0;
-  request(naver_weekday_url, function (err, response, body) {
-    var naver_weekday_info = [];
-    $ = cheerio.load(body);
-    for (week_num = 0; week_num < 7; week_num++) {
-      var naver_weekday_count = $(".col").eq(week_num).find(".title").length;
-      for (webtoon_num = 0; webtoon_num < naver_weekday_count; webtoon_num++) {
-        var info = {};
+function get_webtoon_info() {
+  for (week_count = 0; week_count < 7; week_count++) {
+    get_weekday_webtoon_info(week_count);
+  }
+}
 
-        info.title = $(".col")
-          .eq(week_num)
-          .find(".thumb")
+function function_finish_check() {
+  var webtoon_count_change = [];
+  var interval = setInterval(function () {
+    webtoon_count_change.push(naver_webtoon.length);
+    if (
+      webtoon_count_change[webtoon_count_change.length - 2] ==
+      webtoon_count_change[webtoon_count_change.length - 1]
+    ) {
+      var naver_weekday_result = naver_webtoon;
+      parentPort.postMessage(naver_weekday_result);
+      parentPort.close();
+      clearInterval(interval);
+    }
+  }, 1000);
+}
+
+function get_weekday_webtoon_info(week_count) {
+  request(
+    naver_webtoon_url + weekday[week_count],
+    function (err, response, body) {
+      $ = cheerio.load(body);
+      var weekday_webtoon_count = $(".list_toon").find(".item").find(".info")
+        .length;
+      for (
+        webtoon_num = 0;
+        webtoon_num < weekday_webtoon_count;
+        webtoon_num++
+      ) {
+        var a_weboon_info = {};
+
+        //웹툰 타이틀 정보
+        a_weboon_info.title = $(".list_toon")
+          .find(".info")
           .eq(webtoon_num)
-          .find("img")
-          .attr("title");
+          .find(".title")
+          .text();
 
-        info.img = $(".col")
-          .eq(week_num)
-          .find(".thumb")
+        //웹툰 작가 정보
+        a_weboon_info.artist = $(".list_toon")
+          .find(".info")
+          .eq(webtoon_num)
+          .find(".author")
+          .text();
+
+        //웹툰 이미지 정보
+        a_weboon_info.img = $(".list_toon")
+          .find(".thumbnail")
           .eq(webtoon_num)
           .find("img")
           .attr("src");
 
-        info.url =
+        //웹툰 이미지 정보
+        a_weboon_info.url =
           naver_comic_url +
-          $(".col")
-            .eq(week_num)
-            .find(".thumb")
-            .eq(webtoon_num)
-            .find("a")
-            .attr("href");
+          $(".list_toon").find("a").eq(webtoon_num).attr("href");
 
-        info.weekday = week_num;
-        var state_variable = $(".col")
-          .eq(week_num)
-          .find(".thumb")
+        //웹툰 요일 정보
+        a_weboon_info.weekday = week_count;
+
+        //웹툰 상태 정보
+        state_variable = $(".list_toon")
+          .find(".info")
           .eq(webtoon_num)
-          .find("a")
-          .find("em")
-          .attr("class");
+          .find(".detail")
+          .find(".blind")
+          .eq(0)
+          .text();
+
         switch (state_variable) {
-          case "ico_updt": //신규화 업데이트
-            info.state = 1;
+          case "휴재":
+            a_weboon_info.state = 2;
             break;
-          case "ico_break": //휴재중
-            info.state = 2;
+          case "up":
+            a_weboon_info.state = 1;
             break;
           default:
-            info.state = 0; //연재중
+            a_weboon_info.state = 0;
             break;
         }
-        naver_weekday_info[index_num] = info;
-        index_num++;
+        naver_webtoon.push(a_weboon_info);
       }
     }
-    var result_2 = naver_weekday_info;
-    parentPort.postMessage(result_2);
-    parentPort.close();
-  });
+  );
 }

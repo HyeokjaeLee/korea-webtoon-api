@@ -7,7 +7,7 @@ var cors = require("cors");
 const http = require("http");
 setInterval(function () {
   http.get("http://korean-webtoon-hub-project.herokuapp.com");
-}, min(15));
+}, sec(600));
 
 var naver_info = [];
 var naver_weekday_info = [];
@@ -60,23 +60,23 @@ naver_overall_update();
 naver_partial_update();
 daum_overall_update();
 
-//2시간 간격으로 전체 네이버 data 업데이트
+//1분 간격으로 전체 네이버 data 업데이트
 setInterval(function () {
   naver_overall_update();
-}, min(120));
-//4분 간격으로 연재중 네이버 data 업데이트
+}, sec(60));
+//30초 간격으로 연재중 네이버 data 업데이트
 setInterval(function () {
   naver_partial_update();
-}, min(4));
-//4분 간격으로 전체 다음 data 업데이트
+}, sec(30));
+//1분 간격으로 전체 다음 data 업데이트
 setInterval(function () {
   daum_overall_update();
-}, min(4));
-//1분 간격으로 전체 data 통합 & log 출력
+}, sec(60));
+//10초 간격으로 전체 data 통합 & log 출력
 setInterval(function () {
   integrate_db();
   console.log(timestamp);
-}, min(1));
+}, sec(10));
 
 //json 형식으로 웹에 배포
 function hosting_start() {
@@ -120,11 +120,11 @@ function hosting_start() {
   });
 }
 
-//네이버 완결 포함 전체 data 업데이트
+//네이버 완결 data 업데이트
 function naver_overall_update() {
   let naver_finished = new Worker(workerPath_1);
-  naver_finished.on("message", (result_1) => {
-    naver_info = result_1;
+  naver_finished.on("message", (naver_finished_result) => {
+    naver_info = naver_finished_result;
   });
   timestamp.naver_overall_update = new Date();
 }
@@ -132,23 +132,15 @@ function naver_overall_update() {
 //네이버 연재중 data 업데이트
 function naver_partial_update() {
   let naver_weekday = new Worker(workerPath_2);
-  naver_weekday.on("message", (result_2) => {
-    naver_weekday_info = result_2;
+  naver_weekday.on("message", (naver_weekday_result) => {
+    naver_weekday_info = naver_weekday_result;
   });
   timestamp.naver_partial_update = new Date();
 }
 
 //네이버 웹툰 정보 통합
 function intergrate_naver_info() {
-  for (n = 0; n < naver_weekday_info.length; n++) {
-    var index_num = naver_info.findIndex(
-      (i) => i.title == naver_weekday_info[n].title
-    );
-    naver_info[index_num] = {
-      ...naver_info[index_num],
-      ...naver_weekday_info[n],
-    };
-  }
+  naver_info = naver_info.concat(naver_weekday_info);
 }
 
 //다음 완결 포함 전체 data 업데이트
@@ -174,7 +166,7 @@ function integrate_db() {
   }
 }
 
-//초단위 분단위로 변환
-function min(sec) {
-  return sec * 60000;
+//초 단위로 변환
+function sec(time) {
+  return time * 1000;
 }
