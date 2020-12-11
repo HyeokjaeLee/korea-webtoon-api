@@ -75,6 +75,9 @@ function get_weekday_webtoon_info(week_count) {
         //웹툰 요일 정보
         a_weboon_info.weekday = week_count;
 
+        //웹툰 사이트 정보
+        a_weboon_info.service = 1;
+
         //웹툰 상태 정보
         state_variable = $(".list_toon")
           .find(".info")

@@ -51,6 +51,10 @@ async function get_webtoon_info() {
 
         //웹툰 상태 정보
         a_weboon_info.state = 3;
+
+        //웹툰 사이트 정보
+        a_weboon_info.service = 1;
+
         naver_webtoon.push(a_weboon_info);
       }
     });
