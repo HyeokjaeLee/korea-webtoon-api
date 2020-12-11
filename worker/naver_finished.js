@@ -4,8 +4,9 @@ const { parentPort } = require("worker_threads");
 var naver_comic_url = "https://m.comic.naver.com";
 var naver_webtoon_url = naver_comic_url + "/webtoon/finish.nhn?page=";
 var $;
-var naver_webtoon = [];
+var naver_webtoon = new Array();
 
+clean_info();
 get_webtoon_info();
 function_finish_check();
 
@@ -80,4 +81,8 @@ function function_finish_check() {
       clearInterval(interval);
     }
   }, 1000);
+}
+
+function clean_info() {
+  naver_webtoon = [];
 }
