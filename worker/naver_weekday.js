@@ -5,9 +5,8 @@ var { weekday } = require("../modules/main_modules");
 var naver_comic_url = "https://m.comic.naver.com";
 var naver_webtoon_url = naver_comic_url + "/webtoon/weekday.nhn?week=";
 var $;
-var naver_webtoon = new Array();
+var naver_webtoon = [];
 
-clean_info();
 get_webtoon_info();
 function_finish_check();
 
@@ -100,8 +99,4 @@ function get_weekday_webtoon_info(week_count) {
       }
     }
   );
-}
-
-function clean_info() {
-  naver_webtoon = [];
 }

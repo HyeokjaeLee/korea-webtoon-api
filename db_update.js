@@ -9,9 +9,6 @@ setInterval(function () {
   http.get("http://korean-webtoon-hub-project.herokuapp.com");
 }, sec(600));
 
-var naver_info = [];
-var naver_weekday_info = [];
-var daum_info = [];
 var weekday_num = {
   0: "mon",
   1: "tue",
@@ -121,15 +118,17 @@ function hosting_start() {
 }
 
 //네이버 완결 data 업데이트
+var naver_finished_info = [];
 function naver_overall_update() {
   let naver_finished = new Worker(workerPath_1);
   naver_finished.on("message", (naver_finished_result) => {
-    naver_info = naver_finished_result;
+    naver_finished_info = naver_finished_result;
   });
   timestamp.naver_overall_update = new Date();
 }
 
 //네이버 연재중 data 업데이트
+var naver_weekday_info = [];
 function naver_partial_update() {
   let naver_weekday = new Worker(workerPath_2);
   naver_weekday.on("message", (naver_weekday_result) => {
@@ -139,10 +138,11 @@ function naver_partial_update() {
 }
 
 //네이버 웹툰 정보 통합
+var naver_info = [];
 function intergrate_naver_info() {
-  naver_info = naver_info.concat(naver_weekday_info);
+  naver_info = naver_finished_info.concat(naver_weekday_info);
 }
-
+var daum_info = [];
 //다음 완결 포함 전체 data 업데이트
 function daum_overall_update() {
   let daum_all = new Worker(workerPath_3);
