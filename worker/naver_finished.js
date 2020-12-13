@@ -50,10 +50,10 @@ async function get_webtoon_info() {
         a_weboon_info.weekday = 7;
 
         //웹툰 상태 정보
-        a_weboon_info.state = 3;
+        a_weboon_info.state = "완결";
 
         //웹툰 사이트 정보
-        a_weboon_info.service = 1;
+        a_weboon_info.service = "Naver";
 
         naver_webtoon.push(a_weboon_info);
       }

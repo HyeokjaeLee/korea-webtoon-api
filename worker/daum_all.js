@@ -21,7 +21,7 @@ function daum_webtoon() {
     "/list_finished/free",
     "/list_finished/pay",
   ];
-  for (i = 0; i < 10; i++) {
+  for (i = 0; i < 9; i++) {
     ajax_get(daum_json_url + url_package[i], function (data) {
       for (k = 0; k < data.data.length; k++) {
         var info = {};
@@ -35,7 +35,7 @@ function daum_webtoon() {
         var state_variable = data.data[k].restYn;
         var day_variable;
         if (6 < i) {
-          info.state = 3;
+          info.state = "완결";
           info.weekday = 7;
         } else {
           switch (i) {
@@ -65,11 +65,11 @@ function daum_webtoon() {
               break;
           }
           if (new Date().getDay() == day_variable && state_variable == "N") {
-            info.state = 1;
+            info.state = "UP";
           } else if (state_variable == "Y") {
-            info.state = 2;
+            info.state = "휴재";
           } else {
-            info.state = 0;
+            info.state = "";
           }
           info.weekday = i;
         }

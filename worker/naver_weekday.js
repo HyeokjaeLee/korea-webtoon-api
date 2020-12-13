@@ -76,7 +76,7 @@ function get_weekday_webtoon_info(week_count) {
         a_weboon_info.weekday = week_count;
 
         //웹툰 사이트 정보
-        a_weboon_info.service = 1;
+        a_weboon_info.service = "Naver";
 
         //웹툰 상태 정보
         state_variable = $(".list_toon")
@@ -89,13 +89,13 @@ function get_weekday_webtoon_info(week_count) {
 
         switch (state_variable) {
           case "휴재":
-            a_weboon_info.state = 2;
+            a_weboon_info.state = "휴재";
             break;
           case "up":
-            a_weboon_info.state = 1;
+            a_weboon_info.state = "UP";
             break;
           default:
-            a_weboon_info.state = 0;
+            a_weboon_info.state = "";
             break;
         }
         naver_webtoon.push(a_weboon_info);
