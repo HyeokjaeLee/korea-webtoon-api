@@ -1,6 +1,6 @@
-const request = require("request");
-const cheerio = require("cheerio");
-const { parentPort } = require("worker_threads");
+import request from "request";
+import { load } from "cheerio";
+import { parentPort } from "worker_threads";
 var naver_comic_url = "https://m.comic.naver.com";
 var naver_webtoon_url = naver_comic_url + "/webtoon/finish.nhn?page=";
 var $;
@@ -13,7 +13,7 @@ async function get_webtoon_info() {
   var page_count = await get_page_count();
   for (i = 1; i <= page_count; i++) {
     request(naver_webtoon_url + i, function (err, response, body) {
-      $ = cheerio.load(body);
+      $ = load(body);
       var page_webtoon_count = $(".list_toon.list_finish")
         .find(".item")
         .find(".info").length;
@@ -64,7 +64,7 @@ async function get_webtoon_info() {
 function get_page_count() {
   return new Promise(function (resolve, reject) {
     request(naver_webtoon_url, function (err, response, body) {
-      $ = cheerio.load(body);
+      $ = load(body);
       resolve($(".paging_type2").find(".current_pg").find(".total").text() * 1);
     });
   });
