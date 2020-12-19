@@ -64,7 +64,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
 //--------------------------------------------------------------------------------
 var get_json_data = function (url) {
     var xmlhttp = new XMLHttpRequest();
-    var json_data;
+    var json_data = "";
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             try {
