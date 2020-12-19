@@ -1,2 +1,2 @@
-.ts linguist-detectrable=true
-.js linguist-detectrable=false
+*.ts linguist-detectrable=true
+*.js linguist-detectrable=false
