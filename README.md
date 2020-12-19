@@ -1,4 +1,4 @@
 # Toy-projects-API
 
 Korean-Webtoon-API
-http://asq.kr/toyprojectapi/webtoon/all
+https://toy-projects-api.herokuapp.com/webtoon/all
