@@ -2,9 +2,9 @@
   "name": "toy-projects-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node ./dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "@types/cheerio": "^0.22.23",
     "@types/cors": "^2.8.9",
     "@types/express": "^4.17.9",
-    "@types/request": "^2.48.5"
+    "@types/request": "^2.48.5",
+    "@types/request-promise-native": "^1.0.17"
   }
 }

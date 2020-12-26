@@ -35,116 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-var worker_threads_1 = require("worker_threads");
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.get_naver_webtoon = void 0;
 var request = require("request-promise-native");
+var base_modules_1 = require("./base_modules");
 var cheerio_1 = require("cheerio");
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var weekday = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-//--------------------------------------------------------------------------------
-//main 실행 함수
-var main = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var naver_info, daum_info, webtoon_info;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, get_naver_webtoon()];
-            case 1:
-                naver_info = _a.sent();
-                return [4 /*yield*/, get_daum_webtoon()];
-            case 2:
-                daum_info = _a.sent();
-                webtoon_info = naver_info.concat(daum_info);
-                console.log("Data update was successful (" + new Date() + ")");
-                worker_threads_1.parentPort.postMessage(webtoon_info);
-                worker_threads_1.parentPort.close();
-                return [2 /*return*/];
-        }
-    });
-}); };
-//--------------------------------------------------------------------------------
-var get_json_data = function (url) {
-    var xmlhttp = new XMLHttpRequest();
-    var json_data = "";
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            try {
-                json_data = JSON.parse(xmlhttp.responseText);
-            }
-            catch (err) {
-                console.log(err.message + " in " + xmlhttp.responseText);
-                return;
-            }
-        }
-    };
-    xmlhttp.open("GET", url, false); //true는 비동기식, false는 동기식 true로 할시 변수 변경전에 웹페이지가 떠버림
-    xmlhttp.send();
-    return json_data;
-};
-//다음 웹툰
-var get_daum_webtoon = function () {
-    var daum_webtoon_info = [];
-    var weekday_value;
-    var state_value;
-    var a_daum_webtoon_info;
-    var daum_json_url = function (platform) {
-        var target_url = "http://webtoon.daum.net/data/" + platform + "/webtoon";
-        return target_url;
-    };
-    var daum_url_package = function (i) {
-        var target_url;
-        var fragments_url = ["/list_serialized/", "/list_finished/"];
-        switch (i) {
-            case 7:
-                target_url = daum_json_url("pc") + fragments_url[1] + "free";
-                break;
-            case 8:
-                target_url = daum_json_url("pc") + fragments_url[1] + "pay";
-                break;
-            default:
-                target_url = daum_json_url("pc") + fragments_url[0] + weekday[i];
-                break;
-        }
-        return target_url;
-    };
-    var _loop_1 = function () {
-        var data = get_json_data(daum_url_package(i));
-        var get_a_daum_webtoon_info = function (k, i) {
-            var state_variable = data.data[k].restYn;
-            if (i > 6) {
-                weekday_value = 7;
-            }
-            else {
-                weekday_value = i;
-            }
-            if (new Date().getDay() == weekday_value && state_variable == "N") {
-                state_value = "UP";
-            }
-            else if (state_variable == "Y") {
-                state_value = "휴재";
-            }
-            else {
-                state_value = "";
-            }
-            return {
-                title: data.data[k].title,
-                artist: data.data[k].cartoon.artists[0].penName,
-                url: daum_json_url("m") + data.data[k].nickname,
-                img: data.data[k].thumbnailImage2.url,
-                service: "Daum",
-                state: state_value,
-                weekday: weekday_value
-            };
-        };
-        for (var k = 0; k < data.data.length; k++) {
-            a_daum_webtoon_info = get_a_daum_webtoon_info(k, i);
-            daum_webtoon_info.push(a_daum_webtoon_info);
-        }
-    };
-    for (var i = 0; i < 9; i++) {
-        _loop_1();
-    }
-    return daum_webtoon_info;
-};
 //네이버 웹툰
 var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, function () {
     var naver_webtoon_info, naver_comic_url, Sortation, naver_url_package, get_page_count, get_naver_finished_webtoon, get_naver_weekday_webtoon, get_a_naver_webtoon;
@@ -161,8 +56,7 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                     var target_url;
                     switch (sortation) {
                         case Sortation.weekday:
-                            target_url =
-                                naver_comic_url + "/webtoon/weekday.nhn?week=" + weekday[num];
+                            target_url = naver_comic_url + "/webtoon/weekday.nhn?week=" + base_modules_1.weekday[num];
                             break;
                         case Sortation.finished:
                             target_url = naver_comic_url + "/webtoon/finish.nhn?page=" + num;
@@ -193,9 +87,7 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                                 if (!(i <= page_count)) return [3 /*break*/, 5];
                                 return [4 /*yield*/, request(naver_url_package(Sortation.finished, i), function (err, response, body) {
                                         var $ = cheerio_1.load(body);
-                                        var page_webtoon_count = $(".list_toon.list_finish")
-                                            .find(".item")
-                                            .find(".info").length;
+                                        var page_webtoon_count = $(".list_toon.list_finish").find(".item").find(".info").length;
                                         for (var webtoon_num = 0; webtoon_num < page_webtoon_count; webtoon_num++) {
                                             a_naver_webtoon_info = get_a_naver_webtoon($, ".list_finish", webtoon_num);
                                             naver_webtoon_info.push(a_naver_webtoon_info);
@@ -212,17 +104,16 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                     });
                 }); };
                 get_naver_weekday_webtoon = function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var a_naver_webtoon_info, _loop_2, week_num;
+                    var a_naver_webtoon_info, _loop_1, week_num;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                _loop_2 = function (week_num) {
+                                _loop_1 = function (week_num) {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0: return [4 /*yield*/, request(naver_url_package(Sortation.weekday, week_num), function (err, response, body) {
                                                     var $ = cheerio_1.load(body);
-                                                    var page_webtoon_count = $(".list_toon").find(".item").find(".info")
-                                                        .length;
+                                                    var page_webtoon_count = $(".list_toon").find(".item").find(".info").length;
                                                     for (var webtoon_num = 0; webtoon_num < page_webtoon_count; webtoon_num++) {
                                                         a_naver_webtoon_info = get_a_naver_webtoon($, "", webtoon_num, week_num);
                                                         naver_webtoon_info.push(a_naver_webtoon_info);
@@ -238,7 +129,7 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                                 _a.label = 1;
                             case 1:
                                 if (!(week_num < 7)) return [3 /*break*/, 4];
-                                return [5 /*yield**/, _loop_2(week_num)];
+                                return [5 /*yield**/, _loop_1(week_num)];
                             case 2:
                                 _a.sent();
                                 _a.label = 3;
@@ -273,13 +164,7 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                     var state_value;
                     var weekday_value;
                     if (index == "") {
-                        var state_variable_calc = $(".list_toon")
-                            .find(".info")
-                            .eq(webtoon_num)
-                            .find(".detail")
-                            .find(".blind")
-                            .eq(0)
-                            .text();
+                        var state_variable_calc = $(".list_toon").find(".info").eq(webtoon_num).find(".detail").find(".blind").eq(0).text();
                         switch (state_variable_calc) {
                             case "휴재":
                                 state_value = "휴재";
@@ -291,7 +176,12 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                                 state_value = "";
                                 break;
                         }
-                        weekday_value = week_num;
+                        if (week_num != undefined) {
+                            weekday_value = week_num;
+                        }
+                        else {
+                            weekday_value = 7;
+                        }
                     }
                     else {
                         state_value = "완결";
@@ -304,7 +194,7 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                         img: get_img,
                         service: "Naver",
                         state: state_value,
-                        weekday: weekday_value
+                        weekday: weekday_value,
                     };
                 };
                 return [4 /*yield*/, get_naver_weekday_webtoon()];
@@ -317,4 +207,4 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
         }
     });
 }); };
-main();
+exports.get_naver_webtoon = get_naver_webtoon;

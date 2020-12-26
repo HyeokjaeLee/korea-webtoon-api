@@ -1,8 +1,9 @@
-const path = require("path");
+import path from "path";
 import { Worker } from "worker_threads";
-const express = require("express");
-const cors = require("cors");
-const http = require("http");
+import express from "express";
+import cors from "cors";
+import http from "http";
+import type { A_webtoon_info } from "./modules/base_modules";
 
 //--------------------------------------------------------------------------------
 //main 실행 함수
@@ -23,30 +24,11 @@ const main = (): void => {
 };
 //--------------------------------------------------------------------------------
 
-//json 형식으로 웹에 배포
-const hosting_start = (): void => {
-  let app = express();
-  app.use(cors());
-
-  app.get(
-    "/webtoon/all",
-    function (request: any, response: { json: (arg0: any[]) => void }) {
-      response.json(webtoon_info_json);
-    },
-  );
-
-  app.listen(process.env.PORT || 8080, function () {
-    console.log("webtoon api hosting started on port 8080.");
-  });
-};
-
-let webtoon_info_json = [];
+//webtoon업데이트 워커 실행
+let webtoon_info_json: A_webtoon_info[] = [];
 const webtoon_update = (): void => {
-  let workerPath_webtoon_info = path.join(
-    __dirname,
-    "./worker/webtoon_info.js",
-  );
-  let webtoon_info = new Worker(workerPath_webtoon_info);
+  let workerPath_webtoon_info = path.join(__dirname, "./worker/webtoon_info.js");
+  let webtoon_info = new Worker(workerPath_webtoon_info, { workerData: { path: "./worker/webtoon_info.ts" } });
   webtoon_info.on("message", (webtoon_info) => {
     webtoon_info_json = webtoon_info;
     webtoon_info_json.sort((a, b) => {
@@ -55,7 +37,21 @@ const webtoon_update = (): void => {
   });
 };
 
-//초 단위로 변환
+//json 형식으로 웹에 배포
+const hosting_start = (): void => {
+  let app = express();
+  app.use(cors());
+
+  app.get("/webtoon/all", function (request: any, response: { json: (arg0: any[]) => void }) {
+    response.json(webtoon_info_json);
+  });
+
+  app.listen(process.env.PORT || 8080, function () {
+    console.log("webtoon api hosting started on port 8080.");
+  });
+};
+
+//ms단위 s단위로 변환
 function sec(time: number) {
   return time * 1000;
 }
