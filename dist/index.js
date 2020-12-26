@@ -27,8 +27,8 @@ var main = function () {
 //webtoon업데이트 워커 실행
 var webtoon_info_json = [];
 var webtoon_update = function () {
-    var workerPath_webtoon_info = path_1.default.join(__dirname, "./worker/webtoon_info.js");
-    var webtoon_info = new worker_threads_1.Worker(workerPath_webtoon_info, { workerData: { path: "./worker/webtoon_info.ts" } });
+    var workerPath_webtoon_info = path_1.default.join(__dirname, "./korean-webtoon-api/worker/webtoon_info.js");
+    var webtoon_info = new worker_threads_1.Worker(workerPath_webtoon_info); //나중에 수정
     webtoon_info.on("message", function (webtoon_info) {
         webtoon_info_json = webtoon_info;
         webtoon_info_json.sort(function (a, b) {

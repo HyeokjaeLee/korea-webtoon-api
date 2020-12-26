@@ -3,7 +3,7 @@ import { Worker } from "worker_threads";
 import express from "express";
 import cors from "cors";
 import http from "http";
-import type { A_webtoon_info } from "./modules/base_modules";
+import type { A_webtoon_info } from "./korean-webtoon-api/modules/base_modules";
 
 //--------------------------------------------------------------------------------
 //main 실행 함수
@@ -27,8 +27,8 @@ const main = (): void => {
 //webtoon업데이트 워커 실행
 let webtoon_info_json: A_webtoon_info[] = [];
 const webtoon_update = (): void => {
-  let workerPath_webtoon_info = path.join(__dirname, "./worker/webtoon_info.js");
-  let webtoon_info = new Worker(workerPath_webtoon_info, { workerData: { path: "./worker/webtoon_info.ts" } });
+  let workerPath_webtoon_info = path.join(__dirname, "./korean-webtoon-api/worker/webtoon_info.js");
+  let webtoon_info = new Worker(workerPath_webtoon_info); //나중에 수정
   webtoon_info.on("message", (webtoon_info) => {
     webtoon_info_json = webtoon_info;
     webtoon_info_json.sort((a, b) => {
