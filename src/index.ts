@@ -4,15 +4,14 @@ import express from "express";
 import cors from "cors";
 import http from "http";
 import type { A_webtoon_info } from "./korean-webtoon-api/modules/base_modules";
+//호스팅 서버 슬립 방지
+setInterval(function () {
+  http.get("http://toy-projects-api.herokuapp.com/");
+}, sec(600));
 
 //--------------------------------------------------------------------------------
 //main 실행 함수
 const main = (): void => {
-  //호스팅 서버 슬립 방지
-  setInterval(function () {
-    http.get("http://toy-projects-api.herokuapp.com/");
-  }, sec(600));
-
   //호스팅 시작과 동시에 전체 데이터 1회 업데이트
   hosting_start();
   webtoon_update();
