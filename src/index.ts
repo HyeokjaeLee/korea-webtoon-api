@@ -10,7 +10,7 @@ import type { A_webtoon_info } from "./korean-webtoon-api/modules/base_modules";
 const main = (): void => {
   //호스팅 서버 슬립 방지
   setInterval(function () {
-    http.get("http://toy-projects-api.herokuapp.com");
+    http.get("http://toy-projects-api.herokuapp.com/");
   }, sec(600));
 
   //호스팅 시작과 동시에 전체 데이터 1회 업데이트
