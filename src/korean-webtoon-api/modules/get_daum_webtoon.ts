@@ -45,7 +45,7 @@ const get_daum_webtoon = (): object[] => {
         state_value = "UP";
       } else if (state_variable == "Y") {
         state_value = "휴재";
-      } else {
+      } else if (state_value != "완결") {
         state_value = "";
       }
 

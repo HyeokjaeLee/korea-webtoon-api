@@ -46,7 +46,7 @@ var get_daum_webtoon = function () {
             else if (state_variable == "Y") {
                 state_value = "휴재";
             }
-            else {
+            else if (state_value != "완결") {
                 state_value = "";
             }
             return {
