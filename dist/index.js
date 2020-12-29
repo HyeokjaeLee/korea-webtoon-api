@@ -8,13 +8,13 @@ var worker_threads_1 = require("worker_threads");
 var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
 var http_1 = __importDefault(require("http"));
+//호스팅 서버 슬립 방지
+setInterval(function () {
+    http_1.default.get("http://toy-projects-api.herokuapp.com/");
+}, sec(600));
 //--------------------------------------------------------------------------------
 //main 실행 함수
 var main = function () {
-    //호스팅 서버 슬립 방지
-    setInterval(function () {
-        http_1.default.get("http://korean-webtoon-hub-project.herokuapp.com");
-    }, sec(600));
     //호스팅 시작과 동시에 전체 데이터 1회 업데이트
     hosting_start();
     webtoon_update();

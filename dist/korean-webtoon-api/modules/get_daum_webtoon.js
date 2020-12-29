@@ -35,6 +35,7 @@ var get_daum_webtoon = function () {
             var state_variable = data.data[k].restYn;
             if (i > 6) {
                 weekday_value = 7;
+                state_value = "완결";
             }
             else {
                 weekday_value = i;
