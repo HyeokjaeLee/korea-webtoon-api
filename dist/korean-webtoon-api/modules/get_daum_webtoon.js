@@ -52,7 +52,7 @@ var get_daum_webtoon = function () {
             return {
                 title: data.data[k].title,
                 artist: data.data[k].cartoon.artists[0].penName,
-                url: daum_json_url("m") + data.data[k].nickname,
+                url: "http://m.webtoon.daum.net/m/webtoon/view/" + data.data[k].nickname,
                 img: data.data[k].thumbnailImage2.url,
                 service: "Daum",
                 state: state_value,
