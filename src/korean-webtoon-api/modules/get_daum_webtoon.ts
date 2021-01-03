@@ -10,7 +10,15 @@ const get_daum_webtoon = (): object[] => {
   let a_daum_webtoon_info: object;
 
   const daum_json_url = (platform: string): string => {
-    let target_url: string = "http://webtoon.daum.net/data/" + platform + "/webtoon";
+    let target_url: string = "";
+    switch (platform) {
+      case "pc":
+        target_url = "http://webtoon.daum.net/data/" + platform + "/webtoon";
+        break;
+      case "m":
+        target_url = "http://" + platform + ".webtoon.daum.net/" + platform + "/webtoon/view/";
+        break;
+    }
     return target_url;
   };
 
@@ -52,7 +60,7 @@ const get_daum_webtoon = (): object[] => {
       return {
         title: data.data[k].title,
         artist: data.data[k].cartoon.artists[0].penName,
-        url: "http://m.webtoon.daum.net/m/webtoon/view/" + data.data[k].nickname,
+        url: daum_json_url("m") + data.data[k].nickname,
         img: data.data[k].thumbnailImage2.url,
         service: "Daum", //다음
         state: state_value,

@@ -10,7 +10,15 @@ var get_daum_webtoon = function () {
     var state_value;
     var a_daum_webtoon_info;
     var daum_json_url = function (platform) {
-        var target_url = "http://webtoon.daum.net/data/" + platform + "/webtoon";
+        var target_url = "";
+        switch (platform) {
+            case "pc":
+                target_url = "http://webtoon.daum.net/data/" + platform + "/webtoon";
+                break;
+            case "m":
+                target_url = "http://" + platform + ".webtoon.daum.net/" + platform + "/webtoon/view/";
+                break;
+        }
         return target_url;
     };
     var daum_url_package = function (i) {
@@ -52,7 +60,7 @@ var get_daum_webtoon = function () {
             return {
                 title: data.data[k].title,
                 artist: data.data[k].cartoon.artists[0].penName,
-                url: "http://m.webtoon.daum.net/m/webtoon/view/" + data.data[k].nickname,
+                url: daum_json_url("m") + data.data[k].nickname,
                 img: data.data[k].thumbnailImage2.url,
                 service: "Daum",
                 state: state_value,
