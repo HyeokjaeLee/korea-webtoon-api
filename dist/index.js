@@ -53,7 +53,7 @@ var hosting_start = function () {
     app.get("/webtoon/all", function (request, response) {
         response.json(webtoon_info_json);
     });
-    app.get("/tradeinfo", function (request, response) {
+    app.get("/insidertrade/lists", function (request, response) {
         response.json(trade_info_json);
     });
     app.listen(process.env.PORT || 8080, function () {

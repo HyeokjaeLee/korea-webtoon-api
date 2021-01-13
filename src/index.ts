@@ -55,7 +55,7 @@ const hosting_start = (): void => {
   app.get("/webtoon/all", function (request: any, response: { json: (arg0: any[]) => void }) {
     response.json(webtoon_info_json);
   });
-  app.get("/tradeinfo", function (request: any, response: { json: (arg0: any[]) => void }) {
+  app.get("/insidertrade/list", function (request: any, response: { json: (arg0: any[]) => void }) {
     response.json(trade_info_json);
   });
 

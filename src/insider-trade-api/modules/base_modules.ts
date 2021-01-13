@@ -15,7 +15,7 @@ const string_date_to_date_form = (string_date: string) => {
   for (let i = 0; i < 3; i++) {
     numArr[i] = Number(strArr[i]);
   }
-  const date = new Date(numArr[0], numArr[1] - 1, numArr[2]);
+  const date: Date = new Date(numArr[0], numArr[1] - 1, numArr[2]);
   return date;
 };
 

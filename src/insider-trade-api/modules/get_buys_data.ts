@@ -24,7 +24,7 @@ const get_a_data_part = (column_num: number, row_num: number) => {
 
 const get_a_data = (column_num: number): A_trade_data => {
   return {
-    ticker: get_a_data_part(column_num, 3),
+    ticker: get_a_data_part(column_num, 3).replace(" ", ""),
     trade_date: string_date_to_date_form(get_a_data_part(column_num, 2)),
     company_name: get_a_data_part(column_num, 4),
     insider_name: get_a_data_part(column_num, 5),

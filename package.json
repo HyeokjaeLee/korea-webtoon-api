@@ -24,7 +24,8 @@
     "http": "^0.0.1-security",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
-    "xmlhttprequest": "^1.8.0"
+    "xmlhttprequest": "^1.8.0",
+    "yahoo-stock-prices": "^1.1.0"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.23",
