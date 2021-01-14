@@ -41,7 +41,7 @@ var get_buys_data_1 = require("../modules/get_buys_data");
 var get_stock_data_1 = require("../modules/get_stock_data");
 var buy_data_url = "http://openinsider.com/insider-purchases-25k";
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var buy_data, stock_data;
+    var buy_data, stock_data, clean_buy_data, trade_info;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, get_buys_data_1.get_buy_data(buy_data_url)];
@@ -50,8 +50,18 @@ var buy_data_url = "http://openinsider.com/insider-purchases-25k";
                 return [4 /*yield*/, get_stock_data_1.get_stock_data(buy_data)];
             case 2:
                 stock_data = _a.sent();
+                clean_buy_data = buy_data.filter(function (data) {
+                    if (stock_data.error_ticker.includes(data.ticker)) {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                });
+                trade_info = { insider_trade_list: clean_buy_data, stock_data: stock_data.stock_data };
+                console.log("Error Ticker : " + stock_data.error_ticker);
                 console.log("Trade data update was successful (" + new Date() + ")");
-                worker_threads_1.parentPort.postMessage(stock_data); //결과가 null될수도 있는 값에는 !붙이기
+                worker_threads_1.parentPort.postMessage(trade_info); //결과가 null될수도 있는 값에는 !붙이기
                 worker_threads_1.parentPort.close();
                 return [2 /*return*/];
         }

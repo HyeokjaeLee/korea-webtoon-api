@@ -8,7 +8,7 @@ const get_buy_data = (url: string) => {
   return new Promise((resolve) => {
     request(url, (err: string, response: object[], body: string) => {
       $ = load(body);
-      let data: object[] = [];
+      let data: A_trade_data[] = [];
       const column_count: number = $(".tinytable").find("tbody").find("tr").length;
       for (let i = 0; i < column_count; i++) {
         data.push(get_a_data(i));

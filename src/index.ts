@@ -17,12 +17,15 @@ const main = (): void => {
   webtoon_update();
   trade_update();
 
-  //1분 간격으로 전체 data 업데이트
+  //5분 간격으로 전체 data 업데이트
   setInterval(function () {
     webtoon_update();
-    trade_update();
-  }, sec(60));
+  }, sec(300));
 };
+//한시간 간격으로 주식데이터 업데이트
+setImmediate(function () {
+  trade_update();
+}, sec(3600));
 //--------------------------------------------------------------------------------
 
 //webtoon업데이트 워커 실행
@@ -38,27 +41,47 @@ const webtoon_update = (): void => {
   });
 };
 
-let trade_info_json: object[] = [];
-const trade_update = (): void => {
+let insider_trade_info: object[];
+let stock_info: any[];
+const trade_update = async () => {
+  interface Trade_info_zip {
+    insider_trade_list: object[];
+    stock_data: [any];
+  }
+  let trade_info_zip: Trade_info_zip;
   let workerPath_trade_info = path.join(__dirname, "./insider-trade-api/worker/trade_info.js");
   let trade_info = new Worker(workerPath_trade_info);
   trade_info.on("message", (trade_info) => {
-    trade_info_json = trade_info;
+    trade_info_zip = trade_info;
+    insider_trade_info = trade_info_zip.insider_trade_list;
+    stock_info = trade_info_zip.stock_data;
   });
 };
 
 //json 형식으로 웹에 배포
-const hosting_start = (): void => {
+const hosting_start = async () => {
   let app = express();
   app.use(cors());
+  const host_stock = () => {
+    stock_info.map((data: any[]) => {
+      app.get("/insidertrade/" + data[0], function (request: any, response: { json: (arg0: any[]) => void }) {
+        response.json(data);
+      });
+    });
+  };
+  setTimeout(() => {
+    host_stock();
+  }, sec(30));
+  setInterval(() => {
+    host_stock();
+  }, sec(3600));
 
   app.get("/webtoon/all", function (request: any, response: { json: (arg0: any[]) => void }) {
     response.json(webtoon_info_json);
   });
   app.get("/insidertrade/list", function (request: any, response: { json: (arg0: any[]) => void }) {
-    response.json(trade_info_json);
+    response.json(insider_trade_info);
   });
-
   app.listen(process.env.PORT || 8080, function () {
     console.log("webtoon api hosting started on port 8080.");
   });
