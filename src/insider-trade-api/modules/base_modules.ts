@@ -9,6 +9,14 @@ interface A_trade_data {
   value: number;
 }
 
+interface A_stock_data {
+  date: Date;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
+
 const string_date_to_date_form = (string_date: string) => {
   const strArr: string[] = string_date.split("-");
   const numArr: number[] = [];
@@ -24,4 +32,4 @@ const $2num = (string_data: string) => {
 };
 
 export { $2num, string_date_to_date_form };
-export type { A_trade_data };
+export type { A_trade_data, A_stock_data };
