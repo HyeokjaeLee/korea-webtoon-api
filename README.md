@@ -1,7 +1,7 @@
 # Toy-projects-API
 
 Korean-Webtoon-API : [link](https://toy-projects-api.herokuapp.com/webtoon/all)<br>
-Insider-Trade-API : [link](https://toy-projects-api.herokuapp.com/tradeinfo)<br>
+Insider-Trade-API : [link](https://toy-projects-api.herokuapp.com/insidertrade/lists)<br>
 
 ## to-do
 
@@ -15,3 +15,4 @@ Insider-Trade-API : [link](https://toy-projects-api.herokuapp.com/tradeinfo)<br>
 ### Insider-Trade-API
 
 - [x] add insider-trade-api(ver 1.2.0)<br>
+- [ ] add stock-info<br>

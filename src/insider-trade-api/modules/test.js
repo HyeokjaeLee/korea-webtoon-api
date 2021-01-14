@@ -96,14 +96,12 @@ var get_a_data = function (ticker, start_date, end_date) { return __awaiter(void
     });
 }); };
 var test = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var test_json, test_data, test2, prices;
+    var test_json, prices;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                test_json = get_json_data("https://toy-projects-api.herokuapp.com/tradeinfo");
-                test_data = test_json.map(function (data) { return data.ticker; });
-                test2 = test_data[1];
-                return [4 /*yield*/, get_a_data(test2)];
+                test_json = get_json_data("https://toy-projects-api.herokuapp.com/insidertrade/lists");
+                return [4 /*yield*/, get_a_data(test_json[0].ticker)];
             case 1:
                 prices = _a.sent();
                 console.log(prices);

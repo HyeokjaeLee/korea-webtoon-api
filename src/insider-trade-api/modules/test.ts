@@ -61,10 +61,8 @@ const get_a_data = async (ticker: string, start_date?: string, end_date?: string
 };
 
 const test = async () => {
-  const test_json: any = get_json_data("https://toy-projects-api.herokuapp.com/tradeinfo");
-  const test_data = test_json.map((data: any) => data.ticker);
-  const test2 = test_data[1];
-  const prices = await get_a_data(test2);
+  const test_json: any = get_json_data("https://toy-projects-api.herokuapp.com/insidertrade/lists");
+  const prices = await get_a_data(test_json[0].ticker);
   console.log(prices);
 };
 
