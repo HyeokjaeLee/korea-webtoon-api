@@ -5,9 +5,9 @@
 
 > 여러가지 ToyProject에 활용할 API <br>
 
-### ✨ [Korean-Webtoon-API](https://toy-projects-api.herokuapp.com/webtoon/all)
-
-### ✨ [Insider-Trade-API](https://toy-projects-api.herokuapp.com/insidertrade/list)
+### ✨ List
+- [Korean-Webtoon-API](https://toy-projects-api.herokuapp.com/webtoon/all)
+- [Insider-Trade-API](https://toy-projects-api.herokuapp.com/insidertrade/list)
 
 ## Author
 
