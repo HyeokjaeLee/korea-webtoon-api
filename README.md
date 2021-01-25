@@ -16,7 +16,7 @@
 - Github: [@HyeokjaeLee](https://github.com/HyeokjaeLee)
 
 ## Used
-
+- [Heroku](https://www.heroku.com)
 - Node.js
   - express
   - xmlhttprequest
