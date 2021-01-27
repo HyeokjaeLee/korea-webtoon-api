@@ -1,11 +1,12 @@
 <h1 align="center">Toy project API 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.3.0-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.3.1-blue.svg?cacheSeconds=2592000" />
 </p>
 
 > 여러가지 ToyProject에 활용할 API <br>
 
 ### ✨ List
+
 - [Korean-Webtoon-API](https://toy-projects-api.herokuapp.com/webtoon/all)
 - [Insider-Trade-API](https://toy-projects-api.herokuapp.com/insidertrade/list)
 
@@ -16,6 +17,7 @@
 - Github: [@HyeokjaeLee](https://github.com/HyeokjaeLee)
 
 ## Used
+
 - [Heroku](https://www.heroku.com)
 - Node.js
   - express
