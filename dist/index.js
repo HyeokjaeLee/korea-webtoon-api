@@ -100,7 +100,7 @@ var hosting_start = function () { return __awaiter(void 0, void 0, void 0, funct
         app.use(cors_1.default());
         host_stock = function () {
             stock_info.map(function (data) {
-                var stock_data = data.slice(1);
+                var stock_data = data.slice(1).reverse();
                 app.get("/insidertrade/" + data[0], function (request, response) {
                     response.json(stock_data);
                 });

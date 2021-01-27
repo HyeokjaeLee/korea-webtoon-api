@@ -121,7 +121,6 @@ var get_stock_data = function (json_data, start_date, end_date) { return __await
                 clean_stock_data = dirty_stock_data.filter(function (data) {
                     return data !== undefined;
                 });
-                clean_stock_data.reverse();
                 return [2 /*return*/, { stock_data: clean_stock_data, error_ticker: error_ticker }];
         }
     });

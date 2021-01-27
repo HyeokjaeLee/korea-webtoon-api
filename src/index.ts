@@ -64,7 +64,7 @@ const hosting_start = async () => {
   app.use(cors());
   const host_stock = () => {
     stock_info.map((data: any[]) => {
-      const stock_data = data.slice(1);
+      const stock_data = data.slice(1).reverse();
       app.get("/insidertrade/" + data[0], function (request: any, response: { json: (arg0: any[]) => void }) {
         response.json(stock_data);
       });
