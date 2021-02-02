@@ -17,19 +17,9 @@ interface A_stock_data {
   close: number;
 }
 
-const string_date_to_date_form = (string_date: string) => {
-  const strArr: string[] = string_date.split("-");
-  const numArr: number[] = [];
-  for (let i = 0; i < 3; i++) {
-    numArr[i] = Number(strArr[i]);
-  }
-  const date: Date = new Date(numArr[0], numArr[1] - 1, numArr[2]);
-  return date;
-};
-
 const $2num = (string_data: string) => {
   return Number(string_data.replace("$", "").replace(/,/gi, ""));
 };
 
-export { $2num, string_date_to_date_form };
+export { $2num };
 export type { A_trade_data, A_stock_data };

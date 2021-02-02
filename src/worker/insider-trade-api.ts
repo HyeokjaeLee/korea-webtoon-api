@@ -1,7 +1,7 @@
 import { parentPort } from "worker_threads";
-import { get_buy_data } from "../modules/get_buys_data";
-import { get_stock_data } from "../modules/get_stock_data";
-import type { A_trade_data } from "../modules/base_modules";
+import get_buy_data from "../modules/insider-trade-api/get_buys_data";
+import get_stock_data from "../modules/insider-trade-api/get_stock_data";
+import type { A_trade_data } from "../modules/insider-trade-api/base_modules";
 const buy_data_url = "http://openinsider.com/insider-purchases-25k";
 
 (async () => {

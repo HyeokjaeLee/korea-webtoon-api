@@ -37,40 +37,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var yahooStockPrices = require("yahoo-stock-prices");
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var get_json_data = function (url) {
-    var xmlhttp = new XMLHttpRequest();
-    var json_data = "";
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            try {
-                json_data = JSON.parse(xmlhttp.responseText);
-            }
-            catch (err) {
-                console.log(err.message + " in " + xmlhttp.responseText);
-                return;
-            }
-        }
-    };
-    xmlhttp.open("GET", url, false); //true는 비동기식, false는 동기식 true로 할시 변수 변경전에 웹페이지가 떠버림
-    xmlhttp.send();
-    return json_data;
-};
+var error_ticker = [];
 var get_a_data = function (ticker, start_date, end_date) { return __awaiter(void 0, void 0, void 0, function () {
-    var date_arr, start_date_arr, end_date_arr, stock_original_data, stock_processed_data;
+    var date_arr, start_date_arr, end_date_arr, stock_original_data, stock_processed_data, data_length, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 2, , 3]);
                 date_arr = function (date_str) {
                     var date = new Date(date_str);
                     return { year: date.getFullYear(), month: date.getMonth(), day: date.getDate() };
                 };
+                start_date_arr = void 0;
                 if (start_date != undefined) {
                     start_date_arr = date_arr(start_date);
                 }
                 else {
                     start_date_arr = { year: 0, month: 0, day: 0 };
                 }
+                end_date_arr = void 0;
                 if (end_date != undefined) {
                     end_date_arr = date_arr(end_date);
                 }
@@ -80,33 +65,63 @@ var get_a_data = function (ticker, start_date, end_date) { return __awaiter(void
                 return [4 /*yield*/, yahooStockPrices.getHistoricalPrices(start_date_arr.month, start_date_arr.day, start_date_arr.year, end_date_arr.month, end_date_arr.day, end_date_arr.year, ticker, "1d")];
             case 1:
                 stock_original_data = _a.sent();
-                stock_processed_data = stock_original_data.map(function (data) {
-                    var date = new Date("1970-1-1");
-                    date.setSeconds(date.getSeconds() + data.date);
-                    return {
-                        date: date,
-                        open: data.open,
-                        high: data.high,
-                        low: data.low,
-                        close: data.close,
-                    };
+                stock_processed_data = stock_original_data
+                    .map(function (data) {
+                    if (data.open != null && data.high != null && data.low != null && data.close != null) {
+                        var date = new Date("1970-1-1");
+                        date.setSeconds(date.getSeconds() + data.date);
+                        var result = {
+                            date: date,
+                            open: data.open,
+                            high: data.high,
+                            low: data.low,
+                            close: data.close,
+                        };
+                        return result;
+                    }
+                })
+                    .filter(function (data) {
+                    return data !== undefined;
                 });
-                return [2 /*return*/, stock_processed_data];
+                stock_processed_data.unshift(ticker);
+                data_length = stock_processed_data.length;
+                if (stock_processed_data[data_length - 1] == ticker) {
+                    error_ticker.push(ticker);
+                }
+                else {
+                    return [2 /*return*/, stock_processed_data];
+                }
+                return [3 /*break*/, 3];
+            case 2:
+                e_1 = _a.sent();
+                error_ticker.push(ticker);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
-var test = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var test_json, prices;
+var get_stock_data = function (json_data, start_date, end_date) { return __awaiter(void 0, void 0, void 0, function () {
+    var ticker_arr, unique_ticker_arr, dirty_stock_data, clean_stock_data;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                test_json = get_json_data("https://toy-projects-api.herokuapp.com/insidertrade/lists");
-                return [4 /*yield*/, get_a_data(test_json[0].ticker)];
+                ticker_arr = json_data.map(function (data) { return data.ticker; });
+                unique_ticker_arr = Array.from(new Set(ticker_arr));
+                return [4 /*yield*/, Promise.all(unique_ticker_arr.map(function (data) { return __awaiter(void 0, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, get_a_data(data, start_date, end_date)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        });
+                    }); }))];
             case 1:
-                prices = _a.sent();
-                console.log(prices);
-                return [2 /*return*/];
+                dirty_stock_data = _a.sent();
+                clean_stock_data = dirty_stock_data.filter(function (data) {
+                    return data !== undefined;
+                });
+                return [2 /*return*/, { stock_data: clean_stock_data, error_ticker: error_ticker }];
         }
     });
 }); };
-test();
+exports.default = get_stock_data;

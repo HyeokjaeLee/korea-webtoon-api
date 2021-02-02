@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_daum_webtoon = void 0;
-var base_modules_1 = require("../modules/base_modules");
-var base_modules_2 = require("./base_modules");
+var common_modules_1 = require("../common_modules");
+var base_modules_1 = require("./base_modules");
 //다음 웹툰
 var get_daum_webtoon = function () {
     var daum_webtoon_info = [];
@@ -32,13 +31,13 @@ var get_daum_webtoon = function () {
                 target_url = daum_json_url("pc") + fragments_url[1] + "pay";
                 break;
             default:
-                target_url = daum_json_url("pc") + fragments_url[0] + base_modules_2.weekday[i];
+                target_url = daum_json_url("pc") + fragments_url[0] + base_modules_1.weekday[i];
                 break;
         }
         return target_url;
     };
     var _loop_1 = function () {
-        var data = base_modules_1.get_json_data(daum_url_package(i));
+        var data = common_modules_1.get_json_data(daum_url_package(i));
         var get_a_daum_webtoon_info = function (k, i) {
             var state_variable = data.data[k].restYn;
             if (i > 6) {
@@ -77,4 +76,4 @@ var get_daum_webtoon = function () {
     }
     return daum_webtoon_info;
 };
-exports.get_daum_webtoon = get_daum_webtoon;
+exports.default = get_daum_webtoon;

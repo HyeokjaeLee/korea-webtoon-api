@@ -64,31 +64,10 @@ const get_naver_webtoon = async (): Promise<object[]> => {
   };
 
   const get_a_naver_webtoon = ($: any, index: string, webtoon_num: number, week_num?: number): A_webtoon_info => {
-    let get_title = $(".list_toon" + index)
-      .find(".info")
-      .eq(webtoon_num)
-      .find(".title")
-      .text();
-    let get_artist = $(".list_toon" + index)
-      .find(".info")
-      .eq(webtoon_num)
-      .find(".author")
-      .text();
-    let get_url =
-      naver_comic_url +
-      $(".list_toon" + index)
-        .find("a")
-        .eq(webtoon_num)
-        .attr("href");
-    let get_img = $(".list_toon" + index)
-      .find(".thumbnail")
-      .eq(webtoon_num)
-      .find("img")
-      .attr("src");
     let state_value: string;
     let weekday_value: number;
     if (index == "") {
-      let state_variable_calc: string = $(".list_toon").find(".info").eq(webtoon_num).find(".detail").find(".blind").eq(0).text();
+      const state_variable_calc: string = $(".list_toon").find(".info").eq(webtoon_num).find(".detail").find(".blind").eq(0).text();
       switch (state_variable_calc) {
         case "휴재":
           state_value = "휴재";
@@ -111,10 +90,27 @@ const get_naver_webtoon = async (): Promise<object[]> => {
     }
 
     return {
-      title: get_title,
-      artist: get_artist,
-      url: get_url,
-      img: get_img,
+      title: $(".list_toon" + index)
+        .find(".info")
+        .eq(webtoon_num)
+        .find(".title")
+        .text(),
+      artist: $(".list_toon" + index)
+        .find(".info")
+        .eq(webtoon_num)
+        .find(".author")
+        .text(),
+      url:
+        naver_comic_url +
+        $(".list_toon" + index)
+          .find("a")
+          .eq(webtoon_num)
+          .attr("href"),
+      img: $(".list_toon" + index)
+        .find(".thumbnail")
+        .eq(webtoon_num)
+        .find("img")
+        .attr("src"),
       service: "Naver",
       state: state_value,
       weekday: weekday_value,
@@ -126,4 +122,4 @@ const get_naver_webtoon = async (): Promise<object[]> => {
   return naver_webtoon_info;
 };
 
-export { get_naver_webtoon };
+export default get_naver_webtoon;

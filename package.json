@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/HyeokjaeLee/Toy-projects-API#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",

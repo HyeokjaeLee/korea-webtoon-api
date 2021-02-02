@@ -1,4 +1,4 @@
-import { get_json_data } from "../modules/base_modules";
+import { get_json_data } from "../common_modules";
 import { weekday } from "./base_modules";
 import type { A_webtoon_info } from "./base_modules";
 
@@ -75,4 +75,4 @@ const get_daum_webtoon = (): object[] => {
   return daum_webtoon_info;
 };
 
-export { get_daum_webtoon };
+export default get_daum_webtoon;

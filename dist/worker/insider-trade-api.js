@@ -35,19 +35,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
-var get_buys_data_1 = require("../modules/get_buys_data");
-var get_stock_data_1 = require("../modules/get_stock_data");
+var get_buys_data_1 = __importDefault(require("../modules/insider-trade-api/get_buys_data"));
+var get_stock_data_1 = __importDefault(require("../modules/insider-trade-api/get_stock_data"));
 var buy_data_url = "http://openinsider.com/insider-purchases-25k";
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var buy_data, stock_data, clean_buy_data, trade_info;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, get_buys_data_1.get_buy_data(buy_data_url)];
+            case 0: return [4 /*yield*/, get_buys_data_1.default(buy_data_url)];
             case 1:
                 buy_data = _a.sent();
-                return [4 /*yield*/, get_stock_data_1.get_stock_data(buy_data)];
+                return [4 /*yield*/, get_stock_data_1.default(buy_data)];
             case 2:
                 stock_data = _a.sent();
                 clean_buy_data = buy_data.filter(function (data) {

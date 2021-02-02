@@ -35,18 +35,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
-var get_naver_webtoon_1 = require("../modules/get_naver_webtoon");
-var get_daum_webtoon_1 = require("../modules/get_daum_webtoon");
+var get_naver_webtoon_1 = __importDefault(require("../modules/korean-webtoon-api/get_naver_webtoon"));
+var get_daum_webtoon_1 = __importDefault(require("../modules/korean-webtoon-api/get_daum_webtoon"));
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var naver_info, daum_info, webtoon_info;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, get_naver_webtoon_1.get_naver_webtoon()];
+            case 0: return [4 /*yield*/, get_naver_webtoon_1.default()];
             case 1:
                 naver_info = _a.sent();
-                daum_info = get_daum_webtoon_1.get_daum_webtoon();
+                daum_info = get_daum_webtoon_1.default();
                 webtoon_info = naver_info.concat(daum_info);
                 console.log("Webtoon data update was successful (" + new Date() + ")");
                 worker_threads_1.parentPort.postMessage(webtoon_info); //결과가 null될수도 있는 값에는 !붙이기

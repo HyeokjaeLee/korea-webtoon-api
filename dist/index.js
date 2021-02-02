@@ -68,7 +68,7 @@ setImmediate(function () {
 //webtoon업데이트 워커 실행
 var webtoon_info_json = [];
 var webtoon_update = function () {
-    var workerPath_webtoon_info = path_1.default.join(__dirname, "./korean-webtoon-api/worker/webtoon_info.js");
+    var workerPath_webtoon_info = path_1.default.join(__dirname, "./worker/korean-webtoon-api.js");
     var webtoon_info = new worker_threads_1.Worker(workerPath_webtoon_info);
     webtoon_info.on("message", function (webtoon_info) {
         webtoon_info_json = webtoon_info;
@@ -82,7 +82,7 @@ var stock_info;
 var trade_update = function () { return __awaiter(void 0, void 0, void 0, function () {
     var trade_info_zip, workerPath_trade_info, trade_info;
     return __generator(this, function (_a) {
-        workerPath_trade_info = path_1.default.join(__dirname, "./insider-trade-api/worker/trade_info.js");
+        workerPath_trade_info = path_1.default.join(__dirname, "./worker/insider-trade-api.js");
         trade_info = new worker_threads_1.Worker(workerPath_trade_info);
         trade_info.on("message", function (trade_info) {
             trade_info_zip = trade_info;

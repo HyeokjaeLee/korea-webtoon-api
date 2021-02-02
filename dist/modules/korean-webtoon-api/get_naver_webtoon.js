@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_naver_webtoon = void 0;
 var request = require("request-promise-native");
 var base_modules_1 = require("./base_modules");
 var cheerio_1 = require("cheerio");
@@ -141,26 +140,6 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                     });
                 }); };
                 get_a_naver_webtoon = function ($, index, webtoon_num, week_num) {
-                    var get_title = $(".list_toon" + index)
-                        .find(".info")
-                        .eq(webtoon_num)
-                        .find(".title")
-                        .text();
-                    var get_artist = $(".list_toon" + index)
-                        .find(".info")
-                        .eq(webtoon_num)
-                        .find(".author")
-                        .text();
-                    var get_url = naver_comic_url +
-                        $(".list_toon" + index)
-                            .find("a")
-                            .eq(webtoon_num)
-                            .attr("href");
-                    var get_img = $(".list_toon" + index)
-                        .find(".thumbnail")
-                        .eq(webtoon_num)
-                        .find("img")
-                        .attr("src");
                     var state_value;
                     var weekday_value;
                     if (index == "") {
@@ -188,10 +167,26 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                         weekday_value = 7;
                     }
                     return {
-                        title: get_title,
-                        artist: get_artist,
-                        url: get_url,
-                        img: get_img,
+                        title: $(".list_toon" + index)
+                            .find(".info")
+                            .eq(webtoon_num)
+                            .find(".title")
+                            .text(),
+                        artist: $(".list_toon" + index)
+                            .find(".info")
+                            .eq(webtoon_num)
+                            .find(".author")
+                            .text(),
+                        url: naver_comic_url +
+                            $(".list_toon" + index)
+                                .find("a")
+                                .eq(webtoon_num)
+                                .attr("href"),
+                        img: $(".list_toon" + index)
+                            .find(".thumbnail")
+                            .eq(webtoon_num)
+                            .find("img")
+                            .attr("src"),
                         service: "Naver",
                         state: state_value,
                         weekday: weekday_value,
@@ -207,4 +202,4 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
         }
     });
 }); };
-exports.get_naver_webtoon = get_naver_webtoon;
+exports.default = get_naver_webtoon;

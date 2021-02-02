@@ -1,18 +1,6 @@
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-interface A_webtoon_info {
-  title: string;
-  artist: string;
-  url: string;
-  img: string;
-  service: string;
-  state: string;
-  weekday: number;
-}
-
-const weekday: string[] = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-
 const get_json_data = (url: string) => {
-  let xmlhttp = new XMLHttpRequest();
+  const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+  const xmlhttp = new XMLHttpRequest();
   let json_data: string = "";
   xmlhttp.onreadystatechange = () => {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -29,5 +17,14 @@ const get_json_data = (url: string) => {
   return json_data;
 };
 
-export type { A_webtoon_info };
-export { get_json_data, weekday };
+const string_date_to_date_form = (string_date: string) => {
+  const strArr: string[] = string_date.split("-");
+  const numArr: number[] = [];
+  for (let i = 0; i < 3; i++) {
+    numArr[i] = Number(strArr[i]);
+  }
+  const date: Date = new Date(numArr[0], numArr[1] - 1, numArr[2]);
+  return date;
+};
+
+export { get_json_data, string_date_to_date_form };

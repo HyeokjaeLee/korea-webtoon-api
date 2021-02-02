@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_buy_data = void 0;
 var request = require("request-promise-native");
 var cheerio_1 = require("cheerio");
 var base_modules_1 = require("./base_modules");
+var common_modules_1 = require("../common_modules");
 var $;
 var get_buy_data = function (url) {
     return new Promise(function (resolve) {
@@ -18,19 +18,17 @@ var get_buy_data = function (url) {
         });
     });
 };
-exports.get_buy_data = get_buy_data;
 var get_a_data_part = function (column_num, row_num) {
     return $(".tinytable").find("tbody").find("tr").eq(column_num).find("td").eq(row_num).text();
 };
-var get_a_data = function (column_num) {
-    return {
-        ticker: get_a_data_part(column_num, 3).replace(/ /gi, ""),
-        trade_date: base_modules_1.string_date_to_date_form(get_a_data_part(column_num, 2)),
-        company_name: get_a_data_part(column_num, 4),
-        insider_name: get_a_data_part(column_num, 5),
-        price: base_modules_1.$2num(get_a_data_part(column_num, 8)),
-        qty: base_modules_1.$2num(get_a_data_part(column_num, 9)),
-        owned: base_modules_1.$2num(get_a_data_part(column_num, 10)),
-        value: base_modules_1.$2num(get_a_data_part(column_num, 12)),
-    };
-};
+var get_a_data = function (column_num) { return ({
+    ticker: get_a_data_part(column_num, 3).replace(/ /gi, ""),
+    trade_date: common_modules_1.string_date_to_date_form(get_a_data_part(column_num, 2)),
+    company_name: get_a_data_part(column_num, 4),
+    insider_name: get_a_data_part(column_num, 5),
+    price: base_modules_1.$2num(get_a_data_part(column_num, 8)),
+    qty: base_modules_1.$2num(get_a_data_part(column_num, 9)),
+    owned: base_modules_1.$2num(get_a_data_part(column_num, 10)),
+    value: base_modules_1.$2num(get_a_data_part(column_num, 12)),
+}); };
+exports.default = get_buy_data;

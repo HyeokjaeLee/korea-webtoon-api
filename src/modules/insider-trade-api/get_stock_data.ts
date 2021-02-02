@@ -75,4 +75,4 @@ const get_stock_data = async (json_data: any, start_date?: string, end_date?: st
   return { stock_data: clean_stock_data, error_ticker: error_ticker };
 };
 
-export { get_stock_data };
+export default get_stock_data;
