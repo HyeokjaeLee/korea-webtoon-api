@@ -55,6 +55,7 @@ var main = function () {
     hosting_start();
     webtoon_update();
     trade_update();
+    covid19_update();
     //5분 간격으로 전체 data 업데이트
     setInterval(function () {
         webtoon_update();
@@ -63,6 +64,7 @@ var main = function () {
 //한시간 간격으로 주식데이터 업데이트
 setImmediate(function () {
     trade_update();
+    covid19_update();
 }, sec(3600));
 //--------------------------------------------------------------------------------
 //webtoon업데이트 워커 실행
@@ -93,6 +95,14 @@ var trade_update = function () { return __awaiter(void 0, void 0, void 0, functi
         return [2 /*return*/];
     });
 }); };
+var covid19_info_json = [];
+var covid19_update = function () {
+    var workerPath_covid19_info = path_1.default.join(__dirname, "./worker/korea-covid19-api.js");
+    var covid19_info = new worker_threads_1.Worker(workerPath_covid19_info);
+    covid19_info.on("message", function (covid19_info) {
+        covid19_info_json = covid19_info;
+    });
+};
 //json 형식으로 웹에 배포
 var hosting_start = function () { return __awaiter(void 0, void 0, void 0, function () {
     var app, host_stock;
@@ -118,6 +128,9 @@ var hosting_start = function () { return __awaiter(void 0, void 0, void 0, funct
         });
         app.get("/insidertrade/list", function (request, response) {
             response.json(insider_trade_info);
+        });
+        app.get("/covid19/korea", function (request, response) {
+            response.json(covid19_info_json);
         });
         app.listen(process.env.PORT || 8080, function () {
             console.log("webtoon api hosting started on port 8080.");
