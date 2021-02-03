@@ -1,8 +1,29 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.string_date_to_date_form = exports.get_json_data = void 0;
+exports.get_api_xml2json = exports.string_date_to_date_form = exports.get_json_data = void 0;
+var convert = __importStar(require("xml-js"));
+var request = __importStar(require("request"));
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var get_json_data = function (url) {
-    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     var xmlhttp = new XMLHttpRequest();
     var json_data = "";
     xmlhttp.onreadystatechange = function () {
@@ -21,6 +42,22 @@ var get_json_data = function (url) {
     return json_data;
 };
 exports.get_json_data = get_json_data;
+var get_api_xml2json = function (url) {
+    return new Promise(function (resolve, reject) {
+        request.get(url, function (err, res, body) {
+            if (err) {
+                console.log("err => " + err);
+            }
+            else {
+                if (res.statusCode == 200) {
+                    var JSON_Data = JSON.parse(convert.xml2json(body, { compact: true, spaces: 4 }));
+                    resolve(JSON_Data);
+                }
+            }
+        });
+    });
+};
+exports.get_api_xml2json = get_api_xml2json;
 var string_date_to_date_form = function (string_date) {
     var strArr = string_date.split("-");
     var numArr = [];

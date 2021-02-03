@@ -16,7 +16,7 @@ const main = (): void => {
   hosting_start();
   webtoon_update();
   trade_update();
-
+  covid19_update();
   //5분 간격으로 전체 data 업데이트
   setInterval(function () {
     webtoon_update();
@@ -25,6 +25,7 @@ const main = (): void => {
 //한시간 간격으로 주식데이터 업데이트
 setImmediate(function () {
   trade_update();
+  covid19_update();
 }, sec(3600));
 //--------------------------------------------------------------------------------
 
@@ -41,6 +42,7 @@ const webtoon_update = (): void => {
   });
 };
 
+//insider-trade 업데이트 워커 실행
 let insider_trade_info: object[];
 let stock_info: any[];
 const trade_update = async () => {
@@ -55,6 +57,14 @@ const trade_update = async () => {
     trade_info_zip = trade_info;
     insider_trade_info = trade_info_zip.insider_trade_list;
     stock_info = trade_info_zip.stock_data;
+  });
+};
+let covid19_info_json: any = [];
+const covid19_update = (): void => {
+  let workerPath_covid19_info = path.join(__dirname, "./worker/korea-covid19-api.js");
+  let covid19_info = new Worker(workerPath_covid19_info);
+  covid19_info.on("message", (covid19_info) => {
+    covid19_info_json = covid19_info;
   });
 };
 
@@ -82,6 +92,9 @@ const hosting_start = async () => {
   });
   app.get("/insidertrade/list", function (request: any, response: { json: (arg0: any[]) => void }) {
     response.json(insider_trade_info);
+  });
+  app.get("/covid19/korea", function (request: any, response: { json: (arg0: any[]) => void }) {
+    response.json(covid19_info_json);
   });
   app.listen(process.env.PORT || 8080, function () {
     console.log("webtoon api hosting started on port 8080.");

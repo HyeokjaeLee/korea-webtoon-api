@@ -25,6 +25,7 @@
     "http": "^0.0.1-security",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
+    "xml-js": "^1.6.11",
     "xmlhttprequest": "^1.8.0",
     "yahoo-stock-prices": "^1.1.0"
   },

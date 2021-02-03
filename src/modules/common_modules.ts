@@ -1,5 +1,8 @@
+import * as convert from "xml-js";
+import * as request from "request";
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 const get_json_data = (url: string) => {
-  const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
   const xmlhttp = new XMLHttpRequest();
   let json_data: string = "";
   xmlhttp.onreadystatechange = () => {
@@ -17,6 +20,21 @@ const get_json_data = (url: string) => {
   return json_data;
 };
 
+const get_api_xml2json = (url: string) => {
+  return new Promise((resolve, reject) => {
+    request.get(url, (err: any, res: any, body: any) => {
+      if (err) {
+        console.log(`err => ${err}`);
+      } else {
+        if (res.statusCode == 200) {
+          const JSON_Data: any = JSON.parse(convert.xml2json(body, { compact: true, spaces: 4 }));
+          resolve(JSON_Data);
+        }
+      }
+    });
+  });
+};
+
 const string_date_to_date_form = (string_date: string) => {
   const strArr: string[] = string_date.split("-");
   const numArr: number[] = [];
@@ -27,4 +45,4 @@ const string_date_to_date_form = (string_date: string) => {
   return date;
 };
 
-export { get_json_data, string_date_to_date_form };
+export { get_json_data, string_date_to_date_form, get_api_xml2json };

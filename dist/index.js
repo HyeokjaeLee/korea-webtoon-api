@@ -77,6 +77,7 @@ var webtoon_update = function () {
         });
     });
 };
+//insider-trade 업데이트 워커 실행
 var insider_trade_info;
 var stock_info;
 var trade_update = function () { return __awaiter(void 0, void 0, void 0, function () {
