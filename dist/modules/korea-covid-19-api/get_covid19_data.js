@@ -64,8 +64,8 @@ var process_covid19_region_data = function (source_api_data) {
                 },
                 recovered: recovered_cnt,
                 total: confirmed_cnt,
+                death_cnt: death_cnt,
             },
-            death_cnt: death_cnt,
         };
     });
 };
