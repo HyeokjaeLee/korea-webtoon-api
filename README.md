@@ -1,6 +1,6 @@
 <h1 align="center">Toy project API 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.5.0-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.6.0-blue.svg?cacheSeconds=2592000" />
 </p>
 
 > 여러가지 ToyProject에 활용할 API <br>
@@ -9,6 +9,7 @@
 
 - [Korean-Webtoon-API](https://toy-projects-api.herokuapp.com/webtoon/all)
 - [Insider-Trade-API](https://toy-projects-api.herokuapp.com/insidertrade/list)
+- [Korea-Covid19-API](https://toy-projects-api.herokuapp.com/covid19/korea)
 
 ## Author
 
@@ -29,6 +30,9 @@
   - [DaumWebtoon](http://webtoon.daum.net)
 - Insider-Trade-API
   - [OpenInsider](http://openinsider.com)
+- Korea-covid19-API
+  - [공공데이터포털](https://www.data.go.kr/data/15043378/openapi.do)<br>
+    XML Data
 
 ## To-Do
 

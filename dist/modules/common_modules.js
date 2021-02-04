@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_api_xml2json = exports.string_date_to_date_form = exports.get_json_data = void 0;
+exports.setTimer_loop = exports.ms2second = exports.ms2minute = exports.ms2hour = exports.string_date_to_date_form = exports.get_api_xml2json = exports.get_json_data = void 0;
 var convert = __importStar(require("xml-js"));
 var request = __importStar(require("request"));
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
@@ -68,3 +68,16 @@ var string_date_to_date_form = function (string_date) {
     return date;
 };
 exports.string_date_to_date_form = string_date_to_date_form;
+var ms2hour = function (hour) { return hour * 3600000; };
+exports.ms2hour = ms2hour;
+var ms2minute = function (minute) { return minute * 60000; };
+exports.ms2minute = ms2minute;
+var ms2second = function (second) { return second * 1000; };
+exports.ms2second = ms2second;
+var setTimer_loop = function (sec_num, fn) {
+    fn();
+    setInterval(function () {
+        fn();
+    }, sec_num);
+};
+exports.setTimer_loop = setTimer_loop;

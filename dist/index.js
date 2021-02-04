@@ -40,106 +40,69 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
-var worker_threads_1 = require("worker_threads");
 var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
-var http_1 = __importDefault(require("http"));
-//호스팅 서버 슬립 방지
-setInterval(function () {
-    http_1.default.get("http://toy-projects-api.herokuapp.com/");
-}, sec(600));
-//--------------------------------------------------------------------------------
-//main 실행 함수
+var common_modules_1 = require("./modules/common_modules");
+var index_modules_1 = require("./modules/index_modules");
+var exp = express_1.default();
+exp.use(cors_1.default());
+index_modules_1.keep_host("http://toy-projects-api.herokuapp.com/");
+var korea_covid19_dir = path_1.default.join(__dirname, "./worker/korea-covid19-api.js");
+var insider_trade_dir = path_1.default.join(__dirname, "./worker/insider-trade-api.js");
+var korean_webtoon_dir = path_1.default.join(__dirname, "./worker/korean-webtoon-api.js");
+//------------------------------------------------------------------------
 var main = function () {
-    //호스팅 시작과 동시에 전체 데이터 1회 업데이트
-    hosting_start();
-    webtoon_update();
-    trade_update();
-    covid19_update();
-    //5분 간격으로 전체 data 업데이트
-    setInterval(function () {
-        webtoon_update();
-    }, sec(300));
+    common_modules_1.setTimer_loop(common_modules_1.ms2hour(12), update_insider_trade_api);
+    common_modules_1.setTimer_loop(common_modules_1.ms2minute(10), update_korean_webtoon_api);
+    common_modules_1.setTimer_loop(common_modules_1.ms2hour(1), update_korea_covid19_api);
+    index_modules_1.hosting(8080);
 };
-//한시간 간격으로 주식데이터 업데이트
-setImmediate(function () {
-    trade_update();
-    covid19_update();
-}, sec(3600));
-//--------------------------------------------------------------------------------
-//webtoon업데이트 워커 실행
-var webtoon_info_json = [];
-var webtoon_update = function () {
-    var workerPath_webtoon_info = path_1.default.join(__dirname, "./worker/korean-webtoon-api.js");
-    var webtoon_info = new worker_threads_1.Worker(workerPath_webtoon_info);
-    webtoon_info.on("message", function (webtoon_info) {
-        webtoon_info_json = webtoon_info;
-        webtoon_info_json.sort(function (a, b) {
-            return a.title < b.title ? -1 : 1;
-        });
-    });
-};
-//insider-trade 업데이트 워커 실행
-var insider_trade_info;
-var stock_info;
-var trade_update = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var trade_info_zip, workerPath_trade_info, trade_info;
-    return __generator(this, function (_a) {
-        workerPath_trade_info = path_1.default.join(__dirname, "./worker/insider-trade-api.js");
-        trade_info = new worker_threads_1.Worker(workerPath_trade_info);
-        trade_info.on("message", function (trade_info) {
-            trade_info_zip = trade_info;
-            insider_trade_info = trade_info_zip.insider_trade_list;
-            stock_info = trade_info_zip.stock_data;
-        });
-        return [2 /*return*/];
+//------------------------------------------------------------------------
+var update_korea_covid19_api = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = index_modules_1.create_router;
+                _b = ["/covid19/korea"];
+                return [4 /*yield*/, index_modules_1.get_data_from_worker(korea_covid19_dir)];
+            case 1:
+                _a.apply(void 0, _b.concat([_c.sent()]));
+                return [2 /*return*/];
+        }
     });
 }); };
-var covid19_info_json = [];
-var covid19_update = function () {
-    var workerPath_covid19_info = path_1.default.join(__dirname, "./worker/korea-covid19-api.js");
-    var covid19_info = new worker_threads_1.Worker(workerPath_covid19_info);
-    covid19_info.on("message", function (covid19_info) {
-        covid19_info_json = covid19_info;
-    });
-};
-//json 형식으로 웹에 배포
-var hosting_start = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var app, host_stock;
+var update_insider_trade_api = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var data, insider_trade_list_data, stock_data;
     return __generator(this, function (_a) {
-        app = express_1.default();
-        app.use(cors_1.default());
-        host_stock = function () {
-            stock_info.map(function (data) {
-                var stock_data = data.slice(1).reverse();
-                app.get("/insidertrade/" + data[0], function (request, response) {
-                    response.json(stock_data);
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, index_modules_1.get_data_from_worker(insider_trade_dir)];
+            case 1:
+                data = _a.sent();
+                insider_trade_list_data = data.insider_trade_list;
+                stock_data = data.stock_data;
+                stock_data.map(function (data) {
+                    var stock_data = data.slice(1).reverse();
+                    index_modules_1.create_router("/insidertrade/" + data[0], stock_data);
                 });
-            });
-        };
-        setTimeout(function () {
-            host_stock();
-        }, sec(30));
-        setInterval(function () {
-            host_stock();
-        }, sec(3600));
-        app.get("/webtoon/all", function (request, response) {
-            response.json(webtoon_info_json);
-        });
-        app.get("/insidertrade/list", function (request, response) {
-            response.json(insider_trade_info);
-        });
-        app.get("/covid19/korea", function (request, response) {
-            response.json(covid19_info_json);
-        });
-        app.listen(process.env.PORT || 8080, function () {
-            console.log("webtoon api hosting started on port 8080.");
-        });
-        return [2 /*return*/];
+                index_modules_1.create_router("/insidertrade/list", insider_trade_list_data);
+                return [2 /*return*/];
+        }
     });
 }); };
-//ms단위 s단위로 변환
-function sec(time) {
-    return time * 1000;
-}
+var update_korean_webtoon_api = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, index_modules_1.get_data_from_worker(korean_webtoon_dir)];
+            case 1:
+                data = _a.sent();
+                data.sort(function (a, b) {
+                    return a.title < b.title ? -1 : 1;
+                });
+                index_modules_1.create_router("/webtoon/all", data);
+                return [2 /*return*/];
+        }
+    });
+}); };
 main();
