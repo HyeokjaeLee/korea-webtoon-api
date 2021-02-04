@@ -1,7 +1,8 @@
 import { covid19_api_url } from "./base_modules";
-import { get_api_xml2json } from "../common_modules";
+import { get_api_xml2json, getFormatDate } from "../common_modules";
 const service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D";
-const url = covid19_api_url(service_key, 20200415, 20200420, "getCovid19SidoInfStateJson");
+const today = Number(getFormatDate(new Date(), ""));
+const url = covid19_api_url(service_key, 20200409, today, "getCovid19SidoInfStateJson");
 
 const process_covid19_region_data = (source_api_data: any[]) =>
   source_api_data.map((data: any) => {

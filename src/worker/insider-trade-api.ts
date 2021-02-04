@@ -1,6 +1,7 @@
 import { parentPort } from "worker_threads";
 import get_buy_data from "../modules/insider-trade-api/get_buys_data";
 import get_stock_data from "../modules/insider-trade-api/get_stock_data";
+import { update_check } from "../modules/common_modules";
 import type { A_trade_data } from "../modules/insider-trade-api/base_modules";
 const buy_data_url = "http://openinsider.com/insider-purchases-25k";
 
@@ -16,8 +17,8 @@ const buy_data_url = "http://openinsider.com/insider-purchases-25k";
     }
   });
   const trade_info = { insider_trade_list: clean_buy_data, stock_data: stock_data.stock_data };
+  update_check("Insider Trade", trade_info);
   console.log("Error Ticker : " + stock_data.error_ticker);
-  console.log("Trade data update was successful (" + new Date() + ")");
   parentPort!.postMessage(trade_info); //결과가 null될수도 있는 값에는 !붙이기
   parentPort!.close();
 })();

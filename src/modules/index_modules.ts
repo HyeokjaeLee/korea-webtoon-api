@@ -13,7 +13,7 @@ const create_router = (url: string, data: any): void => {
 
 const hosting = (port: number): void => {
   exp.listen(process.env.PORT || port, function () {
-    console.log(`api hosting started on port ${port}`);
+    console.log(`API hosting started on port ${port}`);
   });
 };
 

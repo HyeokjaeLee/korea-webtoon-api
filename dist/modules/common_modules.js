@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setTimer_loop = exports.ms2second = exports.ms2minute = exports.ms2hour = exports.string_date_to_date_form = exports.get_api_xml2json = exports.get_json_data = void 0;
+exports.setTimer_loop = exports.ms2second = exports.ms2minute = exports.ms2hour = exports.update_check = exports.string_date_to_date_form = exports.getFormatDate = exports.get_api_xml2json = exports.get_json_data = void 0;
 var convert = __importStar(require("xml-js"));
 var request = __importStar(require("request"));
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
@@ -58,6 +58,24 @@ var get_api_xml2json = function (url) {
     });
 };
 exports.get_api_xml2json = get_api_xml2json;
+var getFormatDate = function (input_date, form) {
+    var date = new Date(input_date);
+    var num2str = function (num) {
+        var result;
+        if (num < 10) {
+            result = "0" + num;
+        }
+        else {
+            result = String(num);
+        }
+        return result;
+    };
+    var year = date.getFullYear(); //yyyy
+    var month = num2str(1 + date.getMonth()); //M
+    var day = num2str(date.getDate());
+    return year + form + month + form + day;
+};
+exports.getFormatDate = getFormatDate;
 var string_date_to_date_form = function (string_date) {
     var strArr = string_date.split("-");
     var numArr = [];
@@ -68,6 +86,16 @@ var string_date_to_date_form = function (string_date) {
     return date;
 };
 exports.string_date_to_date_form = string_date_to_date_form;
+var update_check = function (api_name, data) {
+    console.log("\n------------------------" + new Date() + "------------------------\n");
+    if (data != undefined) {
+        console.log(api_name + " data has been updated successfully.");
+    }
+    else {
+        console.log(api_name + " data update failed.");
+    }
+};
+exports.update_check = update_check;
 var ms2hour = function (hour) { return hour * 3600000; };
 exports.ms2hour = ms2hour;
 var ms2minute = function (minute) { return minute * 60000; };

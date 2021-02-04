@@ -18,7 +18,7 @@ var create_router = function (url, data) {
 exports.create_router = create_router;
 var hosting = function (port) {
     exp.listen(process.env.PORT || port, function () {
-        console.log("api hosting started on port " + port);
+        console.log("API hosting started on port " + port);
     });
 };
 exports.hosting = hosting;

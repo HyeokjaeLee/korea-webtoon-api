@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
 var get_buys_data_1 = __importDefault(require("../modules/insider-trade-api/get_buys_data"));
 var get_stock_data_1 = __importDefault(require("../modules/insider-trade-api/get_stock_data"));
+var common_modules_1 = require("../modules/common_modules");
 var buy_data_url = "http://openinsider.com/insider-purchases-25k";
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var buy_data, stock_data, clean_buy_data, trade_info;
@@ -62,8 +63,8 @@ var buy_data_url = "http://openinsider.com/insider-purchases-25k";
                     }
                 });
                 trade_info = { insider_trade_list: clean_buy_data, stock_data: stock_data.stock_data };
+                common_modules_1.update_check("Insider Trade", trade_info);
                 console.log("Error Ticker : " + stock_data.error_ticker);
-                console.log("Trade data update was successful (" + new Date() + ")");
                 worker_threads_1.parentPort.postMessage(trade_info); //결과가 null될수도 있는 값에는 !붙이기
                 worker_threads_1.parentPort.close();
                 return [2 /*return*/];

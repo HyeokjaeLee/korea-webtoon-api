@@ -39,7 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var base_modules_1 = require("./base_modules");
 var common_modules_1 = require("../common_modules");
 var service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D";
-var url = base_modules_1.covid19_api_url(service_key, 20200415, 20200420, "getCovid19SidoInfStateJson");
+var today = Number(common_modules_1.getFormatDate(new Date(), ""));
+var url = base_modules_1.covid19_api_url(service_key, 20200409, today, "getCovid19SidoInfStateJson");
 var process_covid19_region_data = function (source_api_data) {
     return source_api_data.map(function (data) {
         var date = new Date(data.createDt._text); //날짜

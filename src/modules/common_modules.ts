@@ -35,6 +35,24 @@ export const get_api_xml2json = (url: string) => {
   });
 };
 
+export const getFormatDate = (input_date: Date, form: string) => {
+  const date = new Date(input_date);
+  const num2str = (num: number) => {
+    let result;
+    if (num < 10) {
+      result = "0" + num;
+    } else {
+      result = String(num);
+    }
+    return result;
+  };
+  let year: number = date.getFullYear(); //yyyy
+  let month: string = num2str(1 + date.getMonth()); //M
+  let day: string = num2str(date.getDate());
+
+  return year + form + month + form + day;
+};
+
 export const string_date_to_date_form = (string_date: string) => {
   const strArr: string[] = string_date.split("-");
   const numArr: number[] = [];
@@ -43,6 +61,15 @@ export const string_date_to_date_form = (string_date: string) => {
   }
   const date: Date = new Date(numArr[0], numArr[1] - 1, numArr[2]);
   return date;
+};
+
+export const update_check = (api_name: string, data: any): void => {
+  console.log(`\n------------------------${new Date()}------------------------\n`);
+  if (data != undefined) {
+    console.log(`${api_name} data has been updated successfully.`);
+  } else {
+    console.log(`${api_name} data update failed.`);
+  }
 };
 
 export const ms2hour = (hour: number) => hour * 3600000;

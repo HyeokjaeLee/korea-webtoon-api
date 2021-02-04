@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
 var get_covid19_data_1 = __importDefault(require("../modules/korea-covid-19-api/get_covid19_data"));
+var common_modules_1 = require("../modules/common_modules");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var covid19_info;
     return __generator(this, function (_a) {
@@ -48,7 +49,7 @@ var get_covid19_data_1 = __importDefault(require("../modules/korea-covid-19-api/
             case 0: return [4 /*yield*/, get_covid19_data_1.default()];
             case 1:
                 covid19_info = _a.sent();
-                console.log("Covid19 data update was successful (" + new Date() + ")");
+                common_modules_1.update_check("Covid19", covid19_info);
                 worker_threads_1.parentPort.postMessage(covid19_info); //결과가 null될수도 있는 값에는 !붙이기
                 worker_threads_1.parentPort.close();
                 return [2 /*return*/];

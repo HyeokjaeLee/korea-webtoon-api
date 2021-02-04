@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
 var get_naver_webtoon_1 = __importDefault(require("../modules/korean-webtoon-api/get_naver_webtoon"));
 var get_daum_webtoon_1 = __importDefault(require("../modules/korean-webtoon-api/get_daum_webtoon"));
+var common_modules_1 = require("../modules/common_modules");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var naver_info, daum_info, webtoon_info;
     return __generator(this, function (_a) {
@@ -51,7 +52,7 @@ var get_daum_webtoon_1 = __importDefault(require("../modules/korean-webtoon-api/
                 naver_info = _a.sent();
                 daum_info = get_daum_webtoon_1.default();
                 webtoon_info = naver_info.concat(daum_info);
-                console.log("Webtoon data update was successful (" + new Date() + ")");
+                common_modules_1.update_check("Korean Webtoon", webtoon_info);
                 worker_threads_1.parentPort.postMessage(webtoon_info); //결과가 null될수도 있는 값에는 !붙이기
                 worker_threads_1.parentPort.close();
                 return [2 /*return*/];
