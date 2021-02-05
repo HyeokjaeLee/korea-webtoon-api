@@ -26,7 +26,8 @@ const update_insider_trade_api = async () => {
   const stock_data = data.stock_data;
   stock_data.map((data: any) => {
     const stock_data = data.slice(1).reverse();
-    create_router(`/insidertrade/${data[0]}`, stock_data);
+    const ticker = data[0];
+    create_router(`/insidertrade/${ticker}`, stock_data);
   });
   create_router("/insidertrade/list", insider_trade_list_data);
 };

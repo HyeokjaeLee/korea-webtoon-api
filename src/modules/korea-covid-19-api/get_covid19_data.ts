@@ -3,18 +3,18 @@ import { get_api_xml2json, getFormatDate } from "../common_modules";
 const service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D";
 const today = Number(getFormatDate(new Date(), ""));
 const url = covid19_api_url(service_key, 20200409, today, "getCovid19SidoInfStateJson");
-
-const process_covid19_region_data = (source_api_data: any[]) =>
-  source_api_data.map((data: any) => {
+const process_covid19_region_data = (source_api_data: any[]) => {
+  const for_ai_data = {};
+  const processed_covid19_region_data = source_api_data.map((data: any) => {
     const date: Date = new Date(data.createDt._text); //날짜
     const region: string = data.gubun._text; //지역 또는 구분값
     const infected_cnt: number = Number(data.isolIngCnt._text); //전체 확진자 수
     const new_local_infection_cnt: number = Number(data.localOccCnt._text); //새로운 지역감염으로 인한 확진자
     const new_overseas_infection_cnt: number = Number(data.overFlowCnt._text); //새로운 해외감염으로 인한 확진자
-    const new_infected_cnt: number = Number(data.incDec._text); //새로운 확진자
-    const existing_infected_cnt: number = infected_cnt - new_infected_cnt; //기존 확진자
-    const death_cnt: number = Number(data.deathCnt._text); //사망자
-    const recovered_cnt: number = Number(data.isolClearCnt._text); //회복
+    const new_infected_cnt: number = Number(data.incDec._text); //새로운 확진자_getAI
+    const existing_infected_cnt: number = infected_cnt - new_infected_cnt; //기존 확진자_getAI
+    const death_cnt: number = Number(data.deathCnt._text); //사망자_getAI
+    const recovered_cnt: number = Number(data.isolClearCnt._text); //회복_getAI
     const confirmed_cnt: number = Number(data.defCnt._text); //전체 확진자 수
     return {
       date: date,
@@ -31,6 +31,8 @@ const process_covid19_region_data = (source_api_data: any[]) =>
       },
     };
   });
+  return processed_covid19_region_data;
+};
 
 const get_covid19_data = async () => {
   const source_api_data: any = await get_api_xml2json(url);

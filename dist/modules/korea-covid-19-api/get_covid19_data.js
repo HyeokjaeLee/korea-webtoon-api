@@ -42,7 +42,7 @@ var service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgm
 var today = Number(common_modules_1.getFormatDate(new Date(), ""));
 var url = base_modules_1.covid19_api_url(service_key, 20200409, today, "getCovid19SidoInfStateJson");
 var process_covid19_region_data = function (source_api_data) {
-    return source_api_data.map(function (data) {
+    var data = source_api_data.map(function (data) {
         var date = new Date(data.createDt._text); //날짜
         var region = data.gubun._text; //지역 또는 구분값
         var infected_cnt = Number(data.isolIngCnt._text); //전체 확진자 수
@@ -68,6 +68,7 @@ var process_covid19_region_data = function (source_api_data) {
             },
         };
     });
+    return data;
 };
 var get_covid19_data = function () { return __awaiter(void 0, void 0, void 0, function () {
     var source_api_data, covid19_region_data, processed_api_data;
