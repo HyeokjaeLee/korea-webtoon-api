@@ -45,5 +45,5 @@
   - [x] add insider-trade-api(ver 1.2.0)<br>
   - [x] add stock-info(ver 1.3.0)<br>
 - Korea-COVID19-API
-  - [x] complete xml data with appropriate json data form(ver 1.6.5)<br>
+  - [x] Convert xml data to json format and complete appropriate data form(ver 1.6.5)<br>
   - [ ] add AI Data<br>
