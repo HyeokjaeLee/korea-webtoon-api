@@ -57,7 +57,6 @@ const process_covid19_region_data = (source_api_data: any[]) => {
     data_arr[i].push(region_arr[i]);
     data_arr[i].reverse();
   }
-  console.log(data_arr);
   return data_arr;
 };
 
