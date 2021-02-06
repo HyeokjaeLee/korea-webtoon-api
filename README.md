@@ -9,7 +9,7 @@
 
 - [Korean-Webtoon-API](https://toy-projects-api.herokuapp.com/webtoon/all)
 - [Insider-Trade-API](https://toy-projects-api.herokuapp.com/insidertrade/list)
-- [Korea-Covid19-API](https://toy-projects-api.herokuapp.com/covid19/korea)
+- [Korea-Covid19-API](https://toy-projects-api.herokuapp.com/covid19/korea/total)
 
 ## Author
 
