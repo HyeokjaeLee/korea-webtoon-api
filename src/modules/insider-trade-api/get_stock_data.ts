@@ -49,7 +49,8 @@ const get_a_data = async (ticker: string, start_date?: string, end_date?: string
       .filter((data: A_stock_data) => {
         return data !== undefined;
       });
-    stock_processed_data.unshift(ticker);
+    stock_processed_data.push(ticker);
+    stock_processed_data.reverse();
     const data_length = stock_processed_data.length;
     if (stock_processed_data[data_length - 1] == ticker) {
       error_ticker.push(ticker);

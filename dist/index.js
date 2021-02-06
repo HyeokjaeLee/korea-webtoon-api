@@ -59,15 +59,17 @@ var main = function () {
 };
 //------------------------------------------------------------------------
 var update_korea_covid19_api = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _a = index_modules_1.create_router;
-                _b = ["/covid19/korea"];
-                return [4 /*yield*/, index_modules_1.get_data_from_worker(korea_covid19_dir)];
+    var data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, index_modules_1.get_data_from_worker(korea_covid19_dir)];
             case 1:
-                _a.apply(void 0, _b.concat([_c.sent()]));
+                data = _a.sent();
+                data.map(function (data) {
+                    var covid_data = data.slice(1);
+                    var region = data[0];
+                    index_modules_1.create_router("/covid19/korea/" + region, covid_data);
+                });
                 return [2 /*return*/];
         }
     });
@@ -82,8 +84,9 @@ var update_insider_trade_api = function () { return __awaiter(void 0, void 0, vo
                 insider_trade_list_data = data.insider_trade_list;
                 stock_data = data.stock_data;
                 stock_data.map(function (data) {
-                    var stock_data = data.slice(1).reverse();
-                    index_modules_1.create_router("/insidertrade/" + data[0], stock_data);
+                    var stock_data = data.slice(1);
+                    var ticker = data[0];
+                    index_modules_1.create_router("/insidertrade/" + ticker, stock_data);
                 });
                 index_modules_1.create_router("/insidertrade/list", insider_trade_list_data);
                 return [2 /*return*/];

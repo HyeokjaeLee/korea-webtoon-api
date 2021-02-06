@@ -18,14 +18,19 @@ const main = () => {
 };
 //------------------------------------------------------------------------
 const update_korea_covid19_api = async () => {
-  create_router("/covid19/korea", await get_data_from_worker(korea_covid19_dir));
+  const data: any = await get_data_from_worker(korea_covid19_dir);
+  data.map((data: any) => {
+    const covid_data = data.slice(1);
+    const region = data[0];
+    create_router(`/covid19/korea/${region}`, covid_data);
+  });
 };
 const update_insider_trade_api = async () => {
   const data: any = await get_data_from_worker(insider_trade_dir);
   const insider_trade_list_data = data.insider_trade_list;
   const stock_data = data.stock_data;
   stock_data.map((data: any) => {
-    const stock_data = data.slice(1).reverse();
+    const stock_data = data.slice(1);
     const ticker = data[0];
     create_router(`/insidertrade/${ticker}`, stock_data);
   });

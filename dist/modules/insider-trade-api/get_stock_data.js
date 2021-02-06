@@ -83,7 +83,8 @@ var get_a_data = function (ticker, start_date, end_date) { return __awaiter(void
                     .filter(function (data) {
                     return data !== undefined;
                 });
-                stock_processed_data.unshift(ticker);
+                stock_processed_data.push(ticker);
+                stock_processed_data.reverse();
                 data_length = stock_processed_data.length;
                 if (stock_processed_data[data_length - 1] == ticker) {
                     error_ticker.push(ticker);
