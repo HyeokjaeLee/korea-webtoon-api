@@ -10,10 +10,11 @@ var worker_threads_1 = require("worker_threads");
 var http_1 = __importDefault(require("http"));
 var exp = express_1.default();
 exp.use(cors_1.default());
-var create_router = function (url, data) {
-    exp.get(url, function (request, response) {
+var create_router = function (router, data, router_list) {
+    exp.get(router, function (request, response) {
         response.json(data);
     });
+    router_list === null || router_list === void 0 ? void 0 : router_list.push(router);
 };
 exports.create_router = create_router;
 var hosting = function (port) {

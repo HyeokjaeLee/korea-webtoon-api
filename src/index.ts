@@ -18,29 +18,35 @@ const main = () => {
 };
 //------------------------------------------------------------------------
 const update_korea_covid19_api = async () => {
+  const router_list: string[] = [];
   const data: any = await get_data_from_worker(korea_covid19_dir);
   data.map((data: any) => {
     const covid_data = data.slice(1);
     const region = data[0];
-    create_router(`/covid19/korea/${region}`, covid_data);
+    create_router(`/covid19/korea/${region}`, covid_data, router_list);
   });
+  create_router("/covid19", router_list);
 };
 const update_insider_trade_api = async () => {
+  const router_list: string[] = [];
   const data: any = await get_data_from_worker(insider_trade_dir);
   const insider_trade_list_data = data.insider_trade_list;
   const stock_data = data.stock_data;
   stock_data.map((data: any) => {
     const stock_data = data.slice(1);
     const ticker = data[0];
-    create_router(`/insidertrade/${ticker}`, stock_data);
+    create_router(`/insidertrade/${ticker}`, stock_data, router_list);
   });
-  create_router("/insidertrade/list", insider_trade_list_data);
+  create_router("/insidertrade/list", insider_trade_list_data, router_list);
+  create_router("/insidertrade", router_list);
 };
 const update_korean_webtoon_api = async () => {
+  const router_list: string[] = [];
   const data: any = await get_data_from_worker(korean_webtoon_dir);
   data.sort((a: any, b: any) => {
     return a.title < b.title ? -1 : 1;
   });
-  create_router("/webtoon/all", data);
+  create_router("/webtoon/all", data, router_list);
+  create_router("/webtoon", router_list);
 };
 main();

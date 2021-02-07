@@ -95,7 +95,6 @@ var process_covid19_region_data = function (source_api_data) {
         data_arr[i].push(region_arr[i]);
         data_arr[i].reverse();
     }
-    console.log(data_arr);
     return data_arr;
 };
 var get_covid19_data = function () { return __awaiter(void 0, void 0, void 0, function () {

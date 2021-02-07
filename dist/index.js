@@ -59,26 +59,31 @@ var main = function () {
 };
 //------------------------------------------------------------------------
 var update_korea_covid19_api = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
+    var router_list, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, index_modules_1.get_data_from_worker(korea_covid19_dir)];
+            case 0:
+                router_list = [];
+                return [4 /*yield*/, index_modules_1.get_data_from_worker(korea_covid19_dir)];
             case 1:
                 data = _a.sent();
                 data.map(function (data) {
                     var covid_data = data.slice(1);
                     var region = data[0];
-                    index_modules_1.create_router("/covid19/korea/" + region, covid_data);
+                    index_modules_1.create_router("/covid19/korea/" + region, covid_data, router_list);
                 });
+                index_modules_1.create_router("/covid19", router_list);
                 return [2 /*return*/];
         }
     });
 }); };
 var update_insider_trade_api = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var data, insider_trade_list_data, stock_data;
+    var router_list, data, insider_trade_list_data, stock_data;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, index_modules_1.get_data_from_worker(insider_trade_dir)];
+            case 0:
+                router_list = [];
+                return [4 /*yield*/, index_modules_1.get_data_from_worker(insider_trade_dir)];
             case 1:
                 data = _a.sent();
                 insider_trade_list_data = data.insider_trade_list;
@@ -86,24 +91,28 @@ var update_insider_trade_api = function () { return __awaiter(void 0, void 0, vo
                 stock_data.map(function (data) {
                     var stock_data = data.slice(1);
                     var ticker = data[0];
-                    index_modules_1.create_router("/insidertrade/" + ticker, stock_data);
+                    index_modules_1.create_router("/insidertrade/" + ticker, stock_data, router_list);
                 });
-                index_modules_1.create_router("/insidertrade/list", insider_trade_list_data);
+                index_modules_1.create_router("/insidertrade/list", insider_trade_list_data, router_list);
+                index_modules_1.create_router("/insidertrade", router_list);
                 return [2 /*return*/];
         }
     });
 }); };
 var update_korean_webtoon_api = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
+    var router_list, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, index_modules_1.get_data_from_worker(korean_webtoon_dir)];
+            case 0:
+                router_list = [];
+                return [4 /*yield*/, index_modules_1.get_data_from_worker(korean_webtoon_dir)];
             case 1:
                 data = _a.sent();
                 data.sort(function (a, b) {
                     return a.title < b.title ? -1 : 1;
                 });
-                index_modules_1.create_router("/webtoon/all", data);
+                index_modules_1.create_router("/webtoon/all", data, router_list);
+                index_modules_1.create_router("/webtoon", router_list);
                 return [2 /*return*/];
         }
     });

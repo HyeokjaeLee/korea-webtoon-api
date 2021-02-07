@@ -5,10 +5,11 @@ import http from "http";
 const exp = express();
 exp.use(cors());
 
-const create_router = (url: string, data: any): void => {
-  exp.get(url, function (request: any, response: { json: (arg: any[]) => void }) {
+const create_router = (router: string, data: any, router_list?: string[]): void => {
+  exp.get(router, function (request: any, response: { json: (arg: any[]) => void }) {
     response.json(data);
   });
+  router_list?.push(router);
 };
 
 const hosting = (port: number): void => {
