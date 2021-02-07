@@ -48,7 +48,7 @@ const process_covid19_region_data = (source_api_data: any[]) => {
           total: infected_cnt,
         },
         recovered: recovered_cnt,
-        death_cnt: death_cnt,
+        death: death_cnt,
         total: confirmed_cnt,
       },
     });

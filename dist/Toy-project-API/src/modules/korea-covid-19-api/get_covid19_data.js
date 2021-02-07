@@ -86,7 +86,7 @@ var process_covid19_region_data = function (source_api_data) {
                     total: infected_cnt,
                 },
                 recovered: recovered_cnt,
-                death: death_cnt,
+                death_cnt: death_cnt,
                 total: confirmed_cnt,
             },
         });
