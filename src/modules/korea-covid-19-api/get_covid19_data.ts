@@ -25,90 +25,65 @@ const process_covid19_region_data = (source_api_data: any[]) => {
     "Seoul",
     "Total",
   ];
-  const region_arr_length: number = region_arr.length;
-  const data_arr: any[][] = Array.from(Array(region_arr_length), () => new Array());
-  const api_length: number = source_api_data.length;
-  const Original_data = source_api_data.map((data: any) => ({
-    date: new Date(data.createDt._text), //날짜
-    region: data.gubun._text, //지역 kor
-    regionEn: data.gubunEn._text, //지역 eng
-    infected: Number(data.isolIngCnt._text), //치료 안된 감염자
-    new_local_infection: Number(data.localOccCnt._text), //새로운 지역감염으로 인한 확진자
-    new_overseas_infection: Number(data.overFlowCnt._text), //새로운 해외감염으로 인한 확진자
-    new_infected: Number(data.incDec._text), //새로운 확진자_getAI
-    death: Number(data.deathCnt._text), //사망자_getAI
-    recovered: Number(data.isolClearCnt._text), //회복_getAI
-    confirmed: Number(data.defCnt._text), //전체 확진자
-  }));
-
-  for (let i = 1; i < api_length; i++) {
-    const date: Date = new Date(source_api_data[i].createDt._text); //날짜
-    const region: string = source_api_data[i].gubunEn._text; //지역 또는 구분값
-    const infected_cnt: number = Number(source_api_data[i].isolIngCnt._text); //전체 확진자 수
-    const new_infected_cnt: number = Number(source_api_data[i].incDec._text); //새로운 확진자_getAI
-    const new_local_infection_cnt: number = Number(source_api_data[i].localOccCnt._text); //새로운 지역감염으로 인한 확진자
-    const new_overseas_infection_cnt: number = Number(source_api_data[i].overFlowCnt._text); //새로운 해외감염으로 인한 확진자
-    const existing_infected_cnt: number = infected_cnt - new_infected_cnt; //기존 확진자
-    const confirmed_cnt: number = Number(source_api_data[i].defCnt._text); //전체 확진자 수
-    const region_num = region_arr.indexOf(region);
-    const recovered_cnt: number = Number(source_api_data[i].isolClearCnt._text); //회복_getAI
-    const existing_recovered_cnt = Number(source_api_data[i - 1].isolClearCnt._text);
-    const new_recovered_cnt = recovered_cnt - existing_recovered_cnt;
-    const death_cnt: number = Number(source_api_data[i].deathCnt._text); //사망자_getAI
-    const existing_death_cnt = Number(source_api_data[i - 1].deathCnt._text);
-    const new_death_cnt = death_cnt - existing_death_cnt;
-    if (
-      i < Original_data.length - 1 &&
-      Original_data[i].infected < Original_data[i + 1].infected &&
-      Original_data[i].recovered < Original_data[i + 1].recovered &&
-      Original_data[i].death < Original_data[i + 1].death
-    ) {
-      data_arr[region_num].push({
-        date: date,
-        confirmed: {
-          infected: {
-            new_infected: { local_infection: new_local_infection_cnt, overseas_infection: new_overseas_infection_cnt, total: new_infected_cnt },
-            existing_infected: existing_infected_cnt,
-            total: infected_cnt,
-          },
-          recovered: recovered_cnt,
-          death: death_cnt,
-          total: confirmed_cnt,
-        },
-      });
-  }
-
+  const region_count: number = region_arr.length;
+  const result_data: any[][] = Array.from(Array(region_count), () => new Array());
+  const categorized_by_region: any[][] = Array.from(Array(region_count), () => new Array());
   source_api_data.map((data: any) => {
-    const date: Date = new Date(data.createDt._text); //날짜
-    const region: string = data.gubunEn._text; //지역 또는 구분값
-    const infected_cnt: number = Number(data.isolIngCnt._text); //전체 확진자 수
-    const new_local_infection_cnt: number = Number(data.localOccCnt._text); //새로운 지역감염으로 인한 확진자
-    const new_overseas_infection_cnt: number = Number(data.overFlowCnt._text); //새로운 해외감염으로 인한 확진자
-    const new_infected_cnt: number = Number(data.incDec._text); //새로운 확진자_getAI
-    const existing_infected_cnt: number = infected_cnt - new_infected_cnt; //기존 확진자
-    const death_cnt: number = Number(data.deathCnt._text); //사망자_getAI
-    const recovered_cnt: number = Number(data.isolClearCnt._text); //회복_getAI
-    const confirmed_cnt: number = Number(data.defCnt._text); //전체 확진자 수
-    const region_num = region_arr.indexOf(region);
-    data_arr[region_num].push({
-      date: date,
-      confirmed: {
-        infected: {
-          new_infected: { local_infection: new_local_infection_cnt, overseas_infection: new_overseas_infection_cnt, total: new_infected_cnt },
-          existing_infected: existing_infected_cnt,
-          total: infected_cnt,
-        },
-        recovered: recovered_cnt,
-        death: death_cnt,
-        total: confirmed_cnt,
-      },
+    const region_num = region_arr.indexOf(data.gubunEn._text);
+    categorized_by_region[region_num].push({
+      date: new Date(data.createDt._text), //날짜
+      infected: Number(data.isolIngCnt._text), //치료 안된 감염자
+      new_local_infection: Number(data.localOccCnt._text), //새로운 지역감염으로 인한 확진자
+      new_overseas_infection: Number(data.overFlowCnt._text), //새로운 해외감염으로 인한 확진자
+      new_infected: Number(data.incDec._text), //새로운 확진자_getAI
+      death: Number(data.deathCnt._text), //사망자_getAI
+      recovered: Number(data.isolClearCnt._text), //회복_getAI
+      confirmed: Number(data.defCnt._text), //전체 확진자
     });
   });
-  for (let i = 0; i < region_arr_length; i++) {
-    data_arr[i].push(region_arr[i]);
-    data_arr[i].reverse();
+  for (let region_num = 0; region_num < region_count; region_num++) {
+    const data = categorized_by_region[region_num].reverse();
+    const data_count: number = data.length;
+    for (let i = 1; i < data_count; i++) {
+      const date: Date = data[i].date; //날짜
+      const infected_cnt: number = data[i].infected; //전체 확진자 수
+      const new_infected_cnt: number = data[i].new_infected; //새로운 확진자_getAI
+      const new_local_infection_cnt: number = data[i].new_local_infection; //새로운 지역감염으로 인한 확진자
+      const new_overseas_infection_cnt: number = data[i].new_overseas_infection; //새로운 해외감염으로 인한 확진자
+      const existing_infected_cnt: number = infected_cnt - new_infected_cnt; //기존 확진자
+      const confirmed_cnt: number = data[i].confirmed; //전체 확진자 수
+      const recovered_cnt: number = data[i].recovered; //회복_getAI
+      const existing_recovered_cnt = data[i - 1].recovered;
+      const new_recovered_cnt = recovered_cnt - existing_recovered_cnt;
+      const death_cnt: number = data[i].death; //사망자_getAI
+      const existing_death_cnt = data[i - 1].death;
+      const new_death_cnt = death_cnt - existing_death_cnt;
+      if (
+        i == data_count - 1 ||
+        (i < data_count - 1 &&
+          confirmed_cnt < data[i + 1].confirmed &&
+          data[i].recovered < data[i] < data[i + 1].recovered &&
+          data[i].death < data[i + 1].death)
+      ) {
+        result_data[region_num].push({
+          date: date,
+          confirmed: {
+            infected: {
+              new: { local: new_local_infection_cnt, overseas: new_overseas_infection_cnt, total: new_infected_cnt },
+              existing: existing_infected_cnt,
+              total: infected_cnt,
+            },
+            recovered: { new: new_recovered_cnt, existing: existing_recovered_cnt, total: recovered_cnt },
+            death: { new: new_death_cnt, existing: existing_death_cnt, total: death_cnt },
+            total: confirmed_cnt,
+          },
+        });
+      }
+    }
+    result_data[region_num].unshift(region_arr[region_num]);
   }
-  return data_arr;
+
+  return result_data;
 };
 
 const get_covid19_data = async () => {

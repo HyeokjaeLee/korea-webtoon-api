@@ -63,39 +63,62 @@ var process_covid19_region_data = function (source_api_data) {
         "Seoul",
         "Total",
     ];
-    var region_arr_length = region_arr.length;
-    var data_arr = Array.from(Array(region_arr_length), function () { return new Array(); });
+    var region_count = region_arr.length;
+    var result_data = Array.from(Array(region_count), function () { return new Array(); });
+    var categorized_by_region = Array.from(Array(region_count), function () { return new Array(); });
     source_api_data.map(function (data) {
-        var date = new Date(data.createDt._text); //날짜
-        var region = data.gubunEn._text; //지역 또는 구분값
-        var infected_cnt = Number(data.isolIngCnt._text); //전체 확진자 수
-        var new_local_infection_cnt = Number(data.localOccCnt._text); //새로운 지역감염으로 인한 확진자
-        var new_overseas_infection_cnt = Number(data.overFlowCnt._text); //새로운 해외감염으로 인한 확진자
-        var new_infected_cnt = Number(data.incDec._text); //새로운 확진자_getAI
-        var existing_infected_cnt = infected_cnt - new_infected_cnt; //기존 확진자
-        var death_cnt = Number(data.deathCnt._text); //사망자_getAI
-        var recovered_cnt = Number(data.isolClearCnt._text); //회복_getAI
-        var confirmed_cnt = Number(data.defCnt._text); //전체 확진자 수
-        var region_num = region_arr.indexOf(region);
-        data_arr[region_num].push({
-            date: date,
-            confirmed: {
-                infected: {
-                    new_infected: { local_infection: new_local_infection_cnt, overseas_infection: new_overseas_infection_cnt, total: new_infected_cnt },
-                    existing_infected: existing_infected_cnt,
-                    total: infected_cnt,
-                },
-                recovered: recovered_cnt,
-                death: death_cnt,
-                total: confirmed_cnt,
-            },
+        var region_num = region_arr.indexOf(data.gubunEn._text);
+        categorized_by_region[region_num].push({
+            date: new Date(data.createDt._text),
+            infected: Number(data.isolIngCnt._text),
+            new_local_infection: Number(data.localOccCnt._text),
+            new_overseas_infection: Number(data.overFlowCnt._text),
+            new_infected: Number(data.incDec._text),
+            death: Number(data.deathCnt._text),
+            recovered: Number(data.isolClearCnt._text),
+            confirmed: Number(data.defCnt._text),
         });
     });
-    for (var i = 0; i < region_arr_length; i++) {
-        data_arr[i].push(region_arr[i]);
-        data_arr[i].reverse();
+    for (var region_num = 0; region_num < region_count; region_num++) {
+        var data = categorized_by_region[region_num].reverse();
+        var data_count = data.length;
+        for (var i = 1; i < data_count; i++) {
+            var date = data[i].date; //날짜
+            var infected_cnt = data[i].infected; //전체 확진자 수
+            var new_infected_cnt = data[i].new_infected; //새로운 확진자_getAI
+            var new_local_infection_cnt = data[i].new_local_infection; //새로운 지역감염으로 인한 확진자
+            var new_overseas_infection_cnt = data[i].new_overseas_infection; //새로운 해외감염으로 인한 확진자
+            var existing_infected_cnt = infected_cnt - new_infected_cnt; //기존 확진자
+            var confirmed_cnt = data[i].confirmed; //전체 확진자 수
+            var recovered_cnt = data[i].recovered; //회복_getAI
+            var existing_recovered_cnt = data[i - 1].recovered;
+            var new_recovered_cnt = recovered_cnt - existing_recovered_cnt;
+            var death_cnt = data[i].death; //사망자_getAI
+            var existing_death_cnt = data[i - 1].death;
+            var new_death_cnt = death_cnt - existing_death_cnt;
+            if (i == data_count - 1 ||
+                (i < data_count - 1 &&
+                    confirmed_cnt < data[i + 1].confirmed &&
+                    data[i].recovered < data[i] < data[i + 1].recovered &&
+                    data[i].death < data[i + 1].death)) {
+                result_data[region_num].push({
+                    date: date,
+                    confirmed: {
+                        infected: {
+                            new: { local: new_local_infection_cnt, overseas: new_overseas_infection_cnt, total: new_infected_cnt },
+                            existing: existing_infected_cnt,
+                            total: infected_cnt,
+                        },
+                        recovered: { new: new_recovered_cnt, existing: existing_recovered_cnt, total: recovered_cnt },
+                        death: { new: new_death_cnt, existing: existing_death_cnt, total: death_cnt },
+                        total: confirmed_cnt,
+                    },
+                });
+            }
+        }
+        result_data[region_num].unshift(region_arr[region_num]);
     }
-    return data_arr;
+    return result_data;
 };
 var get_covid19_data = function () { return __awaiter(void 0, void 0, void 0, function () {
     var source_api_data, covid19_region_data, processed_api_data;

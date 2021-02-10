@@ -1,6 +1,6 @@
 <h1 align="center">Toy project API 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.6.7-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.6.10-blue.svg?cacheSeconds=2592000" />
 </p>
 
 > 여러가지 ToyProject에 활용할 API <br>
@@ -49,4 +49,5 @@
 - Korea-COVID19-API
 
   - [x] Convert xml data to json format and complete appropriate data form(ver 1.6.5)<br>
+  - [x] junck data skip(ver 1.6.10)<br>
   - [ ] add AI Data<br>
