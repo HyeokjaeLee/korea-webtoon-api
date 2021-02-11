@@ -98,9 +98,9 @@ var process_covid19_region_data = function (source_api_data) {
             var new_death_cnt = death_cnt - existing_death_cnt;
             if (i == data_count - 1 ||
                 (i < data_count - 1 &&
-                    confirmed_cnt < data[i + 1].confirmed &&
-                    data[i].recovered < data[i] < data[i + 1].recovered &&
-                    data[i].death < data[i + 1].death)) {
+                    confirmed_cnt <= data[i + 1].confirmed &&
+                    data[i].recovered <= data[i] < data[i + 1].recovered &&
+                    data[i].death <= data[i + 1].death)) {
                 result_data[region_num].push({
                     date: date,
                     confirmed: {
