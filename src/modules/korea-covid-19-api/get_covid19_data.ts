@@ -89,7 +89,7 @@ const process_covid19_region_data = (source_api_data: any[]) => {
 const get_covid19_data = async () => {
   const source_api_data: any = await get_api_xml2json(url);
   const covid19_region_data: any[] = await source_api_data.response.body.items.item;
-  const processed_api_data = process_covid19_region_data(covid19_region_data);
+  const processed_api_data: any[][] = process_covid19_region_data(covid19_region_data);
   return processed_api_data;
 };
 

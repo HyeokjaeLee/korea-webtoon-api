@@ -41,15 +41,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
 var get_covid19_data_1 = __importDefault(require("../modules/korea-covid-19-api/get_covid19_data"));
+var AI_model = require("../../brainjs/covid_19_model.json");
+var get_ai_data_1 = __importDefault(require("../modules/korea-covid-19-api/get_ai_data"));
 var common_modules_1 = require("../modules/common_modules");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var covid19_info;
+    var covid19_info, total_info, ai_data;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, get_covid19_data_1.default()];
             case 1:
                 covid19_info = _a.sent();
                 common_modules_1.update_check("Covid19", covid19_info);
+                total_info = covid19_info[covid19_info.length - 1];
+                ai_data = new get_ai_data_1.default(total_info, AI_model, 10, 10);
+                covid19_info.push(ai_data.make_test_ai_data());
+                covid19_info.push(ai_data.make_ai_data());
                 worker_threads_1.parentPort.postMessage(covid19_info); //결과가 null될수도 있는 값에는 !붙이기
                 worker_threads_1.parentPort.close();
                 return [2 /*return*/];
