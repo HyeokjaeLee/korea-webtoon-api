@@ -1,14 +1,15 @@
 import path from "path";
 import express from "express";
 import cors from "cors";
-import { setTimer_loop, ms2hour, ms2minute } from "./modules/common_modules";
-import { create_router, hosting, get_data_from_worker, keep_host } from "./modules/index_modules";
+import { setTimer_loop, ms2hour, ms2minute } from "./modules/FormatConversion";
+import { createRouter, hosting, getData_from_Worker, keepHosting } from "./modules/index_modules";
 const exp = express();
 exp.use(cors());
-keep_host("http://toy-projects-api.herokuapp.com/");
-const korea_covid19_dir = path.join(__dirname, "./worker/korea-covid19-api.js");
-const insider_trade_dir = path.join(__dirname, "./worker/insider-trade-api.js");
-const korean_webtoon_dir = path.join(__dirname, "./worker/korean-webtoon-api.js");
+keepHosting("http://toy-projects-api.herokuapp.com/");
+const pathDir = (dir: string) => path.join(__dirname, dir.replace(".ts", ".js"));
+const korea_covid19_dir = pathDir("./korea-covid19-api/main.ts");
+const insider_trade_dir = pathDir("./insider-trade-api/main.ts");
+const korean_webtoon_dir = pathDir("./korean-webtoon-api/main.ts");
 //------------------------------------------------------------------------
 const main = () => {
   setTimer_loop(ms2hour(12), update_insider_trade_api);
@@ -19,34 +20,33 @@ const main = () => {
 //------------------------------------------------------------------------
 const update_korea_covid19_api = async () => {
   const router_list: string[] = [];
-  const data: any = await get_data_from_worker(korea_covid19_dir);
+  const data: any = await getData_from_Worker(korea_covid19_dir);
   data.map((data: any) => {
-    const covid_data = data.slice(1);
-    const region = data[0];
-    create_router(`/covid19/korea/${region}`, covid_data, router_list);
+    const region = data.region;
+    createRouter(`/covid19/korea/${region}`, data, router_list);
   });
-  create_router("/covid19", router_list);
+  createRouter("/covid19", router_list);
 };
 const update_insider_trade_api = async () => {
   const router_list: string[] = [];
-  const data: any = await get_data_from_worker(insider_trade_dir);
+  const data: any = await getData_from_Worker(insider_trade_dir);
   const insider_trade_list_data = data.insider_trade_list;
   const stock_data = data.stock_data;
   stock_data.map((data: any) => {
     const stock_data = data.slice(1);
     const ticker = data[0];
-    create_router(`/insidertrade/${ticker}`, stock_data, router_list);
+    createRouter(`/insidertrade/${ticker}`, stock_data, router_list);
   });
-  create_router("/insidertrade/list", insider_trade_list_data, router_list);
-  create_router("/insidertrade", router_list);
+  createRouter("/insidertrade/list", insider_trade_list_data, router_list);
+  createRouter("/insidertrade", router_list);
 };
 const update_korean_webtoon_api = async () => {
   const router_list: string[] = [];
-  const data: any = await get_data_from_worker(korean_webtoon_dir);
+  const data: any = await getData_from_Worker(korean_webtoon_dir);
   data.sort((a: any, b: any) => {
     return a.title < b.title ? -1 : 1;
   });
-  create_router("/webtoon/all", data, router_list);
-  create_router("/webtoon", router_list);
+  createRouter("/webtoon/all", data, router_list);
+  createRouter("/webtoon", router_list);
 };
 main();
