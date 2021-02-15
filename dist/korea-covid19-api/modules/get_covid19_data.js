@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.get_covid19_data = void 0;
 var covid19_api_url = function (service_key, from, to, middle_url) {
     return "http://openapi.data.go.kr/openapi/service/rest/Covid19/" + middle_url + "?serviceKey=" + service_key + "&pageNo=1&numOfRows=1&startCreateDt=" + from + "&endCreateDt=" + to;
 };
@@ -45,30 +46,30 @@ var RegionList_1 = require("./RegionList");
 var service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D";
 var today = Number(FormatConversion_1.convertDateFormat(new Date(), ""));
 var url = covid19_api_url(service_key, 20200409, today, "getCovid19SidoInfStateJson");
-var process_covid19_region_data = function (source_api_data) {
-    var region_arr = RegionList_1.regionListData.map(function (data) { return data.eng; });
-    var region_count = region_arr.length;
-    var categorized_by_region = function () {
-        var result = Array.from(Array(region_count), function () { return new Array(); });
-        source_api_data.map(function (data) {
-            var region_num = region_arr.indexOf(data.gubunEn._text);
-            result[region_num].push({
-                date: new Date(data.createDt._text),
-                infected: Number(data.isolIngCnt._text),
-                new_local_infection: Number(data.localOccCnt._text),
-                new_overseas_infection: Number(data.overFlowCnt._text),
-                new_infected: Number(data.incDec._text),
-                death: Number(data.deathCnt._text),
-                recovered: Number(data.isolClearCnt._text),
-                confirmed: Number(data.defCnt._text),
-            });
+var region_arr = RegionList_1.regionListData.map(function (data) { return data.eng; });
+var region_count = region_arr.length;
+var categorizing_by_region = function (source_api_data) {
+    var result = Array.from(Array(region_count), function () { return new Array(); });
+    source_api_data.map(function (data) {
+        var region_num = region_arr.indexOf(data.gubunEn._text);
+        result[region_num].push({
+            date: new Date(data.createDt._text),
+            infected: Number(data.isolIngCnt._text),
+            new_local_infection: Number(data.localOccCnt._text),
+            new_overseas_infection: Number(data.overFlowCnt._text),
+            new_infected: Number(data.incDec._text),
+            death: Number(data.deathCnt._text),
+            recovered: Number(data.isolClearCnt._text),
+            confirmed: Number(data.defCnt._text),
         });
-        return result;
-    };
+    });
+    return result;
+};
+var createDetail_Info = function (categorized_by_region_Data) {
     var result = [];
     for (var region_num = 0; region_num < region_count; region_num++) {
         result.push({ region: region_arr[region_num], data: [] });
-        var data = categorized_by_region()[region_num].reverse();
+        var data = categorized_by_region_Data[region_num].reverse();
         var data_count = data.length;
         for (var i = 1; i < data_count; i++) {
             var date = data[i].date; //날짜
@@ -87,18 +88,30 @@ var process_covid19_region_data = function (source_api_data) {
             if (i == data_count - 1 ||
                 (i < data_count - 1 &&
                     confirmed_cnt <= data[i + 1].confirmed &&
-                    data[i].recovered <= data[i] < data[i + 1].recovered &&
+                    data[i].recovered <= data[i + 1].recovered &&
                     data[i].death <= data[i + 1].death)) {
                 result[region_num].data.push({
                     date: date,
                     confirmed: {
                         infected: {
-                            new: { local: new_local_infection_cnt, overseas: new_overseas_infection_cnt, total: new_infected_cnt },
+                            new: {
+                                local: new_local_infection_cnt,
+                                overseas: new_overseas_infection_cnt,
+                                total: new_infected_cnt,
+                            },
                             existing: existing_infected_cnt,
                             total: infected_cnt,
                         },
-                        recovered: { new: new_recovered_cnt, existing: existing_recovered_cnt, total: recovered_cnt },
-                        death: { new: new_death_cnt, existing: existing_death_cnt, total: death_cnt },
+                        recovered: {
+                            new: new_recovered_cnt,
+                            existing: existing_recovered_cnt,
+                            total: recovered_cnt,
+                        },
+                        death: {
+                            new: new_death_cnt,
+                            existing: existing_death_cnt,
+                            total: death_cnt,
+                        },
                         total: confirmed_cnt,
                     },
                 });
@@ -108,18 +121,17 @@ var process_covid19_region_data = function (source_api_data) {
     return result;
 };
 var get_covid19_data = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var source_api_data, covid19_region_data, processed_api_data;
+    var source_api_data, covid19_region_data, categorized_by_region_Data, detail_info;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, getAPI_1.getXmlAPI2JSON(url)];
             case 1:
                 source_api_data = _a.sent();
-                return [4 /*yield*/, source_api_data.response.body.items.item];
-            case 2:
-                covid19_region_data = _a.sent();
-                processed_api_data = process_covid19_region_data(covid19_region_data);
-                return [2 /*return*/, processed_api_data];
+                covid19_region_data = source_api_data.response.body.items.item;
+                categorized_by_region_Data = categorizing_by_region(covid19_region_data);
+                detail_info = createDetail_Info(categorized_by_region_Data);
+                return [2 /*return*/, detail_info];
         }
     });
 }); };
-exports.default = get_covid19_data;
+exports.get_covid19_data = get_covid19_data;

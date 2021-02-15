@@ -29,3 +29,14 @@ export interface covid19API {
   region: string;
   data: covid19Info[];
 }
+
+export interface covid19OriginalInfo {
+  date: Date;
+  infected: number;
+  new_local_infection: number;
+  new_overseas_infection: number;
+  new_infected: number;
+  death: number;
+  recovered: number;
+  confirmed: number;
+}

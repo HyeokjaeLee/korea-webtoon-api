@@ -35,19 +35,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
-var get_covid19_data_1 = __importDefault(require("./modules/get_covid19_data"));
+var get_covid19_data_1 = require("./modules/get_covid19_data");
 var AI_model = require("../../brain/model/covid_19_model.json");
 var checkUpdates_1 = require("../modules/checkUpdates");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var covid19_info;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, get_covid19_data_1.default()];
+            case 0: return [4 /*yield*/, get_covid19_data_1.get_covid19_data()];
             case 1:
                 covid19_info = _a.sent();
                 checkUpdates_1.checkUpdates("Covid19", covid19_info);
