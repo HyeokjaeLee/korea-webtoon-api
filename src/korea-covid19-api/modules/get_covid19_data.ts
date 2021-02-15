@@ -12,6 +12,7 @@ const covid19_api_url = (
   middle_url: string,
 ): string =>
   `http://openapi.data.go.kr/openapi/service/rest/Covid19/${middle_url}?serviceKey=${service_key}&pageNo=1&numOfRows=1&startCreateDt=${from}&endCreateDt=${to}`;
+
 const today = Number(convertDateFormat(new Date(), ""));
 const url = covid19_api_url(
   service_key,
@@ -20,64 +21,81 @@ const url = covid19_api_url(
   "getCovid19SidoInfStateJson",
 );
 
-const region_arr: string[] = regionListData.map((data) => data.eng);
-const region_count: number = region_arr.length;
+const regionArr: string[] = regionListData.map((data) => data.eng);
+const regionCount: number = regionArr.length;
 
-const categorizing_by_region = (
-  source_api_data: any[],
-): covid19OriginalInfo[][] => {
-  const result: covid19OriginalInfo[][] = Array.from(
-    Array(region_count),
-    () => new Array(),
-  );
-  source_api_data.map((data: any) => {
-    const region_num = region_arr.indexOf(data.gubunEn._text);
-    result[region_num].push({
-      date: new Date(data.createDt._text), //날짜
-      infected: Number(data.isolIngCnt._text), //치료 안된 감염자
-      new_local_infection: Number(data.localOccCnt._text), //새로운 지역감염으로 인한 확진자
-      new_overseas_infection: Number(data.overFlowCnt._text), //새로운 해외감염으로 인한 확진자
-      new_infected: Number(data.incDec._text), //새로운 확진자_getAI
-      death: Number(data.deathCnt._text), //사망자_getAI
-      recovered: Number(data.isolClearCnt._text), //회복_getAI
-      confirmed: Number(data.defCnt._text), //전체 확진자
+export const getCovid19Data = async () => {
+  const originalCovid19API: any = await getXmlAPI2JSON(url);
+  const RequiredInfo = originalCovid19API.response.body.items.item;
+  const region_separated_Info = ((): covid19OriginalInfo[][] => {
+    const result: covid19OriginalInfo[][] = Array.from(
+      Array(regionCount),
+      () => new Array(),
+    );
+    RequiredInfo.map((data: any) => {
+      const regionIndex = regionArr.indexOf(data.gubunEn._text);
+      result[regionIndex].push({
+        date: new Date(data.createDt._text), //날짜
+        infected: Number(data.isolIngCnt._text), //치료 안된 감염자
+        new_local_infection: Number(data.localOccCnt._text), //새로운 지역감염으로 인한 확진자
+        new_overseas_infection: Number(data.overFlowCnt._text), //새로운 해외감염으로 인한 확진자
+        new_infected: Number(data.incDec._text), //새로운 확진자_getAI
+        death: Number(data.deathCnt._text), //사망자_getAI
+        recovered: Number(data.isolClearCnt._text), //회복_getAI
+        confirmed: Number(data.defCnt._text), //전체 확진자
+      });
     });
-  });
-  return result;
-};
+    return result;
+  })();
 
-const createDetail_Info = (
-  categorized_by_region_Data: covid19OriginalInfo[][],
-): covid19API[] => {
-  const result: covid19API[] = [];
-  for (let region_num = 0; region_num < region_count; region_num++) {
-    result.push({ region: region_arr[region_num], data: [] });
-    const data: covid19OriginalInfo[] = categorized_by_region_Data[
-      region_num
-    ].reverse();
-    const data_count: number = data.length;
-    for (let i = 1; i < data_count; i++) {
-      const date: Date = data[i].date; //날짜
-      const infected_cnt: number = data[i].infected; //전체 확진자 수
-      const new_infected_cnt: number = data[i].new_infected; //새로운 확진자_getAI
-      const new_local_infection_cnt: number = data[i].new_local_infection; //새로운 지역감염으로 인한 확진자
-      const new_overseas_infection_cnt: number = data[i].new_overseas_infection; //새로운 해외감염으로 인한 확진자
-      const existing_infected_cnt: number = infected_cnt - new_infected_cnt; //기존 확진자
-      const confirmed_cnt: number = data[i].confirmed; //전체 확진자 수
-      const recovered_cnt: number = data[i].recovered; //회복_getAI
-      const existing_recovered_cnt = data[i - 1].recovered;
-      const new_recovered_cnt = recovered_cnt - existing_recovered_cnt;
-      const death_cnt: number = data[i].death; //사망자_getAI
-      const existing_death_cnt = data[i - 1].death;
-      const new_death_cnt = death_cnt - existing_death_cnt;
-      if (
-        i == data_count - 1 ||
-        (i < data_count - 1 &&
-          confirmed_cnt <= data[i + 1].confirmed &&
-          data[i].recovered <= data[i + 1].recovered &&
-          data[i].death <= data[i + 1].death)
-      ) {
-        result[region_num].data.push({
+  const junckFilteredInfo = (() => {
+    const result: covid19OriginalInfo[][] = Array.from(
+      Array(regionCount),
+      () => new Array(),
+    );
+    for (let regionIndex = 0; regionIndex < regionCount; regionIndex++) {
+      const daysCount: number = region_separated_Info[regionIndex].length;
+      const aRegionInfo = region_separated_Info[regionIndex].reverse();
+      for (let dayIndex = 0; dayIndex < daysCount; dayIndex++) {
+        if (
+          dayIndex == daysCount - 1 ||
+          (dayIndex < daysCount - 1 &&
+            aRegionInfo[dayIndex].confirmed <=
+              aRegionInfo[dayIndex + 1].confirmed &&
+            aRegionInfo[dayIndex].recovered <=
+              aRegionInfo[dayIndex + 1].recovered &&
+            aRegionInfo[dayIndex].death <= aRegionInfo[dayIndex + 1].death)
+        ) {
+          result[regionIndex].push(aRegionInfo[dayIndex]);
+        }
+      }
+    }
+    return result;
+  })();
+
+  const detail_Info = ((): covid19API[] => {
+    const result: covid19API[] = [];
+    for (let regionIndex = 0; regionIndex < regionCount; regionIndex++) {
+      result.push({ region: regionArr[regionIndex], data: [] });
+      const aRegionInfo = junckFilteredInfo[regionIndex];
+      const daysCount: number = aRegionInfo.length;
+      for (let dayIndex = 1; dayIndex < daysCount; dayIndex++) {
+        const date: Date = aRegionInfo[dayIndex].date; //날짜
+        const infected_cnt: number = aRegionInfo[dayIndex].infected; //전체 확진자 수
+        const new_infected_cnt: number = aRegionInfo[dayIndex].new_infected; //새로운 확진자_getAI
+        const new_local_infection_cnt: number =
+          aRegionInfo[dayIndex].new_local_infection; //새로운 지역감염으로 인한 확진자
+        const new_overseas_infection_cnt: number =
+          aRegionInfo[dayIndex].new_overseas_infection; //새로운 해외감염으로 인한 확진자
+        const existing_infected_cnt: number = infected_cnt - new_infected_cnt; //기존 확진자
+        const confirmed_cnt: number = aRegionInfo[dayIndex].confirmed; //전체 확진자 수
+        const recovered_cnt: number = aRegionInfo[dayIndex].recovered; //회복_getAI
+        const existing_recovered_cnt = aRegionInfo[dayIndex - 1].recovered;
+        const new_recovered_cnt = recovered_cnt - existing_recovered_cnt;
+        const death_cnt: number = aRegionInfo[dayIndex].death; //사망자_getAI
+        const existing_death_cnt = aRegionInfo[dayIndex - 1].death;
+        const new_death_cnt = death_cnt - existing_death_cnt;
+        result[regionIndex].data.push({
           date: date,
           confirmed: {
             infected: {
@@ -104,16 +122,8 @@ const createDetail_Info = (
         });
       }
     }
-  }
-  return result;
-};
+    return result;
+  })();
 
-export const get_covid19_data = async () => {
-  const source_api_data: any = await getXmlAPI2JSON(url);
-  const covid19_region_data: any[] = source_api_data.response.body.items.item;
-  const categorized_by_region_Data = categorizing_by_region(
-    covid19_region_data,
-  );
-  const detail_info = createDetail_Info(categorized_by_region_Data);
-  return detail_info;
+  return detail_Info;
 };

@@ -39,12 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
 var get_covid19_data_1 = require("./modules/get_covid19_data");
 var AI_model = require("../../brain/model/covid_19_model.json");
+//import AI_data from "./modules/get_ai_data";
 var checkUpdates_1 = require("../modules/checkUpdates");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var covid19_info;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, get_covid19_data_1.get_covid19_data()];
+            case 0: return [4 /*yield*/, get_covid19_data_1.getCovid19Data()];
             case 1:
                 covid19_info = _a.sent();
                 checkUpdates_1.checkUpdates("Covid19", covid19_info);

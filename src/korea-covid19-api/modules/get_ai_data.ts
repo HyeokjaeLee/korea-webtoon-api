@@ -6,7 +6,7 @@ interface ai_data {
   total: number;
 }
 
-export default class get_ai_data {
+/*export default class get_ai_data {
   private net: any = new brain.recurrent.LSTMTimeStep();
   public new: number[] = [];
   public existing: number[] = [];
@@ -126,3 +126,4 @@ export default class get_ai_data {
     return result;
   }
 }
+*/

@@ -1,11 +1,11 @@
 import { parentPort } from "worker_threads";
-import { get_covid19_data } from "./modules/get_covid19_data";
+import { getCovid19Data } from "./modules/get_covid19_data";
 const AI_model = require("../../brain/model/covid_19_model.json");
-import AI_data from "./modules/get_ai_data";
+//import AI_data from "./modules/get_ai_data";
 import { checkUpdates } from "../modules/checkUpdates";
 
 (async () => {
-  const covid19_info = await get_covid19_data();
+  const covid19_info = await getCovid19Data();
   checkUpdates("Covid19", covid19_info);
   //const total_info = covid19_info[covid19_info.length - 1];
   //const ai_data = new AI_data(total_info, AI_model, 10, 10);
