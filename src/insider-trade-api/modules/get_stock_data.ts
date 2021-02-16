@@ -3,6 +3,7 @@ import type { yahooStockInfo, stockInfo } from "./types";
 import { checkEmpty } from "../../modules/checking";
 const errorTicker: string[] = [];
 
+//string 날짜를 number 형식으로 분리 ex: "20020123" => [2020,01,23]
 const separateStrDate = (date_str: string) => {
   const date = new Date(date_str);
   return {
@@ -12,6 +13,7 @@ const separateStrDate = (date_str: string) => {
   };
 };
 
+//기준일로 부터 seconds초 후 Date return
 const seconds2dateForm = (seconds: number): Date => {
   const calcuBaseDate = "1970-1-1";
   const date = new Date(calcuBaseDate);
@@ -19,6 +21,7 @@ const seconds2dateForm = (seconds: number): Date => {
   return date;
 };
 
+//get 한가지 주식의 정보
 const getAstockInfo = async (ticker: string, start_date?: string, end_date?: string) => {
   try {
     //받아올 날짜의 시작일을 입력안한경우
@@ -87,6 +90,7 @@ const getAstockInfo = async (ticker: string, start_date?: string, end_date?: str
   }
 };
 
+//get 전체 주식정보
 export const getTotalStockInfo = async (json_data: any, start_date?: string, end_date?: string) => {
   const tickerArr = json_data.map((data: any) => data.ticker);
   const unique_tickerArr = Array.from(new Set(tickerArr));
