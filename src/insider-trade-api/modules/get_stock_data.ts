@@ -1,27 +1,44 @@
 const yahooStockPrices = require("yahoo-stock-prices");
-import type { A_stock_data } from "./types";
-const error_ticker: string[] = [];
+import type { yahooStockInfo, stockInfo } from "./types";
+import { checkEmpty } from "../../modules/checking";
+const errorTicker: string[] = [];
 
-const get_a_data = async (ticker: string, start_date?: string, end_date?: string) => {
+const separateStrDate = (date_str: string) => {
+  const date = new Date(date_str);
+  return {
+    year: date.getFullYear(),
+    month: date.getMonth(),
+    day: date.getDate(),
+  };
+};
+
+const seconds2dateForm = (seconds: number): Date => {
+  const calcuBaseDate = "1970-1-1";
+  const date = new Date(calcuBaseDate);
+  date.setSeconds(date.getSeconds() + seconds);
+  return date;
+};
+
+const getAstockInfo = async (ticker: string, start_date?: string, end_date?: string) => {
   try {
-    const date_arr = (date_str: string) => {
-      const date = new Date(date_str);
-      return { year: date.getFullYear(), month: date.getMonth(), day: date.getDate() };
-    };
-    //날짜 안받을경우
+    //받아올 날짜의 시작일을 입력안한경우
     let start_date_arr;
     if (start_date != undefined) {
-      start_date_arr = date_arr(start_date);
+      start_date_arr = separateStrDate(start_date);
     } else {
       start_date_arr = { year: 0, month: 0, day: 0 };
     }
+
+    //받아올 날짜의 종료일을 입력안한경우
     let end_date_arr;
     if (end_date != undefined) {
-      end_date_arr = date_arr(end_date);
+      end_date_arr = separateStrDate(end_date);
     } else {
-      end_date_arr = date_arr(String(new Date()));
+      end_date_arr = separateStrDate(String(new Date()));
     }
-    const stock_original_data = await yahooStockPrices.getHistoricalPrices(
+
+    //yahooStockPrices모듈을 통해 받아온 주식정보
+    const yahooStockPricesInfo: yahooStockInfo[] = await yahooStockPrices.getHistoricalPrices(
       start_date_arr.month,
       start_date_arr.day,
       start_date_arr.year,
@@ -31,49 +48,64 @@ const get_a_data = async (ticker: string, start_date?: string, end_date?: string
       ticker,
       "1d",
     );
-    const stock_processed_data = stock_original_data
-      .map((data: any) => {
-        if (data.open != null && data.high != null && data.low != null && data.close != null) {
-          const date = new Date("1970-1-1");
-          date.setSeconds(date.getSeconds() + data.date);
-          const result: A_stock_data = {
+
+    //주식정보 정리(빈값 삭제,날짜형식 변환,시간순서대로 재배치)
+    const filtered_yahooStockPricesInfo = (() => {
+      const result: stockInfo[] = [];
+      yahooStockPricesInfo.map((data: yahooStockInfo) => {
+        //빈값 확인
+        if (
+          checkEmpty(data.date) &&
+          checkEmpty(data.open) &&
+          checkEmpty(data.high) &&
+          checkEmpty(data.low) &&
+          checkEmpty(data.close) &&
+          checkEmpty(data.adjclose) &&
+          checkEmpty(data.volume)
+        ) {
+          //초단위로 계산되었던 날짜 정보를 Date타입으로 변경
+          const date = seconds2dateForm(data.date);
+          result.push({
             date: date,
             open: data.open,
             high: data.high,
             low: data.low,
             close: data.close,
-          };
-          return result;
+            volume: data.volume,
+            adjclose: data.adjclose,
+          });
         }
-      })
-      .filter((data: A_stock_data) => {
-        return data !== undefined;
       });
-    stock_processed_data.push(ticker);
-    stock_processed_data.reverse();
-    const data_length = stock_processed_data.length;
-    if (stock_processed_data[data_length - 1] == ticker) {
-      error_ticker.push(ticker);
-    } else {
-      return stock_processed_data;
-    }
+      //역순으로 재배치
+      result.reverse();
+      return result;
+    })();
+
+    return filtered_yahooStockPricesInfo;
   } catch (e) {
-    error_ticker.push(ticker);
+    errorTicker.push(ticker);
   }
 };
 
-const get_stock_data = async (json_data: any, start_date?: string, end_date?: string) => {
-  const ticker_arr = json_data.map((data: any) => data.ticker);
-  const unique_ticker_arr = Array.from(new Set(ticker_arr));
-  const dirty_stock_data = await Promise.all(
-    unique_ticker_arr.map(async (data: any) => {
-      return await get_a_data(data, start_date, end_date);
-    }),
-  );
-  const clean_stock_data = dirty_stock_data.filter((data: A_stock_data) => {
-    return data !== undefined;
-  });
-  return { stock_data: clean_stock_data, error_ticker: error_ticker };
+export const getTotalStockInfo = async (json_data: any, start_date?: string, end_date?: string) => {
+  const tickerArr = json_data.map((data: any) => data.ticker);
+  const unique_tickerArr = Array.from(new Set(tickerArr));
+  const totalStockInfo = await (async () => {
+    const result: object[] = [];
+    await Promise.all(
+      unique_tickerArr.map(async (ticker: any) => {
+        const aStockInfo = await getAstockInfo(ticker, start_date, end_date);
+        if (checkEmpty(aStockInfo)) {
+          result.push({
+            ticker: ticker,
+            data: aStockInfo,
+          });
+        } else {
+          errorTicker.push(ticker);
+        }
+      }),
+    );
+    return result;
+  })();
+  return { stockData: totalStockInfo, errorTicker: errorTicker };
 };
-
-export default get_stock_data;

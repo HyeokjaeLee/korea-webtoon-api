@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
 var get_naver_webtoon_1 = __importDefault(require("./modules/get_naver_webtoon"));
 var get_daum_webtoon_1 = __importDefault(require("./modules/get_daum_webtoon"));
-var checkUpdates_1 = require("../modules/checkUpdates");
+var checking_1 = require("../modules/checking");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var naver_info, daum_info, webtoon_info;
     return __generator(this, function (_a) {
@@ -52,7 +52,7 @@ var checkUpdates_1 = require("../modules/checkUpdates");
                 naver_info = _a.sent();
                 daum_info = get_daum_webtoon_1.default();
                 webtoon_info = naver_info.concat(daum_info);
-                checkUpdates_1.checkUpdates("Korean Webtoon", webtoon_info);
+                checking_1.checkUpdates("Korean Webtoon", webtoon_info);
                 worker_threads_1.parentPort.postMessage(webtoon_info); //결과가 null될수도 있는 값에는 !붙이기
                 worker_threads_1.parentPort.close();
                 return [2 /*return*/];

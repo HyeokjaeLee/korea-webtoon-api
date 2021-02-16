@@ -40,7 +40,7 @@ var worker_threads_1 = require("worker_threads");
 var get_covid19_data_1 = require("./modules/get_covid19_data");
 var AI_model = require("../../brain/model/covid_19_model.json");
 //import AI_data from "./modules/get_ai_data";
-var checkUpdates_1 = require("../modules/checkUpdates");
+var checking_1 = require("../modules/checking");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var covid19_info;
     return __generator(this, function (_a) {
@@ -48,7 +48,7 @@ var checkUpdates_1 = require("../modules/checkUpdates");
             case 0: return [4 /*yield*/, get_covid19_data_1.getCovid19Data()];
             case 1:
                 covid19_info = _a.sent();
-                checkUpdates_1.checkUpdates("Covid19", covid19_info);
+                checking_1.checkUpdates("Covid19", covid19_info);
                 //const total_info = covid19_info[covid19_info.length - 1];
                 //const ai_data = new AI_data(total_info, AI_model, 10, 10);
                 //covid19_info.push(ai_data.make_test_ai_data());

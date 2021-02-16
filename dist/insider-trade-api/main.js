@@ -41,30 +41,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
 var get_buys_data_1 = __importDefault(require("./modules/get_buys_data"));
-var get_stock_data_1 = __importDefault(require("./modules/get_stock_data"));
-var checkUpdates_1 = require("../modules/checkUpdates");
+var get_stock_data_1 = require("./modules/get_stock_data");
+var checking_1 = require("../modules/checking");
 var buy_data_url = "http://openinsider.com/insider-purchases-25k";
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var buy_data, stock_data, clean_buy_data, trade_info;
+    var insiderTradeList, stockData, filteredInsiderTradeList, trade_info;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, get_buys_data_1.default(buy_data_url)];
             case 1:
-                buy_data = _a.sent();
-                return [4 /*yield*/, get_stock_data_1.default(buy_data)];
+                insiderTradeList = _a.sent();
+                return [4 /*yield*/, get_stock_data_1.getTotalStockInfo(insiderTradeList)];
             case 2:
-                stock_data = _a.sent();
-                clean_buy_data = buy_data.filter(function (data) {
-                    if (stock_data.error_ticker.includes(data.ticker)) {
+                stockData = _a.sent();
+                filteredInsiderTradeList = insiderTradeList.filter(function (data) {
+                    if (stockData.errorTicker.includes(data.ticker)) {
                         return false;
                     }
                     else {
                         return true;
                     }
                 });
-                trade_info = { insider_trade_list: clean_buy_data, stock_data: stock_data.stock_data };
-                checkUpdates_1.checkUpdates("Insider Trade", trade_info);
-                console.log("Error Ticker : " + stock_data.error_ticker);
+                trade_info = {
+                    insiderTradeList: filteredInsiderTradeList,
+                    stockData: stockData.stockData,
+                };
+                checking_1.checkUpdates("Insider Trade", trade_info);
+                console.log("Error Ticker : " + stockData.errorTicker);
                 worker_threads_1.parentPort.postMessage(trade_info); //결과가 null될수도 있는 값에는 !붙이기
                 worker_threads_1.parentPort.close();
                 return [2 /*return*/];

@@ -6,3 +6,8 @@ export const checkUpdates = (api_name: string, data: any): void => {
     console.log(`${api_name} data update failed.`);
   }
 };
+
+export const checkEmpty = (data: any) => {
+  if (typeof data == undefined || data == null || data == "") return false;
+  else return true;
+};

@@ -1,6 +1,6 @@
 <h1 align="center">Toy project API 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.8.2-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.8.3-blue.svg?cacheSeconds=2592000" />
 </p>
 
 > 여러가지 ToyProject에 활용할 API <br>
@@ -25,14 +25,15 @@
   - xmlhttprequest
   - request-promise-native
   - cheerio
+  - yahoo-stock-prices
 - Korean-Webtoon-API
   - [NaverWebtoon](https://comic.naver.com)
   - [DaumWebtoon](http://webtoon.daum.net)
 - Insider-Trade-API
   - [OpenInsider](http://openinsider.com)
+  - yahoo finance api
 - Korea-covid19-API
-  - [공공데이터포털](https://www.data.go.kr/data/15043378/openapi.do)<br>
-    XML Data
+  - [공공데이터포털(XML)](https://www.data.go.kr/data/15043378/openapi.do)<br>
 
 ## To-Do
 

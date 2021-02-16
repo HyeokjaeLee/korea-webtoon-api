@@ -36,93 +36,127 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getTotalStockInfo = void 0;
 var yahooStockPrices = require("yahoo-stock-prices");
-var error_ticker = [];
-var get_a_data = function (ticker, start_date, end_date) { return __awaiter(void 0, void 0, void 0, function () {
-    var date_arr, start_date_arr, end_date_arr, stock_original_data, stock_processed_data, data_length, e_1;
+var checking_1 = require("../../modules/checking");
+var errorTicker = [];
+var separateStrDate = function (date_str) {
+    var date = new Date(date_str);
+    return {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        day: date.getDate(),
+    };
+};
+var seconds2dateForm = function (seconds) {
+    var calcuBaseDate = "1970-1-1";
+    var date = new Date(calcuBaseDate);
+    date.setSeconds(date.getSeconds() + seconds);
+    return date;
+};
+var getAstockInfo = function (ticker, start_date, end_date) { return __awaiter(void 0, void 0, void 0, function () {
+    var start_date_arr, end_date_arr, yahooStockPricesInfo_1, filtered_yahooStockPricesInfo, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                date_arr = function (date_str) {
-                    var date = new Date(date_str);
-                    return { year: date.getFullYear(), month: date.getMonth(), day: date.getDate() };
-                };
                 start_date_arr = void 0;
                 if (start_date != undefined) {
-                    start_date_arr = date_arr(start_date);
+                    start_date_arr = separateStrDate(start_date);
                 }
                 else {
                     start_date_arr = { year: 0, month: 0, day: 0 };
                 }
                 end_date_arr = void 0;
                 if (end_date != undefined) {
-                    end_date_arr = date_arr(end_date);
+                    end_date_arr = separateStrDate(end_date);
                 }
                 else {
-                    end_date_arr = date_arr(String(new Date()));
+                    end_date_arr = separateStrDate(String(new Date()));
                 }
                 return [4 /*yield*/, yahooStockPrices.getHistoricalPrices(start_date_arr.month, start_date_arr.day, start_date_arr.year, end_date_arr.month, end_date_arr.day, end_date_arr.year, ticker, "1d")];
             case 1:
-                stock_original_data = _a.sent();
-                stock_processed_data = stock_original_data
-                    .map(function (data) {
-                    if (data.open != null && data.high != null && data.low != null && data.close != null) {
-                        var date = new Date("1970-1-1");
-                        date.setSeconds(date.getSeconds() + data.date);
-                        var result = {
-                            date: date,
-                            open: data.open,
-                            high: data.high,
-                            low: data.low,
-                            close: data.close,
-                        };
-                        return result;
-                    }
-                })
-                    .filter(function (data) {
-                    return data !== undefined;
-                });
-                stock_processed_data.push(ticker);
-                stock_processed_data.reverse();
-                data_length = stock_processed_data.length;
-                if (stock_processed_data[data_length - 1] == ticker) {
-                    error_ticker.push(ticker);
-                }
-                else {
-                    return [2 /*return*/, stock_processed_data];
-                }
-                return [3 /*break*/, 3];
+                yahooStockPricesInfo_1 = _a.sent();
+                filtered_yahooStockPricesInfo = (function () {
+                    var result = [];
+                    yahooStockPricesInfo_1.map(function (data) {
+                        //빈값 확인
+                        if (checking_1.checkEmpty(data.date) &&
+                            checking_1.checkEmpty(data.open) &&
+                            checking_1.checkEmpty(data.high) &&
+                            checking_1.checkEmpty(data.low) &&
+                            checking_1.checkEmpty(data.close) &&
+                            checking_1.checkEmpty(data.adjclose) &&
+                            checking_1.checkEmpty(data.volume)) {
+                            //초단위로 계산되었던 날짜 정보를 Date타입으로 변경
+                            var date = seconds2dateForm(data.date);
+                            result.push({
+                                date: date,
+                                open: data.open,
+                                high: data.high,
+                                low: data.low,
+                                close: data.close,
+                                volume: data.volume,
+                                adjclose: data.adjclose,
+                            });
+                        }
+                    });
+                    //역순으로 재배치
+                    result.reverse();
+                    return result;
+                })();
+                return [2 /*return*/, filtered_yahooStockPricesInfo];
             case 2:
                 e_1 = _a.sent();
-                error_ticker.push(ticker);
+                errorTicker.push(ticker);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-var get_stock_data = function (json_data, start_date, end_date) { return __awaiter(void 0, void 0, void 0, function () {
-    var ticker_arr, unique_ticker_arr, dirty_stock_data, clean_stock_data;
+var getTotalStockInfo = function (json_data, start_date, end_date) { return __awaiter(void 0, void 0, void 0, function () {
+    var tickerArr, unique_tickerArr, totalStockInfo;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                ticker_arr = json_data.map(function (data) { return data.ticker; });
-                unique_ticker_arr = Array.from(new Set(ticker_arr));
-                return [4 /*yield*/, Promise.all(unique_ticker_arr.map(function (data) { return __awaiter(void 0, void 0, void 0, function () {
+                tickerArr = json_data.map(function (data) { return data.ticker; });
+                unique_tickerArr = Array.from(new Set(tickerArr));
+                return [4 /*yield*/, (function () { return __awaiter(void 0, void 0, void 0, function () {
+                        var result;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, get_a_data(data, start_date, end_date)];
-                                case 1: return [2 /*return*/, _a.sent()];
+                                case 0:
+                                    result = [];
+                                    return [4 /*yield*/, Promise.all(unique_tickerArr.map(function (ticker) { return __awaiter(void 0, void 0, void 0, function () {
+                                            var aStockInfo;
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0: return [4 /*yield*/, getAstockInfo(ticker, start_date, end_date)];
+                                                    case 1:
+                                                        aStockInfo = _a.sent();
+                                                        if (checking_1.checkEmpty(aStockInfo)) {
+                                                            result.push({
+                                                                ticker: ticker,
+                                                                data: aStockInfo,
+                                                            });
+                                                        }
+                                                        else {
+                                                            errorTicker.push(ticker);
+                                                        }
+                                                        return [2 /*return*/];
+                                                }
+                                            });
+                                        }); }))];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/, result];
                             }
                         });
-                    }); }))];
+                    }); })()];
             case 1:
-                dirty_stock_data = _a.sent();
-                clean_stock_data = dirty_stock_data.filter(function (data) {
-                    return data !== undefined;
-                });
-                return [2 /*return*/, { stock_data: clean_stock_data, error_ticker: error_ticker }];
+                totalStockInfo = _a.sent();
+                return [2 /*return*/, { stockData: totalStockInfo, errorTicker: errorTicker }];
         }
     });
 }); };
-exports.default = get_stock_data;
+exports.getTotalStockInfo = getTotalStockInfo;

@@ -86,12 +86,11 @@ var update_insider_trade_api = function () { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, index_modules_1.getData_from_Worker(insider_trade_dir)];
             case 1:
                 data = _a.sent();
-                insider_trade_list_data = data.insider_trade_list;
-                stock_data = data.stock_data;
+                insider_trade_list_data = data.insiderTradeList;
+                stock_data = data.stockData;
                 stock_data.map(function (data) {
-                    var stock_data = data.slice(1);
-                    var ticker = data[0];
-                    index_modules_1.createRouter("/insidertrade/" + ticker, stock_data, router_list);
+                    var ticker = data.ticker;
+                    index_modules_1.createRouter("/insidertrade/" + ticker, data, router_list);
                 });
                 index_modules_1.createRouter("/insidertrade/list", insider_trade_list_data, router_list);
                 index_modules_1.createRouter("/insidertrade", router_list);

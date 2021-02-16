@@ -9,10 +9,22 @@ export interface A_trade_data {
   value: number;
 }
 
-export interface A_stock_data {
+export interface yahooStockInfo {
+  date: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  adjclose: number;
+}
+
+export interface stockInfo {
   date: Date;
   open: number;
   high: number;
   low: number;
   close: number;
+  volume: number;
+  adjclose: number;
 }

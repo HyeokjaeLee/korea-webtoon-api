@@ -30,12 +30,11 @@ const update_korea_covid19_api = async () => {
 const update_insider_trade_api = async () => {
   const router_list: string[] = [];
   const data: any = await getData_from_Worker(insider_trade_dir);
-  const insider_trade_list_data = data.insider_trade_list;
-  const stock_data = data.stock_data;
+  const insider_trade_list_data = data.insiderTradeList;
+  const stock_data = data.stockData;
   stock_data.map((data: any) => {
-    const stock_data = data.slice(1);
-    const ticker = data[0];
-    createRouter(`/insidertrade/${ticker}`, stock_data, router_list);
+    const ticker = data.ticker;
+    createRouter(`/insidertrade/${ticker}`, data, router_list);
   });
   createRouter("/insidertrade/list", insider_trade_list_data, router_list);
   createRouter("/insidertrade", router_list);
