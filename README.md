@@ -52,3 +52,4 @@
   - [x] Convert xml data to json format and complete appropriate data form(ver 1.6.5)<br>
   - [x] junck data skip(ver 1.6.10)<br>
   - [ ] add AI Data<br>
+  - [ ] 코로나 정보필터 수정(전날 보다 확진자가 줄어드는 경우는 필터링 했으나 전날보다는 늘고 그다음날 보다는 적은 경우가 필터링 안됨 대쉬보드 참조)
