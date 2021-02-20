@@ -80,11 +80,12 @@ var getCovid19Data = function () { return __awaiter(void 0, void 0, void 0, func
                         var aRegionInfo = region_separated_Info[regionIndex].reverse();
                         for (var dayIndex = 0; dayIndex < daysCount; dayIndex++) {
                             if (dayIndex == daysCount - 1 ||
-                                (dayIndex < daysCount - 1 &&
-                                    aRegionInfo[dayIndex].confirmed <=
-                                        aRegionInfo[dayIndex + 1].confirmed &&
-                                    aRegionInfo[dayIndex].recovered <=
-                                        aRegionInfo[dayIndex + 1].recovered &&
+                                dayIndex == 0 ||
+                                (aRegionInfo[dayIndex].confirmed >= aRegionInfo[dayIndex - 1].confirmed &&
+                                    aRegionInfo[dayIndex].recovered >= aRegionInfo[dayIndex - 1].recovered &&
+                                    aRegionInfo[dayIndex].death >= aRegionInfo[dayIndex - 1].death &&
+                                    aRegionInfo[dayIndex].confirmed <= aRegionInfo[dayIndex + 1].confirmed &&
+                                    aRegionInfo[dayIndex].recovered <= aRegionInfo[dayIndex + 1].recovered &&
                                     aRegionInfo[dayIndex].death <= aRegionInfo[dayIndex + 1].death)) {
                                 result[regionIndex].push(aRegionInfo[dayIndex]);
                             }

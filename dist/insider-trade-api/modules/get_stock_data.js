@@ -40,6 +40,7 @@ exports.getTotalStockInfo = void 0;
 var yahooStockPrices = require("yahoo-stock-prices");
 var checking_1 = require("../../modules/checking");
 var errorTicker = [];
+//string 날짜를 number 형식으로 분리 ex: "20020123" => [2020,01,23]
 var separateStrDate = function (date_str) {
     var date = new Date(date_str);
     return {
@@ -48,12 +49,14 @@ var separateStrDate = function (date_str) {
         day: date.getDate(),
     };
 };
+//기준일로 부터 seconds초 후 Date return
 var seconds2dateForm = function (seconds) {
     var calcuBaseDate = "1970-1-1";
     var date = new Date(calcuBaseDate);
     date.setSeconds(date.getSeconds() + seconds);
     return date;
 };
+//get 한가지 주식의 정보
 var getAstockInfo = function (ticker, start_date, end_date) { return __awaiter(void 0, void 0, void 0, function () {
     var start_date_arr, end_date_arr, yahooStockPricesInfo_1, filtered_yahooStockPricesInfo, e_1;
     return __generator(this, function (_a) {
@@ -114,6 +117,7 @@ var getAstockInfo = function (ticker, start_date, end_date) { return __awaiter(v
         }
     });
 }); };
+//get 전체 주식정보
 var getTotalStockInfo = function (json_data, start_date, end_date) { return __awaiter(void 0, void 0, void 0, function () {
     var tickerArr, unique_tickerArr, totalStockInfo;
     return __generator(this, function (_a) {

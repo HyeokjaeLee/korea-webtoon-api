@@ -1,6 +1,6 @@
 <h1 align="center">Toy project API 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.8.3-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.8.4-blue.svg?cacheSeconds=2592000" />
 </p>
 
 > 여러가지 ToyProject에 활용할 API <br>
@@ -52,5 +52,6 @@
   - [x] Convert xml data to json format and complete appropriate data form(ver 1.6.5)<br>
   - [x] junck data skip(ver 1.6.10)<br>
   - [ ] add AI Data<br>
-  - [ ] 코로나 정보필터 수정<br>
-        (전날 보다 확진자가 줄어드는 경우는 필터링 했으나 전날보다는 늘고 그다음날 보다는 적은 경우가 필터링 안됨 대쉬보드 참조)
+  - [x] modify the filtering code(ver 1.8.4)<br>
+        코로나 정보필터 수정<br>
+        (전날 보다 확진자가 줄어드는 경우는 필터링 했으나 전날보다는 늘고 그다음날 보다는 적은 경우가 필터링 안됨 대쉬보드 참조)<br>
