@@ -50,7 +50,7 @@
 - Korea-COVID19-API
 
   - [x] Convert xml data to json format and complete appropriate data form(ver 1.6.5)<br>
-  - [x] junck data skip(ver 1.6.10)<br>
+  - [x] create filtering code(ver 1.6.10)<br>
   - [ ] add AI Data(modification)<br>
   - [x] modify the filtering code(ver 1.8.4)<br>
         코로나 정보필터 수정<br>
