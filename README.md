@@ -50,9 +50,12 @@
 - Korea-COVID19-API
 
   - [x] Convert xml data to json format and complete appropriate data form(ver 1.6.5)<br>
-  - [x] create filtering code(ver 1.6.10)<br>
-  - [ ] add AI Data(modification)<br>
-  - [x] modify the filtering code(ver 1.8.4)<br>
+  - [x] Create filtering code(ver 1.6.10)<br>
+  - [ ] Add AI Data(modification)<br>
+  - [x] Modify the filtering code(ver 1.8.4)<br>
         코로나 정보필터 수정<br>
         (전날 보다 확진자가 줄어드는 경우는 필터링 했으나 전날보다는 늘고 그다음날 보다는 적은 경우가 필터링 안됨 대쉬보드 참조)<br>
-  - [ ] 호스팅 모듈 class형으로 변경
+  - [ ] Change to hosting module class type<br>
+        호스팅 모듈 클래스형으로 변경<br>
+  - [ ] Add Monthly Information<br>
+        월간 정보 추가<br>
