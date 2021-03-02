@@ -50,6 +50,7 @@
 - Korea-COVID19-API
 
   - [x] Convert xml data to json format and complete appropriate data form(ver 1.6.5)<br>
+        xml 데이터를 json 형식으로 변환하고 적절한 데이터 양식 작성<br>
   - [x] Create filtering code(ver 1.6.10)<br>
         필터링 코드 생성<br>
   - [ ] Add AI Data(modification)<br>
