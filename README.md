@@ -46,6 +46,7 @@
 
   - [x] add insider-trade-api(ver 1.2.0)<br>
   - [x] add stock-info(ver 1.3.0)<br>
+        stock정보 추가<br>
 
 - Korea-COVID19-API
 
