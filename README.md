@@ -40,6 +40,7 @@
 - Korean-Webtoon-API
 
   - [x] move completely from javascript to typescript(ver 1.1.0)<br>
+        javascript 코드를 typescript로 완전히 옮김<br>
   - [ ] add more info about webtoon<br>
         더 많은 웹툰 정보 추가<br>
 - Insider-Trade-API
