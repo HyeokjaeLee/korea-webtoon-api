@@ -43,6 +43,7 @@
         javascript 코드를 typescript로 완전히 옮김<br>
   - [ ] add more info about webtoon<br>
         더 많은 웹툰 정보 추가<br>
+  - [ ] 라우터 분리
 - Insider-Trade-API
 
   - [x] add insider-trade-api(ver 1.2.0)<br>
