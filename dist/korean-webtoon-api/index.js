@@ -52,6 +52,10 @@ var checking_1 = require("../modules/checking");
                 naver_info = _a.sent();
                 daum_info = get_daum_webtoon_1.default();
                 webtoon_info = naver_info.concat(daum_info);
+                console.log(webtoon_info);
+                webtoon_info.sort(function (a, b) {
+                    return a.title < b.title ? -1 : 1;
+                });
                 checking_1.checkUpdates("Korean Webtoon", webtoon_info);
                 worker_threads_1.parentPort.postMessage(webtoon_info); //결과가 null될수도 있는 값에는 !붙이기
                 worker_threads_1.parentPort.close();

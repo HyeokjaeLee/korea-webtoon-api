@@ -68,7 +68,7 @@ var getCovid19Data = function () { return __awaiter(void 0, void 0, void 0, func
                             new_infected: Number(data.incDec._text),
                             death: Number(data.deathCnt._text),
                             recovered: Number(data.isolClearCnt._text),
-                            confirmed: Number(data.defCnt._text),
+                            confirmed: Number(data.defCnt._text), //전체 확진자
                         });
                     });
                     return result;
@@ -81,11 +81,15 @@ var getCovid19Data = function () { return __awaiter(void 0, void 0, void 0, func
                         for (var dayIndex = 0; dayIndex < daysCount; dayIndex++) {
                             if (dayIndex == daysCount - 1 ||
                                 dayIndex == 0 ||
-                                (aRegionInfo[dayIndex].confirmed >= aRegionInfo[dayIndex - 1].confirmed &&
-                                    aRegionInfo[dayIndex].recovered >= aRegionInfo[dayIndex - 1].recovered &&
+                                (aRegionInfo[dayIndex].confirmed >=
+                                    aRegionInfo[dayIndex - 1].confirmed &&
+                                    aRegionInfo[dayIndex].recovered >=
+                                        aRegionInfo[dayIndex - 1].recovered &&
                                     aRegionInfo[dayIndex].death >= aRegionInfo[dayIndex - 1].death &&
-                                    aRegionInfo[dayIndex].confirmed <= aRegionInfo[dayIndex + 1].confirmed &&
-                                    aRegionInfo[dayIndex].recovered <= aRegionInfo[dayIndex + 1].recovered &&
+                                    aRegionInfo[dayIndex].confirmed <=
+                                        aRegionInfo[dayIndex + 1].confirmed &&
+                                    aRegionInfo[dayIndex].recovered <=
+                                        aRegionInfo[dayIndex + 1].recovered &&
                                     aRegionInfo[dayIndex].death <= aRegionInfo[dayIndex + 1].death)) {
                                 result[regionIndex].push(aRegionInfo[dayIndex]);
                             }

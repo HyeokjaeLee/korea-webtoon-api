@@ -47,10 +47,12 @@ var index_modules_1 = require("./modules/index_modules");
 var exp = express_1.default();
 exp.use(cors_1.default());
 index_modules_1.keepHosting("http://toy-projects-api.herokuapp.com/");
-var pathDir = function (dir) { return path_1.default.join(__dirname, dir.replace(".ts", ".js")); };
-var korea_covid19_dir = pathDir("./korea-covid19-api/main.ts");
-var insider_trade_dir = pathDir("./insider-trade-api/main.ts");
-var korean_webtoon_dir = pathDir("./korean-webtoon-api/main.ts");
+var pathDir = function (dir) {
+    return path_1.default.join(__dirname, dir.replace(".ts", ".js"));
+};
+var korea_covid19_dir = pathDir("./korea-covid19-api/index.ts");
+var insider_trade_dir = pathDir("./insider-trade-api/index.ts");
+var korean_webtoon_dir = pathDir("./korean-webtoon-api/index.ts");
 //------------------------------------------------------------------------
 var main = function () {
     FormatConversion_1.setTimer_loop(FormatConversion_1.ms2hour(12), update_insider_trade_api);
@@ -70,7 +72,7 @@ var update_korea_covid19_api = function () { return __awaiter(void 0, void 0, vo
                 data = _a.sent();
                 data.map(function (data) {
                     var region = data.region;
-                    index_modules_1.createRouter("/covid19/korea/" + region, data, router_list);
+                    index_modules_1.createRouter("/covid19/" + region, data, router_list);
                 });
                 index_modules_1.createRouter("/covid19", router_list);
                 return [2 /*return*/];
@@ -107,9 +109,6 @@ var update_korean_webtoon_api = function () { return __awaiter(void 0, void 0, v
                 return [4 /*yield*/, index_modules_1.getData_from_Worker(korean_webtoon_dir)];
             case 1:
                 data = _a.sent();
-                data.sort(function (a, b) {
-                    return a.title < b.title ? -1 : 1;
-                });
                 index_modules_1.createRouter("/webtoon/all", data, router_list);
                 index_modules_1.createRouter("/webtoon", router_list);
                 return [2 /*return*/];

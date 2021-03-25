@@ -108,8 +108,8 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                         switch (_a.label) {
                             case 0:
                                 _loop_1 = function (week_num) {
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
+                                    return __generator(this, function (_b) {
+                                        switch (_b.label) {
                                             case 0: return [4 /*yield*/, request(naver_url_package(Sortation.weekday, week_num), function (err, response, body) {
                                                     var $ = cheerio_1.load(body);
                                                     var page_webtoon_count = $(".list_toon").find(".item").find(".info").length;
@@ -119,7 +119,7 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                                                     }
                                                 })];
                                             case 1:
-                                                _a.sent();
+                                                _b.sent();
                                                 return [2 /*return*/];
                                         }
                                     });
