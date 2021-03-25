@@ -1,6 +1,6 @@
 import { convertDateFormat } from "../../modules/FormatConversion";
 import { getXmlAPI2JSON } from "../../modules/getAPI";
-import { regionListData } from "./RegionList";
+import { regionListData } from  "../../modules/commonData";
 import { covid19API, covid19OriginalInfo } from "../../modules/types";
 
 const service_key: string =

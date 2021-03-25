@@ -40,8 +40,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
-var get_naver_webtoon_1 = __importDefault(require("./modules/get_naver_webtoon"));
-var get_daum_webtoon_1 = __importDefault(require("./modules/get_daum_webtoon"));
+var get_naver_webtoon_1 = __importDefault(require("./components/get_naver_webtoon"));
+var get_daum_webtoon_1 = __importDefault(require("./components/get_daum_webtoon"));
 var checking_1 = require("../modules/checking");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var naver_info, daum_info, total_info;

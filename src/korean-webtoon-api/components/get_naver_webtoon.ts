@@ -1,5 +1,5 @@
 const request = require("request-promise-native");
-import { weekday } from "./weekday";
+import { weekday } from  "../../modules/commonData";
 import type { A_webtoon_info } from "../../modules/types";
 import { load } from "cheerio";
 

@@ -1,4 +1,5 @@
-import type { regionList } from "../../modules/types";
+export const weekday: string[] = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+import type { regionList } from "./types";
 export const regionListData: regionList[] = [
   {
     kor: "검역",

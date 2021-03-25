@@ -1,5 +1,3 @@
-import { getTotalStockInfo } from "../insider-trade-api/modules/get_stock_data";
-
 //insierTrade
 export interface A_trade_data {
     ticker: string;

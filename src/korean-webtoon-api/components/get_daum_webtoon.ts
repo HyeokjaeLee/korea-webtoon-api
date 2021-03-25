@@ -1,5 +1,5 @@
 import { getJsonAPI } from "../../modules/getAPI";
-import { weekday } from "./weekday";
+import { weekday } from "../../modules/commonData";
 import type { A_webtoon_info } from "../../modules/types";
 
 //다음 웹툰

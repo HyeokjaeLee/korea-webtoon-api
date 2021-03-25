@@ -1,6 +1,6 @@
 import { parentPort } from "worker_threads";
-import get_buy_data from "./modules/get_buys_data";
-import { getTotalStockInfo } from "./modules/get_stock_data";
+import get_buy_data from "./components/get_buys_data";
+import { getTotalStockInfo } from "./components/get_stock_data";
 import { checkUpdates } from "../modules/checking";
 import type { A_trade_data } from "../modules/types";
 const buy_data_url = "http://openinsider.com/insider-purchases-25k";
