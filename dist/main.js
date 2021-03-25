@@ -83,13 +83,33 @@ var main = function () {
                     return [4 /*yield*/, getData_from_Worker(webtoonWorker)];
                 case 1:
                     wokrer_data = _a.sent();
-                    classification = { daum: [], naver: [], sun: [], mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], finished: [] };
+                    classification = [
+                        { index: "sun", webtoon: [] },
+                        { index: "mon", webtoon: [] },
+                        { index: "tue", webtoon: [] },
+                        { index: "wed", webtoon: [] },
+                        { index: "thu", webtoon: [] },
+                        { index: "fri", webtoon: [] },
+                        { index: "sat", webtoon: [] },
+                        { index: "finished", webtoon: [] },
+                        { index: "Naver", webtoon: [] },
+                        { index: "Daum", webtoon: [] },
+                        { index: "all", webtoon: wokrer_data },
+                    ];
                     wokrer_data.map(function (data) {
+                        classification[data.weekday].webtoon.push(data);
                         switch (data.service) {
-                            case "Daum": classification.daum.push(data);
+                            case "Naver":
+                                classification[8].webtoon.push(data);
+                                break;
+                            case "Daum":
+                                classification[9].webtoon.push(data);
+                                break;
                         }
                     });
-                    webtoon.createRouter(wokrer_data, "all");
+                    classification.map(function (data) {
+                        webtoon.createRouter(data.webtoon, data.index);
+                    });
                     webtoon.createIndexRouter();
                     return [2 /*return*/];
             }

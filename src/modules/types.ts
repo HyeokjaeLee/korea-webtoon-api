@@ -29,6 +29,11 @@ export interface A_trade_data {
     volume: number;
     adjclose: number;
   }
+
+  export interface TotalStockInfo {
+    ticker:string,
+    data:stockInfo[]|undefined
+  }
   
   //Webtoon
   export interface A_webtoon_info {
@@ -39,6 +44,10 @@ export interface A_trade_data {
     service: string;
     state: string;
     weekday: number;
+  }
+  export interface WebtoonContainer {
+      index:string;
+      webtoon:A_webtoon_info[];
   }
 
   //Covid19
@@ -85,7 +94,4 @@ export interface A_trade_data {
     confirmed: number;
   }
   
-  export interface TotalStockInfo {
-    ticker:string,
-    data:stockInfo[]|undefined
-  }
+ 
