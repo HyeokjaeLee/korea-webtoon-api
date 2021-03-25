@@ -17,7 +17,8 @@ exp.use(cors());
 const main = () => {
   keepHosting("http://toy-projects-api.herokuapp.com/"); //호스팅 유지
 
-  {//InsiderTradeAPI 부분
+  //InsiderTradeAPI 부분
+  {
     const insiderTradeWorker = pathDir("./insider-trade-api/index.ts");
     const updateInsiderTradeAPI = async () => {
       const insiderTrade = new Router("insidertrade");
@@ -34,7 +35,8 @@ const main = () => {
     setTimer_loop(ms2hour(12), updateInsiderTradeAPI);
   }
 
-  {// WebtoonAPI 부분
+  // WebtoonAPI 부분
+  {
     const webtoonWorker = pathDir("./korean-webtoon-api/index.ts");
     const updateWebtoonAPI = async () => {
       const webtoon = new Router("webtoon");
@@ -72,8 +74,9 @@ const main = () => {
     };
     setTimer_loop(ms2minute(10), updateWebtoonAPI);
   }
-
-  {//Covid19API 부분
+  
+  //Covid19API 부분
+  {
     const covid19Worker = pathDir("./korea-covid19-api/index.ts");
     const updateCovid19API = async () => {
       const covid19 = new Router("covid19");
