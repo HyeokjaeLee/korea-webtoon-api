@@ -116,6 +116,7 @@ class Router {
     );
   };
   public createIndexRouter = () => {
+    console.log("routerList")
     console.log(this.routerList);
     this.createRouter(this.routerList);
   };
