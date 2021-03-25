@@ -1,6 +1,6 @@
 const request = require("request-promise-native");
 import { weekday } from "./weekday";
-import type { A_webtoon_info } from "./types";
+import type { A_webtoon_info } from "../../modules/types";
 import { load } from "cheerio";
 
 //네이버 웹툰
@@ -16,7 +16,8 @@ const get_naver_webtoon = async (): Promise<object[]> => {
     let target_url: string;
     switch (sortation) {
       case Sortation.weekday:
-        target_url = naver_comic_url + "/webtoon/weekday.nhn?week=" + weekday[num];
+        target_url =
+          naver_comic_url + "/webtoon/weekday.nhn?week=" + weekday[num];
         break;
       case Sortation.finished:
         target_url = naver_comic_url + "/webtoon/finish.nhn?page=" + num;
@@ -27,47 +28,87 @@ const get_naver_webtoon = async (): Promise<object[]> => {
 
   const get_page_count = () => {
     return new Promise(function (resolve, reject) {
-      request(naver_url_package(Sortation.finished, 1), (err: any, response: any, body: any) => {
-        let $: any = load(body);
-        resolve($(".paging_type2").find(".current_pg").find(".total").text());
-      });
+      request(
+        naver_url_package(Sortation.finished, 1),
+        (err: any, response: any, body: any) => {
+          let $ = load(body);
+          resolve($(".paging_type2").find(".current_pg").find(".total").text());
+        }
+      );
     });
   };
 
   const get_naver_finished_webtoon = async () => {
-    let a_naver_webtoon_info: object;
+    let a_naver_webtoon_info: A_webtoon_info;
     const page_count = Number(await get_page_count());
     for (let i = 1; i <= page_count; i++) {
-      await request(naver_url_package(Sortation.finished, i), (err: any, response: any, body: any) => {
-        let $: any = load(body);
-        let page_webtoon_count = $(".list_toon.list_finish").find(".item").find(".info").length;
-        for (let webtoon_num = 0; webtoon_num < page_webtoon_count; webtoon_num++) {
-          a_naver_webtoon_info = get_a_naver_webtoon($, ".list_finish", webtoon_num);
-          naver_webtoon_info.push(a_naver_webtoon_info);
+      await request(
+        naver_url_package(Sortation.finished, i),
+        (err: any, response: any, body: any) => {
+          let $ = load(body);
+          let page_webtoon_count = $(".list_toon.list_finish")
+            .find(".item")
+            .find(".info").length;
+          for (
+            let webtoon_num = 0;
+            webtoon_num < page_webtoon_count;
+            webtoon_num++
+          ) {
+            a_naver_webtoon_info = get_a_naver_webtoon(
+              $,
+              ".list_finish",
+              webtoon_num
+            );
+            naver_webtoon_info.push(a_naver_webtoon_info);
+          }
         }
-      });
+      );
     }
   };
 
   const get_naver_weekday_webtoon = async () => {
-    let a_naver_webtoon_info: object;
+    let a_naver_webtoon_info: A_webtoon_info;
     for (let week_num: number = 0; week_num < 7; week_num++) {
-      await request(naver_url_package(Sortation.weekday, week_num), (err: any, response: any, body: any) => {
-        let $: any = load(body);
-        let page_webtoon_count = $(".list_toon").find(".item").find(".info").length;
-        for (let webtoon_num = 0; webtoon_num < page_webtoon_count; webtoon_num++) {
-          a_naver_webtoon_info = get_a_naver_webtoon($, "", webtoon_num, week_num);
-          naver_webtoon_info.push(a_naver_webtoon_info);
+      await request(
+        naver_url_package(Sortation.weekday, week_num),
+        (err: any, response: any, body: any) => {
+          let $ = load(body);
+          let page_webtoon_count = $(".list_toon").find(".item").find(".info")
+            .length;
+          for (
+            let webtoon_num = 0;
+            webtoon_num < page_webtoon_count;
+            webtoon_num++
+          ) {
+            a_naver_webtoon_info = get_a_naver_webtoon(
+              $,
+              "",
+              webtoon_num,
+              week_num
+            );
+            naver_webtoon_info.push(a_naver_webtoon_info);
+          }
         }
-      });
+      );
     }
   };
 
-  const get_a_naver_webtoon = ($: any, index: string, webtoon_num: number, week_num?: number): A_webtoon_info => {
+  const get_a_naver_webtoon = (
+    $: cheerio.Root,
+    index: string,
+    webtoon_num: number,
+    week_num?: number
+  ): A_webtoon_info => {
     let state_value: string;
     let weekday_value: number;
     if (index == "") {
-      const state_variable_calc: string = $(".list_toon").find(".info").eq(webtoon_num).find(".detail").find(".blind").eq(0).text();
+      const state_variable_calc: string = $(".list_toon")
+        .find(".info")
+        .eq(webtoon_num)
+        .find(".detail")
+        .find(".blind")
+        .eq(0)
+        .text();
       switch (state_variable_calc) {
         case "휴재":
           state_value = "휴재";

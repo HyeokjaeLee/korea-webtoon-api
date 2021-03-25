@@ -55,7 +55,8 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                     var target_url;
                     switch (sortation) {
                         case Sortation.weekday:
-                            target_url = naver_comic_url + "/webtoon/weekday.nhn?week=" + weekday_1.weekday[num];
+                            target_url =
+                                naver_comic_url + "/webtoon/weekday.nhn?week=" + weekday_1.weekday[num];
                             break;
                         case Sortation.finished:
                             target_url = naver_comic_url + "/webtoon/finish.nhn?page=" + num;
@@ -86,7 +87,9 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                                 if (!(i <= page_count)) return [3 /*break*/, 5];
                                 return [4 /*yield*/, request(naver_url_package(Sortation.finished, i), function (err, response, body) {
                                         var $ = cheerio_1.load(body);
-                                        var page_webtoon_count = $(".list_toon.list_finish").find(".item").find(".info").length;
+                                        var page_webtoon_count = $(".list_toon.list_finish")
+                                            .find(".item")
+                                            .find(".info").length;
                                         for (var webtoon_num = 0; webtoon_num < page_webtoon_count; webtoon_num++) {
                                             a_naver_webtoon_info = get_a_naver_webtoon($, ".list_finish", webtoon_num);
                                             naver_webtoon_info.push(a_naver_webtoon_info);
@@ -112,7 +115,8 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                                         switch (_b.label) {
                                             case 0: return [4 /*yield*/, request(naver_url_package(Sortation.weekday, week_num), function (err, response, body) {
                                                     var $ = cheerio_1.load(body);
-                                                    var page_webtoon_count = $(".list_toon").find(".item").find(".info").length;
+                                                    var page_webtoon_count = $(".list_toon").find(".item").find(".info")
+                                                        .length;
                                                     for (var webtoon_num = 0; webtoon_num < page_webtoon_count; webtoon_num++) {
                                                         a_naver_webtoon_info = get_a_naver_webtoon($, "", webtoon_num, week_num);
                                                         naver_webtoon_info.push(a_naver_webtoon_info);
@@ -143,7 +147,13 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                     var state_value;
                     var weekday_value;
                     if (index == "") {
-                        var state_variable_calc = $(".list_toon").find(".info").eq(webtoon_num).find(".detail").find(".blind").eq(0).text();
+                        var state_variable_calc = $(".list_toon")
+                            .find(".info")
+                            .eq(webtoon_num)
+                            .find(".detail")
+                            .find(".blind")
+                            .eq(0)
+                            .text();
                         switch (state_variable_calc) {
                             case "휴재":
                                 state_value = "휴재";

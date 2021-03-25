@@ -1,56 +1,112 @@
 import path from "path";
 import express from "express";
 import cors from "cors";
-import { Worker } from "worker_threads";
 import { setTimer_loop, ms2hour, ms2minute } from "./modules/FormatConversion";
-import {
-  createRouter,
-  hosting,
-  getData_from_Worker,
-  keepHosting,
-} from "./modules/index_modules";
+import { Worker } from "worker_threads";
+import http from "http";
 const exp = express();
 exp.use(cors());
-keepHosting("http://toy-projects-api.herokuapp.com/");
-const pathDir = (dir: string) =>
-  path.join(__dirname, dir.replace(".ts", ".js"));
-const korea_covid19_dir = pathDir("./korea-covid19-api/index.ts");
-const insider_trade_dir = pathDir("./insider-trade-api/index.ts");
-const korean_webtoon_dir =  pathDir("./korean-webtoon-api/index.ts");
 //------------------------------------------------------------------------
 const main = () => {
-  setTimer_loop(ms2hour(12), update_insider_trade_api);
-  setTimer_loop(ms2minute(10), update_korean_webtoon_api);
-  setTimer_loop(ms2hour(1), update_korea_covid19_api);
+  keepHosting("http://toy-projects-api.herokuapp.com/");//호스팅 유지
+  
+  const insiderTradeWorker = pathDir("./insider-trade-api/index.ts");
+  const updateInsiderTradeAPI = async () => {
+    const insiderTrade = new Router("insidertrade");
+    const wokrer_data = await getData_from_Worker(insiderTradeWorker);
+    const stockData = wokrer_data.stockData;
+    const listData = wokrer_data.insiderTradeList;
+    insiderTrade.createRouter(listData,"list");
+    stockData.map((data:any)=>{
+      const ticker = data.ticker;
+      insiderTrade.createRouter(data,ticker);
+    })
+    insiderTrade.createIndexRouter();
+  };
+  setTimer_loop(ms2hour(12), updateInsiderTradeAPI);
+  
+  const webtoonWorker = pathDir("./korean-webtoon-api/index.ts");
+  const updateWebtoonAPI = async ()=>{
+    const webtoon = new Router("webtoon");
+    const wokrer_data = await getData_from_Worker(webtoonWorker);
+    const classification:any = {daum:[],naver:[],sun:[],mon:[],tue:[],wed:[],thu:[],fri:[],sat:[],finished:[]}
+    wokrer_data.map((data:any)=>{
+      switch(data.service){
+        case "Daum":classification.daum.push(data)
+      }
+    })
+    webtoon.createRouter(wokrer_data,"all");
+    webtoon.createIndexRouter();
+  }
+  setTimer_loop(ms2minute(10), updateWebtoonAPI);
+
+
+  const covid19Worker = pathDir("./korea-covid19-api/index.ts");
+  const updateCovid19API = async () => {
+    const covid19 = new Router("covid19");
+    const wokrer_data = await getData_from_Worker(covid19Worker);
+    wokrer_data.map((data: any) => {
+      covid19.createRouter(data, data.region);
+    });
+    covid19.createIndexRouter();
+  };
+  setTimer_loop(ms2hour(1), updateCovid19API);
   hosting(8080);
 };
 //------------------------------------------------------------------------
-const update_korea_covid19_api = async () => {
-  const router_list: string[] = [];
-  const data: any = await getData_from_Worker(korea_covid19_dir);
-  data.map((data: any) => {
-    const region = data.region;
-    createRouter(`/covid19/${region}`, data, router_list);
+
+class Router {
+  public title: string;
+  public routerList: string[] = [];
+  constructor(title: string) {
+    this.title = title;
+  }
+  public createRouter = (data: any, router?: string): void => {
+    let router_url: string;
+    if (router != undefined) {
+      router_url = `/${this.title}/${router}`;
+      this.routerList.push(router_url);
+    } else {
+      router_url = `/${this.title}`;
+    }
+    exp.get(
+      router_url,
+      function (request: any, response: { json: (arg: any[]) => void }) {
+        response.json(data);
+      }
+    );
+  };
+  public createIndexRouter = () => {
+    console.log(this.routerList);
+    this.createRouter(this.routerList);
+  };
+}
+
+const pathDir = (dir: string) =>
+path.join(__dirname, dir.replace(".ts", ".js"));
+
+const hosting = (port: number): void => {
+  exp.listen(process.env.PORT || port, function () {
+    console.log(`API hosting started on port ${port}`);
   });
-  createRouter("/covid19", router_list);
 };
-const update_insider_trade_api = async () => {
-  const router_list: string[] = [];
-  const data: any = await getData_from_Worker(insider_trade_dir);
-  const insider_trade_list_data = data.insiderTradeList;
-  const stock_data = data.stockData;
-  stock_data.map((data: any) => {
-    const ticker = data.ticker;
-    createRouter(`/insidertrade/${ticker}`, data, router_list);
+
+const getData_from_Worker = (dir: string):any => {
+  return new Promise(function (resolve, reject) {
+    const worker = new Worker(dir);
+    worker.on("message", (data) => resolve(data));
   });
-  createRouter("/insidertrade/list", insider_trade_list_data, router_list);
-  createRouter("/insidertrade", router_list);
 };
-const update_korean_webtoon_api = async () => {
-  const router_list: string[] = [];
-  const data: any = await getData_from_Worker(korean_webtoon_dir);
-  createRouter("/webtoon/all", data, router_list);
-  createRouter("/webtoon", router_list);
+
+const keepHosting = (url: string) => {
+  setInterval(function () {
+    http.get(url);
+  }, ms2hour(1));
 };
+
+
+
+
+
 
 main();

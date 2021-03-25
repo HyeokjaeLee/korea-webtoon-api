@@ -6,12 +6,11 @@ import { checkUpdates } from "../modules/checking";
 (async () => {
   const naver_info: object[] = await get_naver_webtoon();
   const daum_info: object[] = get_daum_webtoon();
-  const webtoon_info: object[] = naver_info.concat(daum_info);
-  console.log(webtoon_info);
-  webtoon_info.sort((a: any, b: any) => {
+  const total_info: object[] = naver_info.concat(daum_info);
+  total_info.sort((a: any, b: any) => {
     return a.title < b.title ? -1 : 1;
   });
-  checkUpdates("Korean Webtoon", webtoon_info);
-  parentPort!.postMessage(webtoon_info); //결과가 null될수도 있는 값에는 !붙이기
+  checkUpdates("Korean Webtoon", total_info);
+  parentPort!.postMessage(total_info); //결과가 null될수도 있는 값에는 !붙이기
   parentPort!.close();
 })();

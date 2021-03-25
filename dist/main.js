@@ -43,76 +43,123 @@ var path_1 = __importDefault(require("path"));
 var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
 var FormatConversion_1 = require("./modules/FormatConversion");
-var index_modules_1 = require("./modules/index_modules");
+var worker_threads_1 = require("worker_threads");
+var http_1 = __importDefault(require("http"));
 var exp = express_1.default();
 exp.use(cors_1.default());
-index_modules_1.keepHosting("http://toy-projects-api.herokuapp.com/");
+//------------------------------------------------------------------------
+var main = function () {
+    keepHosting("http://toy-projects-api.herokuapp.com/"); //호스팅 유지
+    var insiderTradeWorker = pathDir("./insider-trade-api/index.ts");
+    var updateInsiderTradeAPI = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var insiderTrade, wokrer_data, stockData, listData;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    insiderTrade = new Router("insidertrade");
+                    return [4 /*yield*/, getData_from_Worker(insiderTradeWorker)];
+                case 1:
+                    wokrer_data = _a.sent();
+                    stockData = wokrer_data.stockData;
+                    listData = wokrer_data.insiderTradeList;
+                    insiderTrade.createRouter(listData, "list");
+                    stockData.map(function (data) {
+                        var ticker = data.ticker;
+                        insiderTrade.createRouter(data, ticker);
+                    });
+                    insiderTrade.createIndexRouter();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    FormatConversion_1.setTimer_loop(FormatConversion_1.ms2hour(12), updateInsiderTradeAPI);
+    var webtoonWorker = pathDir("./korean-webtoon-api/index.ts");
+    var updateWebtoonAPI = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var webtoon, wokrer_data, classification;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    webtoon = new Router("webtoon");
+                    return [4 /*yield*/, getData_from_Worker(webtoonWorker)];
+                case 1:
+                    wokrer_data = _a.sent();
+                    classification = { daum: [], naver: [], sun: [], mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], finished: [] };
+                    wokrer_data.map(function (data) {
+                        switch (data.service) {
+                            case "Daum": classification.daum.push(data);
+                        }
+                    });
+                    webtoon.createRouter(wokrer_data, "all");
+                    webtoon.createIndexRouter();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    FormatConversion_1.setTimer_loop(FormatConversion_1.ms2minute(10), updateWebtoonAPI);
+    var covid19Worker = pathDir("./korea-covid19-api/index.ts");
+    var updateCovid19API = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var covid19, wokrer_data;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    covid19 = new Router("covid19");
+                    return [4 /*yield*/, getData_from_Worker(covid19Worker)];
+                case 1:
+                    wokrer_data = _a.sent();
+                    wokrer_data.map(function (data) {
+                        covid19.createRouter(data, data.region);
+                    });
+                    covid19.createIndexRouter();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    FormatConversion_1.setTimer_loop(FormatConversion_1.ms2hour(1), updateCovid19API);
+    hosting(8080);
+};
+//------------------------------------------------------------------------
+var Router = /** @class */ (function () {
+    function Router(title) {
+        var _this = this;
+        this.routerList = [];
+        this.createRouter = function (data, router) {
+            var router_url;
+            if (router != undefined) {
+                router_url = "/" + _this.title + "/" + router;
+                _this.routerList.push(router_url);
+            }
+            else {
+                router_url = "/" + _this.title;
+            }
+            exp.get(router_url, function (request, response) {
+                response.json(data);
+            });
+        };
+        this.createIndexRouter = function () {
+            console.log(_this.routerList);
+            _this.createRouter(_this.routerList);
+        };
+        this.title = title;
+    }
+    return Router;
+}());
 var pathDir = function (dir) {
     return path_1.default.join(__dirname, dir.replace(".ts", ".js"));
 };
-var korea_covid19_dir = pathDir("./korea-covid19-api/index.ts");
-var insider_trade_dir = pathDir("./insider-trade-api/index.ts");
-var korean_webtoon_dir = pathDir("./korean-webtoon-api/index.ts");
-//------------------------------------------------------------------------
-var main = function () {
-    FormatConversion_1.setTimer_loop(FormatConversion_1.ms2hour(12), update_insider_trade_api);
-    FormatConversion_1.setTimer_loop(FormatConversion_1.ms2minute(10), update_korean_webtoon_api);
-    FormatConversion_1.setTimer_loop(FormatConversion_1.ms2hour(1), update_korea_covid19_api);
-    index_modules_1.hosting(8080);
+var hosting = function (port) {
+    exp.listen(process.env.PORT || port, function () {
+        console.log("API hosting started on port " + port);
+    });
 };
-//------------------------------------------------------------------------
-var update_korea_covid19_api = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var router_list, data;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                router_list = [];
-                return [4 /*yield*/, index_modules_1.getData_from_Worker(korea_covid19_dir)];
-            case 1:
-                data = _a.sent();
-                data.map(function (data) {
-                    var region = data.region;
-                    index_modules_1.createRouter("/covid19/" + region, data, router_list);
-                });
-                index_modules_1.createRouter("/covid19", router_list);
-                return [2 /*return*/];
-        }
+var getData_from_Worker = function (dir) {
+    return new Promise(function (resolve, reject) {
+        var worker = new worker_threads_1.Worker(dir);
+        worker.on("message", function (data) { return resolve(data); });
     });
-}); };
-var update_insider_trade_api = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var router_list, data, insider_trade_list_data, stock_data;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                router_list = [];
-                return [4 /*yield*/, index_modules_1.getData_from_Worker(insider_trade_dir)];
-            case 1:
-                data = _a.sent();
-                insider_trade_list_data = data.insiderTradeList;
-                stock_data = data.stockData;
-                stock_data.map(function (data) {
-                    var ticker = data.ticker;
-                    index_modules_1.createRouter("/insidertrade/" + ticker, data, router_list);
-                });
-                index_modules_1.createRouter("/insidertrade/list", insider_trade_list_data, router_list);
-                index_modules_1.createRouter("/insidertrade", router_list);
-                return [2 /*return*/];
-        }
-    });
-}); };
-var update_korean_webtoon_api = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var router_list, data;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                router_list = [];
-                return [4 /*yield*/, index_modules_1.getData_from_Worker(korean_webtoon_dir)];
-            case 1:
-                data = _a.sent();
-                index_modules_1.createRouter("/webtoon/all", data, router_list);
-                index_modules_1.createRouter("/webtoon", router_list);
-                return [2 /*return*/];
-        }
-    });
-}); };
+};
+var keepHosting = function (url) {
+    setInterval(function () {
+        http_1.default.get(url);
+    }, FormatConversion_1.ms2hour(1));
+};
 main();

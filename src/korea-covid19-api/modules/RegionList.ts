@@ -1,4 +1,4 @@
-import type { regionList } from "./types";
+import type { regionList } from "../../modules/types";
 export const regionListData: regionList[] = [
   {
     kor: "검역",

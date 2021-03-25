@@ -1,7 +1,7 @@
 import { convertDateFormat } from "../../modules/FormatConversion";
 import { getXmlAPI2JSON } from "../../modules/getAPI";
 import { regionListData } from "./RegionList";
-import { covid19API, covid19OriginalInfo } from "./types";
+import { covid19API, covid19OriginalInfo } from "../../modules/types";
 
 const service_key: string =
   "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D";

@@ -14,7 +14,7 @@ var createRouter = function (router, data, router_list) {
     exp.get(router, function (request, response) {
         response.json(data);
     });
-    router_list === null || router_list === void 0 ? void 0 : router_list.push(router);
+    return router;
 };
 exports.createRouter = createRouter;
 var hosting = function (port) {

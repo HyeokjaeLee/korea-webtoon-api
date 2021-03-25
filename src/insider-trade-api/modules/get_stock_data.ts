@@ -1,5 +1,5 @@
 const yahooStockPrices = require("yahoo-stock-prices");
-import type { yahooStockInfo, stockInfo } from "./types";
+import type { yahooStockInfo, stockInfo,A_trade_data,TotalStockInfo } from "../../modules/types";
 import { checkEmpty } from "../../modules/checking";
 const errorTicker: string[] = [];
 
@@ -91,13 +91,13 @@ const getAstockInfo = async (ticker: string, start_date?: string, end_date?: str
 };
 
 //get 전체 주식정보
-export const getTotalStockInfo = async (json_data: any, start_date?: string, end_date?: string) => {
-  const tickerArr = json_data.map((data: any) => data.ticker);
+export const getTotalStockInfo = async (json_data: A_trade_data[], start_date?: string, end_date?: string) => {
+  const tickerArr = json_data.map((data) => data.ticker);
   const unique_tickerArr = Array.from(new Set(tickerArr));
   const totalStockInfo = await (async () => {
-    const result: object[] = [];
+    const result: TotalStockInfo[] = [];
     await Promise.all(
-      unique_tickerArr.map(async (ticker: any) => {
+      unique_tickerArr.map(async (ticker) => {
         const aStockInfo = await getAstockInfo(ticker, start_date, end_date);
         if (checkEmpty(aStockInfo)) {
           result.push({

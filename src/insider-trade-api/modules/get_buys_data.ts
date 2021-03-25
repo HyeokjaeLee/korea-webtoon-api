@@ -1,11 +1,11 @@
 const request = require("request-promise-native");
 import { load } from "cheerio";
 import { string2date } from "../../modules/FormatConversion";
-import type { A_trade_data } from "./types";
+import type { A_trade_data } from "../../modules/types";
 let $: cheerio.Root;
 const $2num = (string_data: string) => Number(string_data.replace("$", "").replace(/,/gi, ""));
 
-const get_buy_data = (url: string) => {
+const get_buy_data = (url: string):A_trade_data[]|any => {
   return new Promise((resolve) => {
     request(url, (err: string, response: object[], body: string) => {
       $ = load(body);

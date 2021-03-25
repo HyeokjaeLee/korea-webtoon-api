@@ -1,6 +1,6 @@
 import { getJsonAPI } from "../../modules/getAPI";
 import { weekday } from "./weekday";
-import type { A_webtoon_info } from "./types";
+import type { A_webtoon_info } from "../../modules/types";
 
 //다음 웹툰
 const get_daum_webtoon = (): object[] => {

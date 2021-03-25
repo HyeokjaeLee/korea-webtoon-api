@@ -44,20 +44,19 @@ var get_naver_webtoon_1 = __importDefault(require("./modules/get_naver_webtoon")
 var get_daum_webtoon_1 = __importDefault(require("./modules/get_daum_webtoon"));
 var checking_1 = require("../modules/checking");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var naver_info, daum_info, webtoon_info;
+    var naver_info, daum_info, total_info;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, get_naver_webtoon_1.default()];
             case 1:
                 naver_info = _a.sent();
                 daum_info = get_daum_webtoon_1.default();
-                webtoon_info = naver_info.concat(daum_info);
-                console.log(webtoon_info);
-                webtoon_info.sort(function (a, b) {
+                total_info = naver_info.concat(daum_info);
+                total_info.sort(function (a, b) {
                     return a.title < b.title ? -1 : 1;
                 });
-                checking_1.checkUpdates("Korean Webtoon", webtoon_info);
-                worker_threads_1.parentPort.postMessage(webtoon_info); //결과가 null될수도 있는 값에는 !붙이기
+                checking_1.checkUpdates("Korean Webtoon", total_info);
+                worker_threads_1.parentPort.postMessage(total_info); //결과가 null될수도 있는 값에는 !붙이기
                 worker_threads_1.parentPort.close();
                 return [2 /*return*/];
         }
