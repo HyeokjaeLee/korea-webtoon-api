@@ -38,7 +38,9 @@
 ## To-Do
 - [ ] Change to hosting module class type<br>
       호스팅 모듈 클래스형으로 변경<br>
-
+- [ ] Add token authentication function<br>
+      토큰 인증 기능 추가<br>
+      
 - Korean-Webtoon-API
   - [x] move completely from javascript to typescript(ver 1.1.0)<br>
         javascript 코드를 typescript로 완전히 옮김<br>
