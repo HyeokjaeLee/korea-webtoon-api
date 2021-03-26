@@ -45,6 +45,8 @@ var cors_1 = __importDefault(require("cors"));
 var FormatConversion_1 = require("./modules/FormatConversion");
 var worker_threads_1 = require("worker_threads");
 var http_1 = __importDefault(require("http"));
+var checking_1 = require("./modules/checking");
+var FormatConversion_2 = require("./modules/FormatConversion");
 var exp = express_1.default();
 exp.use(cors_1.default());
 var hosting_url = "http://toy-projects-api.herokuapp.com/";
@@ -66,7 +68,7 @@ var main = function () {
     {
         var insiderTradeWorker_1 = pathDir("./insider-trade-api/index.ts");
         var updateInsiderTradeAPI = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var insiderTrade, wokrer_data, stockData, listData;
+            var insiderTrade, wokrer_data, totalStockData, listData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -74,17 +76,45 @@ var main = function () {
                         return [4 /*yield*/, getData_from_Worker(insiderTradeWorker_1)];
                     case 1:
                         wokrer_data = _a.sent();
-                        stockData = wokrer_data.stockData;
+                        totalStockData = wokrer_data.stockData;
                         listData = wokrer_data.insiderTradeList;
-                        insiderTrade.createRouter(listData, "list");
-                        stockData.map(function (data) {
-                            var ticker = data.ticker;
+                        insiderTrade._createRouter(function (req, res) {
+                            res.json(listData);
+                        }, "list");
+                        totalStockData.map(function (aStockData) {
+                            var ticker = aStockData.ticker;
                             insiderTrade._createRouter(function (req, res) {
-                                if (req.query.date == undefined) {
-                                    res.json(data);
+                                var _a, _b, _c;
+                                var from = checking_1.query2Date(req.query.from);
+                                var to = checking_1.query2Date(req.query.to);
+                                var index = ""; //querysString으로 받은 값에 따른 필터링을 위한 구분값
+                                if (from != undefined) {
+                                    index = index + "From";
                                 }
-                                else {
-                                    res.json(data);
+                                if (to != undefined) {
+                                    index = index + "To";
+                                }
+                                var dateForm = function (date) { return Number(FormatConversion_2.convertDateFormat(date, "")); }; //stringQuery로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
+                                switch (index) {
+                                    case "From": {
+                                        res.json((_a = aStockData.data) === null || _a === void 0 ? void 0 : _a.filter(function (info) { return dateForm(info.date) >= from; }));
+                                        break;
+                                    }
+                                    case "To": {
+                                        res.json((_b = aStockData.data) === null || _b === void 0 ? void 0 : _b.filter(function (info) { return dateForm(info.date) <= to; }));
+                                        break;
+                                    }
+                                    case "FromTo": {
+                                        res.json((_c = aStockData.data) === null || _c === void 0 ? void 0 : _c.filter(function (info) {
+                                            var date = dateForm(info.date);
+                                            return date >= from && date <= to;
+                                        }));
+                                        break;
+                                    }
+                                    default: {
+                                        res.json(aStockData);
+                                        break;
+                                    }
                                 }
                             }, ticker);
                         });

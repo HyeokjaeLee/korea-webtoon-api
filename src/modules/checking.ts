@@ -19,7 +19,7 @@ export const query2Date = (query: any) => {//Query 데이터의 값이 형식에
   if (type == "string") {
     const date = Number(query);
     if (date > 19000000 && date < 30000000) {
-      return new Date(date);
+      return date;
     } else {
       return undefined;
     }

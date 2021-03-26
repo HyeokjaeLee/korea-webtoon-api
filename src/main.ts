@@ -4,7 +4,8 @@ import cors from "cors";
 import { setTimer_loop, ms2hour, ms2minute } from "./modules/FormatConversion";
 import { Worker } from "worker_threads";
 import http from "http";
-import {query2Date} from "./modules/checking"
+import { query2Date } from "./modules/checking";
+import { convertDateFormat } from "./modules/FormatConversion";
 import type {
   TotalStockInfo,
   A_trade_data,
@@ -15,6 +16,7 @@ import type {
 const exp = express();
 exp.use(cors());
 const hosting_url = "http://toy-projects-api.herokuapp.com/";
+const test_key = "leehyeokjae"
 
 //------------------------------------------------------------------------
 const main = () => {
@@ -37,33 +39,48 @@ const main = () => {
       const wokrer_data = await getData_from_Worker(insiderTradeWorker);
       const totalStockData: TotalStockInfo[] = wokrer_data.stockData;
       const listData: A_trade_data[] = wokrer_data.insiderTradeList;
-      insiderTrade.createRouter(listData, "list");
+      insiderTrade._createRouter((req,res)=>{
+        res.json(listData)
+      }, "list");
       totalStockData.map((aStockData) => {
         const ticker = aStockData.ticker;
         insiderTrade._createRouter((req, res) => {
-          let from:any = query2Date(req.query.from);
-          let to:any = query2Date(req.query.to);
-          const index: string = ""; //querysString으로 받은 값에 따른 필터링을 위한 구분값
+          const from = query2Date(req.query.from);
+          const to = query2Date(req.query.to);
+          let index: string = ""; //querysString으로 받은 값에 따른 필터링을 위한 구분값
           if (from != undefined) {
-            index + "from";
+            index = index + "From";
           }
           if (to != undefined) {
-            index + "to";
+            index = index + "To";
           }
+          const dateForm = (date: Date) => Number(convertDateFormat(date, "")); //stringQuery로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
           switch (index) {
-            case "from": {
-              res.json(aStockData.data?.filter(info=>{const date = new Date(info.date)}))
+            case "From": {
+              res.json(
+                aStockData.data?.filter((info) => dateForm(info.date) >= from!)
+              );
               break;
             }
 
-            case "to": {
+            case "To": {
+              res.json(
+                aStockData.data?.filter((info) => dateForm(info.date) <= to!)
+              );
               break;
             }
-            case "fromto": {
+
+            case "FromTo": {
+              res.json(
+                aStockData.data?.filter((info) => {
+                  const date = dateForm(info.date);
+                  return date >= from! && date <= to!;
+                })
+              );
               break;
             }
             default: {
-              res.json(aStockData)
+              res.json(aStockData);
               break;
             }
           }
