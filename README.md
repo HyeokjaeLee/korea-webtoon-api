@@ -45,6 +45,4 @@
 |move completely from javascript to typescript(ver 1.1.0)|add insider-trade-api(ver 1.2.0)|Convert xml data to json format and complete appropriate data form(ver 1.6.5)|
 ||add stock-info(ver 1.3.0)|Create filtering code(ver 1.6.10)|
 |||Modify the filtering code(ver 1.8.4)|
-||||
-||||
 
