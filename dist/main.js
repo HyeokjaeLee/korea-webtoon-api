@@ -47,9 +47,21 @@ var worker_threads_1 = require("worker_threads");
 var http_1 = __importDefault(require("http"));
 var exp = express_1.default();
 exp.use(cors_1.default());
+var hosting_url = "http://toy-projects-api.herokuapp.com/";
 //------------------------------------------------------------------------
 var main = function () {
-    keepHosting("http://toy-projects-api.herokuapp.com/"); //호스팅 유지
+    hosting(8080);
+    keepHosting(hosting_url); //호스팅 유지
+    {
+        exp.get("/", function (request, response) {
+            if (request.query.id != undefined) {
+                response.send(request.query.id);
+            }
+            else {
+                response.send("test3");
+            }
+        });
+    }
     //InsiderTradeAPI 부분
     {
         var insiderTradeWorker_1 = pathDir("./insider-trade-api/index.ts");
@@ -67,7 +79,14 @@ var main = function () {
                         insiderTrade.createRouter(listData, "list");
                         stockData.map(function (data) {
                             var ticker = data.ticker;
-                            insiderTrade.createRouter(data, ticker);
+                            insiderTrade._createRouter(function (req, res) {
+                                if (req.query.date == undefined) {
+                                    res.json(data);
+                                }
+                                else {
+                                    res.json(data);
+                                }
+                            }, ticker);
                         });
                         insiderTrade.createIndexRouter();
                         return [2 /*return*/];
@@ -143,14 +162,22 @@ var main = function () {
             });
         }); };
         FormatConversion_1.setTimer_loop(FormatConversion_1.ms2hour(1), updateCovid19API);
-        hosting(8080);
     }
 };
 //------------------------------------------------------------------------
+exp.get("/");
 var Router = /** @class */ (function () {
     function Router(title) {
         var _this = this;
         this.routerList = [];
+        this._createRouter = function (handler, name) {
+            var path = "/" + _this.title;
+            if (name != undefined) {
+                path = path + ("/" + name);
+                _this.routerList.push(path);
+            }
+            exp.get(path, handler);
+        };
         this.createRouter = function (data, router) {
             var router_url;
             if (router != undefined) {
@@ -160,7 +187,7 @@ var Router = /** @class */ (function () {
             else {
                 router_url = "/" + _this.title;
             }
-            exp.get(router_url, function (request, response) {
+            exp.get(router_url, function (req, response) {
                 response.json(data);
             });
         };
@@ -178,6 +205,7 @@ var pathDir = function (dir) {
 };
 var hosting = function (port) {
     exp.listen(process.env.PORT || port, function () {
+        console.log();
         console.log("API hosting started on port " + port);
     });
 };

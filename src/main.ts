@@ -1,9 +1,10 @@
 import path from "path";
-import express from "express";
+import express, { Request, RequestHandler, response, Response } from "express";
 import cors from "cors";
 import { setTimer_loop, ms2hour, ms2minute } from "./modules/FormatConversion";
 import { Worker } from "worker_threads";
 import http from "http";
+import {query2Date} from "./modules/checking"
 import type {
   TotalStockInfo,
   A_trade_data,
@@ -13,22 +14,60 @@ import type {
 } from "./modules/types";
 const exp = express();
 exp.use(cors());
+const hosting_url = "http://toy-projects-api.herokuapp.com/";
+
 //------------------------------------------------------------------------
 const main = () => {
-  keepHosting("http://toy-projects-api.herokuapp.com/"); //호스팅 유지
-
+  hosting(8080);
+  keepHosting(hosting_url); //호스팅 유지
+  {
+    exp.get("/", function (request, response) {
+      if (request.query.id != undefined) {
+        response.send(request.query.id);
+      } else {
+        response.send("test3");
+      }
+    });
+  }
   //InsiderTradeAPI 부분
   {
     const insiderTradeWorker = pathDir("./insider-trade-api/index.ts");
     const updateInsiderTradeAPI = async () => {
       const insiderTrade = new Router("insidertrade");
       const wokrer_data = await getData_from_Worker(insiderTradeWorker);
-      const stockData: TotalStockInfo[] = wokrer_data.stockData;
+      const totalStockData: TotalStockInfo[] = wokrer_data.stockData;
       const listData: A_trade_data[] = wokrer_data.insiderTradeList;
       insiderTrade.createRouter(listData, "list");
-      stockData.map((data) => {
-        const ticker = data.ticker;
-        insiderTrade.createRouter(data, ticker);
+      totalStockData.map((aStockData) => {
+        const ticker = aStockData.ticker;
+        insiderTrade._createRouter((req, res) => {
+          let from:any = query2Date(req.query.from);
+          let to:any = query2Date(req.query.to);
+          const index: string = ""; //querysString으로 받은 값에 따른 필터링을 위한 구분값
+          if (from != undefined) {
+            index + "from";
+          }
+          if (to != undefined) {
+            index + "to";
+          }
+          switch (index) {
+            case "from": {
+              res.json(aStockData.data?.filter(info=>{const date = new Date(info.date)}))
+              break;
+            }
+
+            case "to": {
+              break;
+            }
+            case "fromto": {
+              break;
+            }
+            default: {
+              res.json(aStockData)
+              break;
+            }
+          }
+        }, ticker);
       });
       insiderTrade.createIndexRouter();
     };
@@ -74,7 +113,7 @@ const main = () => {
     };
     setTimer_loop(ms2minute(10), updateWebtoonAPI);
   }
-  
+
   //Covid19API 부분
   {
     const covid19Worker = pathDir("./korea-covid19-api/index.ts");
@@ -89,17 +128,26 @@ const main = () => {
       covid19.createIndexRouter();
     };
     setTimer_loop(ms2hour(1), updateCovid19API);
-    hosting(8080);
   }
 };
 //------------------------------------------------------------------------
-
+exp.get("/");
 class Router {
   public title: string;
   public routerList: string[] = [];
   constructor(title: string) {
     this.title = title;
   }
+
+  public _createRouter = (handler: RequestHandler, name?: string) => {
+    let path: string = `/${this.title}`;
+    if (name != undefined) {
+      path = path + `/${name}`;
+      this.routerList.push(path);
+    }
+    exp.get(path, handler);
+  };
+
   public createRouter = (data: any, router?: string): void => {
     let router_url: string;
     if (router != undefined) {
@@ -108,15 +156,12 @@ class Router {
     } else {
       router_url = `/${this.title}`;
     }
-    exp.get(
-      router_url,
-      function (request: any, response: { json: (arg: any[]) => void }) {
-        response.json(data);
-      }
-    );
+    exp.get(router_url, function (req, response) {
+      response.json(data);
+    });
   };
   public createIndexRouter = () => {
-    console.log("routerList")
+    console.log("routerList");
     console.log(this.routerList);
     this.createRouter(this.routerList);
   };
@@ -127,6 +172,7 @@ const pathDir = (dir: string) =>
 
 const hosting = (port: number): void => {
   exp.listen(process.env.PORT || port, function () {
+    console.log();
     console.log(`API hosting started on port ${port}`);
   });
 };
