@@ -42,8 +42,8 @@
 
 |Korea-Webtoon|Insider-Trade|Korea-COVID19|
 |---|---|---|
-|- [x] move completely from javascript to typescript(ver 1.1.0)|- [x] add insider-trade-api(ver 1.2.0)|- [x] Convert xml data to json format and complete appropriate data form(ver 1.6.5)|
-|- [ ] add more info about webtoon|- [x] add stock-info(ver 1.3.0)|- [x] Create filtering code(ver 1.6.10)|
+| - [x] move completely from javascript to typescript(ver 1.1.0)|- [x] add insider-trade-api(ver 1.2.0)|- [x] Convert xml data to json format and complete appropriate data form(ver 1.6.5)|
+| - [ ] add more info about webtoon|- [x] add stock-info(ver 1.3.0)|- [x] Create filtering code(ver 1.6.10)|
 |||- [ ] Add AI Data(modification)|
 |||- [x] Modify the filtering code(ver 1.8.4)|
 |||- [ ] Add Monthly Information|
