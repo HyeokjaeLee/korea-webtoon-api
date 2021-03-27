@@ -106,8 +106,9 @@ https://toy-projects-api.herokuapp.com/insidertrade/{Ticker}?from={FromDate}&to=
 
 
 ### [Korea-Covid19-API](https://toy-projects-api.herokuapp.com/covid19)
-|Region List|||
-|---|---|---|
+#### RegionList
+||||
+|:---:|:---:|:---:|
 |Lazaretto|Jeju|Gyeongsangnam-do|Gyeongsangbuk-do|
 |Jeollanam-do|Jeollabuk-do|Chungcheongnam-do|
 |Chungcheongbuk-do|Gangwon-do|Gyeonggi-do|
