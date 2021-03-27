@@ -22,7 +22,7 @@ const test_key = "leehyeokjae"
 const main = () => {
   hosting(8080);
   keepHosting(hosting_url); //호스팅 유지
-  
+
   //InsiderTradeAPI 부분
   {
     const insiderTradeWorker = pathDir("./insider-trade-api/index.ts");
@@ -74,6 +74,7 @@ const main = () => {
           }
           res.json(webtoonInfo)
         })
+        webtoon.createIndexRouter();
     };
     setTimer_loop(ms2minute(10), updateWebtoonAPI);
   }

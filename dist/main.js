@@ -54,16 +54,6 @@ var test_key = "leehyeokjae";
 var main = function () {
     hosting(8080);
     keepHosting(hosting_url); //호스팅 유지
-    {
-        exp.get("/", function (request, response) {
-            if (request.query.id != undefined) {
-                response.send(request.query.id);
-            }
-            else {
-                response.send("test3");
-            }
-        });
-    }
     //InsiderTradeAPI 부분
     {
         var insiderTradeWorker_1 = pathDir("./insider-trade-api/index.ts");
@@ -127,6 +117,7 @@ var main = function () {
                             }
                             res.json(webtoonInfo);
                         });
+                        webtoon.createIndexRouter();
                         return [2 /*return*/];
                 }
             });
