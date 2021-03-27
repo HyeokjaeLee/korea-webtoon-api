@@ -152,7 +152,7 @@ const get_naver_webtoon = async (): Promise<object[]> => {
         .eq(webtoon_num)
         .find("img")
         .attr("src"),
-      service: "Naver",
+      service: "naver",
       state: state_value,
       weekday: weekday_value,
     };

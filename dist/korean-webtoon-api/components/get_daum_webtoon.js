@@ -61,7 +61,7 @@ var get_daum_webtoon = function () {
                 artist: data.data[k].cartoon.artists[0].penName,
                 url: daum_json_url("m") + data.data[k].nickname,
                 img: data.data[k].thumbnailImage2.url,
-                service: "Daum",
+                service: "daum",
                 state: state_value,
                 weekday: weekday_value,
             };

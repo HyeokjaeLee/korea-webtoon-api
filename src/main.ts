@@ -22,15 +22,7 @@ const test_key = "leehyeokjae"
 const main = () => {
   hosting(8080);
   keepHosting(hosting_url); //호스팅 유지
-  {
-    exp.get("/", function (request, response) {
-      if (request.query.id != undefined) {
-        response.send(request.query.id);
-      } else {
-        response.send("test3");
-      }
-    });
-  }
+  
   //InsiderTradeAPI 부분
   {
     const insiderTradeWorker = pathDir("./insider-trade-api/index.ts");
@@ -39,52 +31,23 @@ const main = () => {
       const wokrer_data = await getData_from_Worker(insiderTradeWorker);
       const totalStockData: TotalStockInfo[] = wokrer_data.stockData;
       const listData: A_trade_data[] = wokrer_data.insiderTradeList;
-      insiderTrade._createRouter((req,res)=>{
+      insiderTrade.createRouter("list",(req,res)=>{
         res.json(listData)
-      }, "list");
+      });
       totalStockData.map((aStockData) => {
         const ticker = aStockData.ticker;
-        insiderTrade._createRouter((req, res) => {
-          const from = query2Date(req.query.from);
-          const to = query2Date(req.query.to);
-          let index: string = ""; //querysString으로 받은 값에 따른 필터링을 위한 구분값
+        insiderTrade.createRouter(ticker,(req, res) => {
+          let stockInfo = aStockData.data
+          const from =req.query.from;
+          const to =req.query.to;
           if (from != undefined) {
-            index = index + "From";
+            stockInfo = stockInfo?.filter((data)=>dateForm(data.date)>=Number(from))
           }
           if (to != undefined) {
-            index = index + "To";
+            stockInfo = stockInfo?.filter((data)=>dateForm(data.date)<=Number(to))
           }
-          const dateForm = (date: Date) => Number(convertDateFormat(date, "")); //stringQuery로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
-          switch (index) {
-            case "From": {
-              res.json(
-                aStockData.data?.filter((info) => dateForm(info.date) >= from!)
-              );
-              break;
-            }
-
-            case "To": {
-              res.json(
-                aStockData.data?.filter((info) => dateForm(info.date) <= to!)
-              );
-              break;
-            }
-
-            case "FromTo": {
-              res.json(
-                aStockData.data?.filter((info) => {
-                  const date = dateForm(info.date);
-                  return date >= from! && date <= to!;
-                })
-              );
-              break;
-            }
-            default: {
-              res.json(aStockData);
-              break;
-            }
-          }
-        }, ticker);
+          res.json(stockInfo);
+        });
       });
       insiderTrade.createIndexRouter();
     };
@@ -99,34 +62,18 @@ const main = () => {
       const wokrer_data: A_webtoon_info[] = await getData_from_Worker(
         webtoonWorker
       );
-      const classification: WebtoonContainer[] = [
-        { index: "sun", webtoon: [] },
-        { index: "mon", webtoon: [] },
-        { index: "tue", webtoon: [] },
-        { index: "wed", webtoon: [] },
-        { index: "thu", webtoon: [] },
-        { index: "fri", webtoon: [] },
-        { index: "sat", webtoon: [] },
-        { index: "finished", webtoon: [] },
-        { index: "Naver", webtoon: [] },
-        { index: "Daum", webtoon: [] },
-        { index: "all", webtoon: wokrer_data },
-      ];
-      wokrer_data.map((data) => {
-        classification[data.weekday].webtoon.push(data);
-        switch (data.service) {
-          case "Naver":
-            classification[8].webtoon.push(data);
-            break;
-          case "Daum":
-            classification[9].webtoon.push(data);
-            break;
-        }
-      });
-      classification.map((data) => {
-        webtoon.createRouter(data.webtoon, data.index);
-      });
-      webtoon.createIndexRouter();
+        webtoon.createRouter("info",(req,res)=>{
+          let webtoonInfo = wokrer_data;
+          const weeknum = req.query.weeknum
+          const service = req.query.service
+          if(weeknum!=undefined){
+            webtoonInfo=webtoonInfo.filter((aWebtoonInfo)=>aWebtoonInfo.weekday==Number(weeknum))
+          }
+          if(service!=undefined){
+            webtoonInfo=webtoonInfo.filter((aWebtoonInfo)=>aWebtoonInfo.service==service);
+          }
+          res.json(webtoonInfo)
+        })
     };
     setTimer_loop(ms2minute(10), updateWebtoonAPI);
   }
@@ -139,8 +86,19 @@ const main = () => {
       const wokrer_data: covid19API[] = await getData_from_Worker(
         covid19Worker
       );
-      wokrer_data.map((data) => {
-        covid19.createRouter(data, data.region);
+      wokrer_data.map((covidData) => {
+        covid19.createRouter(covidData.region,(req,res)=>{
+          let covidInfo = covidData.data
+          const from =req.query.from;
+          const to =req.query.to;
+          if(from!=undefined){
+            covidInfo = covidInfo.filter((data)=>dateForm(data.date)>=Number(from))
+          }
+          if(to!=undefined){
+            covidInfo = covidInfo.filter((data)=>dateForm(data.date)<=Number(to))
+          }
+          res.json(covidInfo)
+        });
       });
       covid19.createIndexRouter();
     };
@@ -148,48 +106,36 @@ const main = () => {
   }
 };
 //------------------------------------------------------------------------
-exp.get("/");
 class Router {
-  public title: string;
+  public path: string;
   public routerList: string[] = [];
   constructor(title: string) {
-    this.title = title;
+    this.path = `/${title}`;
   }
 
-  public _createRouter = (handler: RequestHandler, name?: string) => {
-    let path: string = `/${this.title}`;
-    if (name != undefined) {
-      path = path + `/${name}`;
-      this.routerList.push(path);
-    }
-    exp.get(path, handler);
+  public createRouter = (name: string,handler: RequestHandler) => {
+    const _path = `${this.path}/${name}`
+      this.routerList.push(_path);
+    exp.get(_path, handler);
   };
 
-  public createRouter = (data: any, router?: string): void => {
-    let router_url: string;
-    if (router != undefined) {
-      router_url = `/${this.title}/${router}`;
-      this.routerList.push(router_url);
-    } else {
-      router_url = `/${this.title}`;
-    }
-    exp.get(router_url, function (req, response) {
-      response.json(data);
-    });
-  };
+  
   public createIndexRouter = () => {
     console.log("routerList");
     console.log(this.routerList);
-    this.createRouter(this.routerList);
+    exp.get(this.path,(req,res)=>{
+      res.json(this.routerList);
+    })
   };
 }
+
+const dateForm = (date: Date) => Number(convertDateFormat(date, "")); //queryString으로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
 
 const pathDir = (dir: string) =>
   path.join(__dirname, dir.replace(".ts", ".js"));
 
 const hosting = (port: number): void => {
   exp.listen(process.env.PORT || port, function () {
-    console.log();
     console.log(`API hosting started on port ${port}`);
   });
 };

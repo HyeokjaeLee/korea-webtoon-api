@@ -69,7 +69,7 @@ export interface A_trade_data {
     total: number;
   }
   export interface covid19Info {
-    date: string | Date;
+    date: Date;
     confirmed: confirmed;
   }
   

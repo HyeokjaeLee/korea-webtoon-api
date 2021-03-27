@@ -197,7 +197,7 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                             .eq(webtoon_num)
                             .find("img")
                             .attr("src"),
-                        service: "Naver",
+                        service: "naver",
                         state: state_value,
                         weekday: weekday_value,
                     };

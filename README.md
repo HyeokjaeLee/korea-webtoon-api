@@ -1,6 +1,6 @@
 ![header](https://capsule-render.vercel.app/api?type=wave&color=auto&height=300&section=header&text=Toy%20project%20API&fontSize=50&animation=fadeIn&fontAlignY=38)
 
-![VERSION](https://img.shields.io/badge/version-1.8.10-blue.svg?cacheSeconds=2592000)
+![VERSION](https://img.shields.io/badge/version-1.8.14-blue.svg?cacheSeconds=2592000)
 > API created for my Toy projects <br>
 
 ![](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![](https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=black) ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-&logo=Node.js&logoColor=white) ![EXPRESS](https://img.shields.io/badge/Express-000000?style=flat-square&logo=Express&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
@@ -32,7 +32,7 @@
   "artist": "장작",
   "url": "http://m.webtoon.daum.net/m/webtoon/view/mhz",
   "img": "http://t1.daumcdn.net/webtoon/op/5496570b740722974c771c3aac3d5a9fb333c0c8",
-  "service": "Daum",
+  "service": "daum",
   "state": "완결",
   "weekday": 7
 }
@@ -129,7 +129,9 @@
 ```
 ## To-Do
 - [ ] Add token authentication function<br>
-- [ ] Add QueryString Filter<br>
+- [x] Add QueryString Filter (ver 1.8.14)<br>
+- [ ] Create GUI API navigation
+- [ ] Create MainPage
 
 - Korean-Webtoon-API
   - [x] Create API (ver 1.1.0)<br>

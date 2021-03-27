@@ -45,11 +45,11 @@ var cors_1 = __importDefault(require("cors"));
 var FormatConversion_1 = require("./modules/FormatConversion");
 var worker_threads_1 = require("worker_threads");
 var http_1 = __importDefault(require("http"));
-var checking_1 = require("./modules/checking");
 var FormatConversion_2 = require("./modules/FormatConversion");
 var exp = express_1.default();
 exp.use(cors_1.default());
 var hosting_url = "http://toy-projects-api.herokuapp.com/";
+var test_key = "leehyeokjae";
 //------------------------------------------------------------------------
 var main = function () {
     hosting(8080);
@@ -78,45 +78,23 @@ var main = function () {
                         wokrer_data = _a.sent();
                         totalStockData = wokrer_data.stockData;
                         listData = wokrer_data.insiderTradeList;
-                        insiderTrade._createRouter(function (req, res) {
+                        insiderTrade.createRouter("list", function (req, res) {
                             res.json(listData);
-                        }, "list");
+                        });
                         totalStockData.map(function (aStockData) {
                             var ticker = aStockData.ticker;
-                            insiderTrade._createRouter(function (req, res) {
-                                var _a, _b, _c;
-                                var from = checking_1.query2Date(req.query.from);
-                                var to = checking_1.query2Date(req.query.to);
-                                var index = ""; //querysString으로 받은 값에 따른 필터링을 위한 구분값
+                            insiderTrade.createRouter(ticker, function (req, res) {
+                                var stockInfo = aStockData.data;
+                                var from = req.query.from;
+                                var to = req.query.to;
                                 if (from != undefined) {
-                                    index = index + "From";
+                                    stockInfo = stockInfo === null || stockInfo === void 0 ? void 0 : stockInfo.filter(function (data) { return dateForm(data.date) >= Number(from); });
                                 }
                                 if (to != undefined) {
-                                    index = index + "To";
+                                    stockInfo = stockInfo === null || stockInfo === void 0 ? void 0 : stockInfo.filter(function (data) { return dateForm(data.date) <= Number(to); });
                                 }
-                                var dateForm = function (date) { return Number(FormatConversion_2.convertDateFormat(date, "")); }; //stringQuery로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
-                                switch (index) {
-                                    case "From": {
-                                        res.json((_a = aStockData.data) === null || _a === void 0 ? void 0 : _a.filter(function (info) { return dateForm(info.date) >= from; }));
-                                        break;
-                                    }
-                                    case "To": {
-                                        res.json((_b = aStockData.data) === null || _b === void 0 ? void 0 : _b.filter(function (info) { return dateForm(info.date) <= to; }));
-                                        break;
-                                    }
-                                    case "FromTo": {
-                                        res.json((_c = aStockData.data) === null || _c === void 0 ? void 0 : _c.filter(function (info) {
-                                            var date = dateForm(info.date);
-                                            return date >= from && date <= to;
-                                        }));
-                                        break;
-                                    }
-                                    default: {
-                                        res.json(aStockData);
-                                        break;
-                                    }
-                                }
-                            }, ticker);
+                                res.json(stockInfo);
+                            });
                         });
                         insiderTrade.createIndexRouter();
                         return [2 /*return*/];
@@ -129,7 +107,7 @@ var main = function () {
     {
         var webtoonWorker_1 = pathDir("./korean-webtoon-api/index.ts");
         var updateWebtoonAPI = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var webtoon, wokrer_data, classification;
+            var webtoon, wokrer_data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -137,34 +115,18 @@ var main = function () {
                         return [4 /*yield*/, getData_from_Worker(webtoonWorker_1)];
                     case 1:
                         wokrer_data = _a.sent();
-                        classification = [
-                            { index: "sun", webtoon: [] },
-                            { index: "mon", webtoon: [] },
-                            { index: "tue", webtoon: [] },
-                            { index: "wed", webtoon: [] },
-                            { index: "thu", webtoon: [] },
-                            { index: "fri", webtoon: [] },
-                            { index: "sat", webtoon: [] },
-                            { index: "finished", webtoon: [] },
-                            { index: "Naver", webtoon: [] },
-                            { index: "Daum", webtoon: [] },
-                            { index: "all", webtoon: wokrer_data },
-                        ];
-                        wokrer_data.map(function (data) {
-                            classification[data.weekday].webtoon.push(data);
-                            switch (data.service) {
-                                case "Naver":
-                                    classification[8].webtoon.push(data);
-                                    break;
-                                case "Daum":
-                                    classification[9].webtoon.push(data);
-                                    break;
+                        webtoon.createRouter("info", function (req, res) {
+                            var webtoonInfo = wokrer_data;
+                            var weeknum = req.query.weeknum;
+                            var service = req.query.service;
+                            if (weeknum != undefined) {
+                                webtoonInfo = webtoonInfo.filter(function (aWebtoonInfo) { return aWebtoonInfo.weekday == Number(weeknum); });
                             }
+                            if (service != undefined) {
+                                webtoonInfo = webtoonInfo.filter(function (aWebtoonInfo) { return aWebtoonInfo.service == service; });
+                            }
+                            res.json(webtoonInfo);
                         });
-                        classification.map(function (data) {
-                            webtoon.createRouter(data.webtoon, data.index);
-                        });
-                        webtoon.createIndexRouter();
                         return [2 /*return*/];
                 }
             });
@@ -183,8 +145,19 @@ var main = function () {
                         return [4 /*yield*/, getData_from_Worker(covid19Worker_1)];
                     case 1:
                         wokrer_data = _a.sent();
-                        wokrer_data.map(function (data) {
-                            covid19.createRouter(data, data.region);
+                        wokrer_data.map(function (covidData) {
+                            covid19.createRouter(covidData.region, function (req, res) {
+                                var covidInfo = covidData.data;
+                                var from = req.query.from;
+                                var to = req.query.to;
+                                if (from != undefined) {
+                                    covidInfo = covidInfo.filter(function (data) { return dateForm(data.date) >= Number(from); });
+                                }
+                                if (to != undefined) {
+                                    covidInfo = covidInfo.filter(function (data) { return dateForm(data.date) <= Number(to); });
+                                }
+                                res.json(covidInfo);
+                            });
                         });
                         covid19.createIndexRouter();
                         return [2 /*return*/];
@@ -195,47 +168,32 @@ var main = function () {
     }
 };
 //------------------------------------------------------------------------
-exp.get("/");
 var Router = /** @class */ (function () {
     function Router(title) {
         var _this = this;
         this.routerList = [];
-        this._createRouter = function (handler, name) {
-            var path = "/" + _this.title;
-            if (name != undefined) {
-                path = path + ("/" + name);
-                _this.routerList.push(path);
-            }
-            exp.get(path, handler);
-        };
-        this.createRouter = function (data, router) {
-            var router_url;
-            if (router != undefined) {
-                router_url = "/" + _this.title + "/" + router;
-                _this.routerList.push(router_url);
-            }
-            else {
-                router_url = "/" + _this.title;
-            }
-            exp.get(router_url, function (req, response) {
-                response.json(data);
-            });
+        this.createRouter = function (name, handler) {
+            var _path = _this.path + "/" + name;
+            _this.routerList.push(_path);
+            exp.get(_path, handler);
         };
         this.createIndexRouter = function () {
             console.log("routerList");
             console.log(_this.routerList);
-            _this.createRouter(_this.routerList);
+            exp.get(_this.path, function (req, res) {
+                res.json(_this.routerList);
+            });
         };
-        this.title = title;
+        this.path = "/" + title;
     }
     return Router;
 }());
+var dateForm = function (date) { return Number(FormatConversion_2.convertDateFormat(date, "")); }; //queryString으로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
 var pathDir = function (dir) {
     return path_1.default.join(__dirname, dir.replace(".ts", ".js"));
 };
 var hosting = function (port) {
     exp.listen(process.env.PORT || port, function () {
-        console.log();
         console.log("API hosting started on port " + port);
     });
 };
