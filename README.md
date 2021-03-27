@@ -133,7 +133,7 @@
 
 - Korean-Webtoon-API
   - [x] Create API (ver 1.1.0)<br>
-  - [x] Add Naver Webtoon Info<br>
+  - [x] Add Daum Webtoon Info<br>
   - [x] Add Naver Webtoon Info<br>
 
 - Insider-Trade-API
