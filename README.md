@@ -106,27 +106,14 @@ https://toy-projects-api.herokuapp.com/insidertrade/{Ticker}?from={FromDate}&to=
 
 
 ### [Korea-Covid19-API](https://toy-projects-api.herokuapp.com/covid19)
-|Region List|
-|---|
-|Lazaretto|
-|Jeju|
-|Gyeongsangnam-do|
-|Gyeongsangbuk-do|
-|Jeollanam-do|
-|Jeollabuk-do|
-|Chungcheongnam-do|
-|Chungcheongbuk-do|
-|Gangwon-do|
-|Gyeonggi-do|
-|Sejong|
-|Ulsan|
-|Daejeon|
-|Gwangju|
-|Incheon|
-|Daegu|
-|Busan|
-|Seoul|
-|Total|
+|Region List|||
+|---|---|---|
+|Lazaretto|Jeju|Gyeongsangnam-do|Gyeongsangbuk-do|
+|Jeollanam-do|Jeollabuk-do|Chungcheongnam-do|
+|Chungcheongbuk-do|Gangwon-do|Gyeonggi-do|
+|Sejong|Ulsan|Daejeon|
+|Gwangju|Incheon|Daegu|
+|Busan|Seoul|**Total**|
 
 DateForm : 20210325<br>
 ```
