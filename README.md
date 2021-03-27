@@ -106,8 +106,7 @@ https://toy-projects-api.herokuapp.com/insidertrade/{Ticker}?from={FromDate}&to=
 
 
 ### [Korea-Covid19-API](https://toy-projects-api.herokuapp.com/covid19)
-Region :
-|List|
+|Region List|
 |---|
 |Lazaretto|
 |Jeju|
