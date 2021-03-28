@@ -1,11 +1,13 @@
 import path from "path";
-import express, { Request, RequestHandler, response, Response } from "express";
+import express, { request, Request, RequestHandler, response, Response } from "express";
 import cors from "cors";
 import { setTimer_loop, ms2hour, ms2minute } from "./modules/FormatConversion";
 import { Worker } from "worker_threads";
 import http from "http";
-import { query2Date } from "./modules/checking";
 import { convertDateFormat } from "./modules/FormatConversion";
+import mongoose from "mongoose"
+const User = require ("./Schema/test")
+import bodyParser from "body-parser";
 import type {
   TotalStockInfo,
   A_trade_data,
@@ -17,6 +19,22 @@ const exp = express();
 exp.use(cors());
 const hosting_url = "http://toy-projects-api.herokuapp.com/";
 const test_key = "leehyeokjae"
+const pw = "44nud95974";
+const dbAddress = `mongodb+srv://leehyeokjae97:${pw}@toyproject-cluster.8xhpm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+mongoose
+  .connect(dbAddress, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
+
+  User.create('inyong', '1254')
+.then((user: any)=>{
+  console.log(user); // 저장된 유저 정보 출력
+});
 
 //------------------------------------------------------------------------
 const main = () => {
