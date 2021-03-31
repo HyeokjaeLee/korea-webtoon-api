@@ -63,10 +63,10 @@ mongoose_1.default
 })
     .then(function () { return console.log("MongoDB Connected"); })
     .catch(function (err) { return console.log(err); });
-User.create('inyong', '1254')
-    .then(function (user) {
-    console.log(user); // 저장된 유저 정보 출력
-});
+/* User.create('inyong', '1254')
+.then((user: any)=>{
+ console.log(user); // 저장된 유저 정보 출력
+});*/
 //------------------------------------------------------------------------
 var main = function () {
     hosting(8080);

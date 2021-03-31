@@ -31,10 +31,10 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-  User.create('inyong', '1254')
+ /* User.create('inyong', '1254')
 .then((user: any)=>{
   console.log(user); // 저장된 유저 정보 출력
-});
+});*/
 
 //------------------------------------------------------------------------
 const main = () => {
