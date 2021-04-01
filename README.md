@@ -3,7 +3,7 @@
 ![VERSION](https://img.shields.io/badge/version-1.8.15-blue.svg?cacheSeconds=2592000)
 > API created for my Toy projects <br>
 
-![](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![](https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=black) ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-&logo=Node.js&logoColor=white) ![EXPRESS](https://img.shields.io/badge/Express-000000?style=flat-square&logo=Express&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
+![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![JAVASCRIPT](https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=black) ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-&logo=Node.js&logoColor=white) ![EXPRESS](https://img.shields.io/badge/Express-000000?style=flat-square&logo=Express&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
 
 ## Author
 
