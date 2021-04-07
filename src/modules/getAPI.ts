@@ -4,14 +4,13 @@ const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 export const getJsonAPI = (url: string) => {
   const xmlhttp = new XMLHttpRequest();
-  let json_data: string = "";
+  let json_data: any;
   xmlhttp.onreadystatechange = () => {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
       try {
         json_data = JSON.parse(xmlhttp.responseText);
       } catch (err) {
         console.log(err.message + " in " + xmlhttp.responseText);
-        return;
       }
     }
   };

@@ -4,10 +4,25 @@ import type { A_webtoon_info } from "../../modules/types";
 
 //다음 웹툰
 class _get_daum_webtoon {
-  private json_data=undefined;
-  private json_url:string;
-  constructor(fragments:string,type:string){
-    this.json_url = `http://webtoon.daum.net/data/pc/webtoon/list_${fragments}/${type}`
+  private json_data: JSON;
+  constructor(fragments: string, type: string) {
+    const json_url = `http://webtoon.daum.net/data/pc/webtoon/list_${fragments}/${type}`;
+    this.json_data = getJsonAPI(json_url);
+  }
+}
+
+class a_webtoon_info {
+  public a_webtoon_info;
+  constructor(original_data: any,state:string,weekday:number) {
+    this.a_webtoon_info = {
+      title: original_data.title,
+      artist: original_data.cartoon.artists[0].penName,
+      url: `http://m.webtoon.daum.net/m/webtoon/view/`+original_data.nickname,
+      img: original_data.thumbnailImage2.url,
+      service: "daum", //다음
+      state: state_value,
+      weekday: weekday_value,
+    };
   }
 }
 
@@ -24,7 +39,12 @@ const get_daum_webtoon = (): object[] => {
         target_url = "http://webtoon.daum.net/data/" + platform + "/webtoon";
         break;
       case "m":
-        target_url = "http://" + platform + ".webtoon.daum.net/" + platform + "/webtoon/view/";
+        target_url =
+          "http://" +
+          platform +
+          ".webtoon.daum.net/" +
+          platform +
+          "/webtoon/view/";
         break;
     }
     return target_url;
