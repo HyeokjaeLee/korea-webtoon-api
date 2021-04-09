@@ -25,7 +25,7 @@ var request = __importStar(require("request"));
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var getJsonAPI = function (url) {
     var xmlhttp = new XMLHttpRequest();
-    var json_data = "";
+    var json_data;
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             try {
@@ -33,7 +33,6 @@ var getJsonAPI = function (url) {
             }
             catch (err) {
                 console.log(err.message + " in " + xmlhttp.responseText);
-                return;
             }
         }
     };

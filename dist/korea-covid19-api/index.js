@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
-var get_covid19_data_1 = require("./components/get_covid19_data");
+var get_covid19_data_1 = require("./modules/get_covid19_data");
 //const AI_model = require("../../brain/model/covid_19_model.json");
 //import AI_data from "./modules/get_ai_data";
 var checking_1 = require("../modules/checking");

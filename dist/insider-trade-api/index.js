@@ -40,8 +40,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
-var get_buys_data_1 = __importDefault(require("./components/get_buys_data"));
-var get_stock_data_1 = require("./components/get_stock_data");
+var get_buys_data_1 = __importDefault(require("./modules/get_buys_data"));
+var get_stock_data_1 = require("./modules/get_stock_data");
 var checking_1 = require("../modules/checking");
 var buy_data_url = "http://openinsider.com/insider-purchases-25k";
 (function () { return __awaiter(void 0, void 0, void 0, function () {

@@ -39,14 +39,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCovid19Data = void 0;
 var FormatConversion_1 = require("../../modules/FormatConversion");
 var getAPI_1 = require("../../modules/getAPI");
-var RegionList_1 = require("./RegionList");
+var commonData_1 = require("../../modules/commonData");
 var service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D";
 var covid19_api_url = function (service_key, from, to, middle_url) {
     return "http://openapi.data.go.kr/openapi/service/rest/Covid19/" + middle_url + "?serviceKey=" + service_key + "&pageNo=1&numOfRows=1&startCreateDt=" + from + "&endCreateDt=" + to;
 };
 var today = Number(FormatConversion_1.convertDateFormat(new Date(), ""));
 var url = covid19_api_url(service_key, 20200409, today, "getCovid19SidoInfStateJson");
-var regionArr = RegionList_1.regionListData.map(function (data) { return data.eng; });
+var regionArr = commonData_1.regionListData.map(function (data) { return data.eng; });
 var regionCount = regionArr.length;
 var getCovid19Data = function () { return __awaiter(void 0, void 0, void 0, function () {
     var originalCovid19API, RequiredInfo, region_separated_Info, junckFilteredInfo, detail_Info;

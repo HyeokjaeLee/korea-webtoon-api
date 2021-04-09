@@ -3,104 +3,61 @@ import { weekday } from "../../modules/commonData";
 import type { A_webtoon_info } from "../../modules/types";
 
 //다음 웹툰
-class _get_daum_webtoon {
-  private json_data: JSON;
-  constructor(fragments: string, type: string) {
-    const json_url = `http://webtoon.daum.net/data/pc/webtoon/list_${fragments}/${type}`;
-    this.json_data = getJsonAPI(json_url);
-  }
-}
 
-class a_webtoon_info {
-  public a_webtoon_info;
-  constructor(original_data: any,state:string,weekday:number) {
-    this.a_webtoon_info = {
-      title: original_data.title,
-      artist: original_data.cartoon.artists[0].penName,
-      url: `http://m.webtoon.daum.net/m/webtoon/view/`+original_data.nickname,
-      img: original_data.thumbnailImage2.url,
-      service: "daum", //다음
+const get_daum_webtoon_json = (fragments: string, type: string) =>
+  getJsonAPI(
+    `http://webtoon.daum.net/data/pc/webtoon/list_${fragments}/${type}`
+  ).data;
+
+const reconstruct_webtoon_data = (
+  json: any,
+  week_num: number
+): A_webtoon_info[] =>
+  json.map((data: any) => {
+    const state_variable = data.restYn;
+    const state_value: string =
+      week_num == 7
+        ? "완결"
+        : week_num == new Date().getDay() && state_variable == "N"
+        ? "UP"
+        : state_variable == "Y"
+        ? "휴재"
+        : "";
+    return {
+      title: data.title,
+      artist: data.cartoon.artists[0].penName,
+      url: "http://m.webtoon.daum.net/m/webtoon/view/" + data.nickname,
+      img: data.thumbnailImage2.url,
+      service: "daum",
       state: state_value,
-      weekday: weekday_value,
+      weekday: week_num,
     };
-  }
-}
+  });
 
-const get_daum_webtoon = (): object[] => {
-  let daum_webtoon_info: object[] = [];
-  let weekday_value: number;
-  let state_value: string;
-  let a_daum_webtoon_info: object;
-
-  const daum_json_url = (platform: string): string => {
-    let target_url: string = "";
-    switch (platform) {
-      case "pc":
-        target_url = "http://webtoon.daum.net/data/" + platform + "/webtoon";
-        break;
-      case "m":
-        target_url =
-          "http://" +
-          platform +
-          ".webtoon.daum.net/" +
-          platform +
-          "/webtoon/view/";
-        break;
-    }
-    return target_url;
-  };
-
-  const daum_url_package = (i: number): string => {
-    let target_url: string;
-    let fragments_url: string[] = ["/list_serialized/", "/list_finished/"];
-    switch (i) {
-      case 7:
-        target_url = daum_json_url("pc") + fragments_url[1] + "free";
-        break;
-      case 8:
-        target_url = daum_json_url("pc") + fragments_url[1] + "pay";
-        break;
-      default:
-        target_url = daum_json_url("pc") + fragments_url[0] + weekday[i];
-        break;
-    }
-    return target_url;
-  };
-
-  for (var i = 0; i < 9; i++) {
-    let data: any = getJsonAPI(daum_url_package(i));
-    let get_a_daum_webtoon_info = (k: number, i: number): A_webtoon_info => {
-      var state_variable = data.data[k].restYn;
-      if (i > 6) {
-        weekday_value = 7;
-        state_value = "완결";
-      } else {
-        weekday_value = i;
-      }
-      if (new Date().getDay() == weekday_value && state_variable == "N") {
-        state_value = "UP";
-      } else if (state_variable == "Y") {
-        state_value = "휴재";
-      } else if (state_value != "완결") {
-        state_value = "";
-      }
-
-      return {
-        title: data.data[k].title,
-        artist: data.data[k].cartoon.artists[0].penName,
-        url: daum_json_url("m") + data.data[k].nickname,
-        img: data.data[k].thumbnailImage2.url,
-        service: "daum", //다음
-        state: state_value,
-        weekday: weekday_value,
-      };
-    };
-    for (var k = 0; k < data.data.length; k++) {
-      a_daum_webtoon_info = get_a_daum_webtoon_info(k, i);
-      daum_webtoon_info.push(a_daum_webtoon_info);
-    }
-  }
-  return daum_webtoon_info;
+const get_finished_webtoon = () => {
+  const free_data = get_daum_webtoon_json("finished", "free");
+  const pay_data = get_daum_webtoon_json("finished", "pay");
+  const original_data = free_data.concat(pay_data);
+  return reconstruct_webtoon_data(original_data, 7);
 };
+
+const get_weekly_webtoon = () => {
+  let result: A_webtoon_info[] = [];
+  for (let week_num = 0; week_num < 7; week_num++) {
+    const original_data = get_daum_webtoon_json(
+      "serialized",
+      weekday[week_num]
+    );
+    const reconstructed_data = reconstruct_webtoon_data(
+      original_data,
+      week_num
+    );
+    result = result.concat(reconstructed_data);
+  }
+  return result;
+};
+
+const get_daum_webtoon = () =>
+  get_finished_webtoon().concat(get_weekly_webtoon());
 
 export default get_daum_webtoon;

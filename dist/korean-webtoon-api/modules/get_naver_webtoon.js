@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var request = require("request-promise-native");
-var weekday_1 = require("./weekday");
+var commonData_1 = require("../../modules/commonData");
 var cheerio_1 = require("cheerio");
 //네이버 웹툰
 var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -56,7 +56,7 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                     switch (sortation) {
                         case Sortation.weekday:
                             target_url =
-                                naver_comic_url + "/webtoon/weekday.nhn?week=" + weekday_1.weekday[num];
+                                naver_comic_url + "/webtoon/weekday.nhn?week=" + commonData_1.weekday[num];
                             break;
                         case Sortation.finished:
                             target_url = naver_comic_url + "/webtoon/finish.nhn?page=" + num;
@@ -197,7 +197,7 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
                             .eq(webtoon_num)
                             .find("img")
                             .attr("src"),
-                        service: "Naver",
+                        service: "naver",
                         state: state_value,
                         weekday: weekday_value,
                     };
