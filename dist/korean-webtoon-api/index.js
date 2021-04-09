@@ -41,14 +41,14 @@ var get_naver_webtoon_1 = require("./modules/get_naver_webtoon");
 var get_daum_webtoon_1 = require("./modules/get_daum_webtoon");
 var checking_1 = require("../modules/checking");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var naver_info, daum_info, total_info;
+    var NAVER, DAUM, total_info;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, get_naver_webtoon_1.get_naver_webtoon()];
             case 1:
-                naver_info = _a.sent();
-                daum_info = get_daum_webtoon_1.get_daum_webtoon();
-                total_info = naver_info.concat(daum_info);
+                NAVER = _a.sent();
+                DAUM = get_daum_webtoon_1.get_daum_webtoon();
+                total_info = NAVER.concat(DAUM);
                 total_info.sort(function (a, b) {
                     return a.title < b.title ? -1 : 1;
                 });
