@@ -1,6 +1,6 @@
 ![header](https://capsule-render.vercel.app/api?type=wave&color=auto&height=300&section=header&text=Toy%20project%20API&fontSize=50&animation=fadeIn&fontAlignY=38)
 
-![VERSION](https://img.shields.io/badge/version-1.8.15-blue.svg?cacheSeconds=2592000)
+![VERSION](https://img.shields.io/badge/version-1.8.17-blue.svg?cacheSeconds=2592000)
 > API created for my Toy projects <br>
 
 ![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![JAVASCRIPT](https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=black) ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-&logo=Node.js&logoColor=white) ![EXPRESS](https://img.shields.io/badge/Express-4C4C4C?style=flat-square&logo=Express&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
