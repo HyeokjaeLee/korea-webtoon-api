@@ -57,7 +57,6 @@ const get_weekly_webtoon = () => {
   return result;
 };
 
-const get_daum_webtoon = () =>
+export const get_daum_webtoon = () =>
   get_finished_webtoon().concat(get_weekly_webtoon());
 
-export default get_daum_webtoon;

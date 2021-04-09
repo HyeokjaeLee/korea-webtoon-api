@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.get_daum_webtoon = void 0;
 var getAPI_1 = require("../../modules/getAPI");
 var commonData_1 = require("../../modules/commonData");
 //다음 웹툰
@@ -45,4 +46,4 @@ var get_weekly_webtoon = function () {
 var get_daum_webtoon = function () {
     return get_finished_webtoon().concat(get_weekly_webtoon());
 };
-exports.default = get_daum_webtoon;
+exports.get_daum_webtoon = get_daum_webtoon;

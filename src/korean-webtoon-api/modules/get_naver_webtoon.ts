@@ -4,7 +4,7 @@ import type { A_webtoon_info } from "../../modules/types";
 import { load } from "cheerio";
 
 //네이버 웹툰
-const get_naver_webtoon = async (): Promise<object[]> => {
+export const get_naver_webtoon = async (): Promise<object[]> => {
   let naver_webtoon_info: object[] = [];
   const naver_comic_url = "https://m.comic.naver.com";
   enum Sortation {
@@ -162,5 +162,3 @@ const get_naver_webtoon = async (): Promise<object[]> => {
   await get_naver_finished_webtoon();
   return naver_webtoon_info;
 };
-
-export default get_naver_webtoon;

@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.get_naver_webtoon = void 0;
 var request = require("request-promise-native");
 var commonData_1 = require("../../modules/commonData");
 var cheerio_1 = require("cheerio");
@@ -212,4 +213,4 @@ var get_naver_webtoon = function () { return __awaiter(void 0, void 0, void 0, f
         }
     });
 }); };
-exports.default = get_naver_webtoon;
+exports.get_naver_webtoon = get_naver_webtoon;
