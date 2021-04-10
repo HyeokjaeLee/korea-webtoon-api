@@ -20,7 +20,7 @@ const get_finished_webtoon = () => {
 const get_a_page_webtoon = (type:string, query_type:string, query_index:number|string) => {
   return new Promise(function (resolve, reject) {
     request(
-      `${naver_webtoon_url}/webtoon/${type}.nhn?${query}`,
+      `${naver_webtoon_url}/webtoon/${type}.nhn?${query_type}`,
       (err: any, response: any, body: any) => {
         const $ = load(body);
         const list_selector = $("#ct > div.section_list_toon > ul > li > a");
