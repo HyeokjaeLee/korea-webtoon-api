@@ -46,23 +46,21 @@ var FormatConversion_1 = require("./modules/FormatConversion");
 var worker_threads_1 = require("worker_threads");
 var http_1 = __importDefault(require("http"));
 var FormatConversion_2 = require("./modules/FormatConversion");
-var mongoose_1 = __importDefault(require("mongoose"));
-var User = require("./Schema/test");
 var exp = express_1.default();
 exp.use(cors_1.default());
 var hosting_url = "http://toy-projects-api.herokuapp.com/";
-var test_key = "leehyeokjae";
-var pw = "44nud95974";
-var dbAddress = "mongodb+srv://leehyeokjae97:" + pw + "@toyproject-cluster.8xhpm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-mongoose_1.default
-    .connect(dbAddress, {
+/*const test_key = "leehyeokjae"
+const pw = "44nud95974";
+const dbAddress = `mongodb+srv://leehyeokjae97:${pw}@toyproject-cluster.8xhpm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+mongoose
+  .connect(dbAddress, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false,
-})
-    .then(function () { return console.log("MongoDB Connected"); })
-    .catch(function (err) { return console.log(err); });
+  })
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));*/
 /* User.create('inyong', '1254')
 .then((user: any)=>{
  console.log(user); // 저장된 유저 정보 출력

@@ -6,7 +6,7 @@ import { Worker } from "worker_threads";
 import http from "http";
 import { convertDateFormat } from "./modules/FormatConversion";
 import mongoose from "mongoose"
-const User = require ("./Schema/test")
+//const User = require ("./Schema/test")
 import bodyParser from "body-parser";
 import type {
   TotalStockInfo,
@@ -18,7 +18,7 @@ import type {
 const exp = express();
 exp.use(cors());
 const hosting_url = "http://toy-projects-api.herokuapp.com/";
-const test_key = "leehyeokjae"
+/*const test_key = "leehyeokjae"
 const pw = "44nud95974";
 const dbAddress = `mongodb+srv://leehyeokjae97:${pw}@toyproject-cluster.8xhpm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose
@@ -29,7 +29,7 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err));*/
 
  /* User.create('inyong', '1254')
 .then((user: any)=>{
