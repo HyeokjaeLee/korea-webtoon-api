@@ -163,6 +163,7 @@ https://https://toy-projects-api.herokuapp.com/covid19/{Region}?from={FromDate}&
   - [x] Create API (ver 1.1.0)<br>
   - [x] Add Daum Webtoon Info<br>
   - [x] Add Naver Webtoon Info<br>
+  - [ ] Connect DB<br>
 
 - Insider-Trade-API
   - [x] Create API (ver 1.2.0)<br>

@@ -1,10 +1,9 @@
-import { weekday } from  "../../modules/commonData";
+import { weekday } from "../../modules/commonData";
 import type { A_webtoon_info } from "../../modules/types";
-
-//네이버 웹툰
 const request = require("request-promise-native");
 import { load } from "cheerio";
 const naver_webtoon_url = "https://m.comic.naver.com";
+
 const get_a_page_webtoon = async (
   type: string,
   query_type: string,
@@ -85,4 +84,3 @@ const get_weekly_webtoon = async (): Promise<A_webtoon_info[]> => {
 
 export const get_naver_webtoon = async () =>
   (await get_finish_webtoon()).concat(await get_weekly_webtoon());
-
