@@ -2,10 +2,21 @@ const request = require("request-promise-native");
 import { load } from "cheerio";
 //import { string2date } from "../../modules/FormatConversion";
 //import type { A_trade_data } from "../../modules/types";
+
+export const string2date = (string_date: string) => {
+  const strArr: string[] = string_date.split("-");
+  const numArr: number[] = [];
+  for (let i = 0; i < 3; i++) {
+    numArr[i] = Number(strArr[i]);
+  }
+  const date: Date = new Date(numArr[0], numArr[1] - 1, numArr[2]);
+  return date;
+};
+
 const $2num = (string_data: string) =>
   Number(string_data.replace("$", "").replace(/,/gi, ""));
 const _get_buy_data = async () => {
-  const openInsider_data:any[] = [];
+  const openInsider_data: any[] = [];
   const openInsiderURL = "http://openinsider.com/insider-purchases-25k";
   await request(
     openInsiderURL,
@@ -16,14 +27,14 @@ const _get_buy_data = async () => {
         const get_a_data = (dir_num: number) =>
           $(element).find(`td:nth-child(${dir_num})`).text();
         const get_info = () => ({
-          ticker: get_a_data(3).replace(/ /gi, ""),
-          trade_date: get_a_data(2),
-          company_name: get_a_data(4),
-          insider_name: get_a_data(5),
-          price: get_a_data(8),
-          qty: get_a_data(9),
-          owned: get_a_data(10),
-          value: get_a_data(12),
+          ticker: get_a_data(4),
+          trade_date: get_a_data(3),
+          company_name: get_a_data(5),
+          insider_name: get_a_data(6),
+          price: get_a_data(9),
+          qty: Number(get_a_data(10).replace(/,/gi, "")),
+          owned: Number(get_a_data(11).replace(/,/gi, "")),
+          value: Number(get_a_data(13).replace("$", "").replace(/,/gi, "")),
         });
         openInsider_data.push(get_info());
       });
