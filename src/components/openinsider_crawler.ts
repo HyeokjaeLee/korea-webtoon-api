@@ -1,12 +1,7 @@
 const request = require("request-promise-native");
 import { load } from "cheerio";
-import { string2date } from "../../module/FormatConversion";
-import type { A_trade_data } from "../../module/types";
-let $: cheerio.Root;
-const $2num = (string_data: string) =>
-  Number(string_data.replace("$", "").replace(/,/gi, ""));
 
-export const get_buy_data = async () => {
+const get_buy_data = async () => {
   const openInsider_data: any[] = [];
   const openInsiderURL = "http://openinsider.com/insider-purchases-25k";
   await request(
@@ -33,5 +28,4 @@ export const get_buy_data = async () => {
   );
   console.log(openInsider_data);
 };
-
-console.log(get_buy_data());
+get_buy_data();
