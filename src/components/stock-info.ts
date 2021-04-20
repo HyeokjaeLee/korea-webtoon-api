@@ -6,39 +6,42 @@ import {
   TotalStockInfo,
 } from "../interfaces/insider_trade";
 
-class StockData {
+export class Stock {
+  constructor(ticker_list: string[]) {
+    this.ticker_list = ticker_list;
+  }
+
   private newDate = new Date();
   private today = {
     year: this.newDate.getFullYear(),
     month: this.newDate.getMonth(),
     day: this.newDate.getDate(),
   };
-  public errorTicker: string[] = [];
   private ticker_list: string[] = [];
-  private get_a_yahooStockPrices = async (
-    ticker: string
-  ): Promise<yahooStockInfo[]> => {
-    const test = await yahooStockPrices.getHistoricalPrices(
-      0,
-      0,
-      0,
-      this.today.month,
-      this.today.day,
-      this.today.year,
-      ticker,
-      "1d"
-    );
-    return test;
+  public errorTicker: string[] = [];
+
+  private getStockPrices = async (ticker: string) => {
+    try {
+      const stockPrices = this.filter_stockPrices(
+        await yahooStockPrices.getHistoricalPrices(
+          0,
+          0,
+          0,
+          this.today.month,
+          this.today.day,
+          this.today.year,
+          ticker,
+          "1d"
+        )
+      );
+      if (stockPrices.length != 0) return { ticker: ticker, data: stockPrices };
+      else this.errorTicker.push(ticker);
+    } catch (e) {
+      this.errorTicker.push(ticker);
+    }
   };
 
-  private seconds2dateForm = (seconds: number): Date => {
-    const calcuBaseDate = "1970-1-1";
-    const date = new Date(calcuBaseDate);
-    date.setSeconds(date.getSeconds() + seconds);
-    return date;
-  };
-
-  private filter_stockPrices = async (yahooStockPrices: yahooStockInfo[]) => {
+  private filter_stockPrices = (yahooStockPrices: yahooStockInfo[]) => {
     const filteredStockPrices: stockInfo[] = [];
     yahooStockPrices.forEach((data: yahooStockInfo) => {
       if (isExists(data.close)) {
@@ -56,36 +59,38 @@ class StockData {
     });
     return filteredStockPrices;
   };
-  constructor(ticker_list: string[]) {
-    this.ticker_list = ticker_list;
-  }
 
-  public stockInfo = async () => {
-    const test = this.ticker_list.map((ticker) => {
-      return this.get_a_yahooStockPrices(ticker);
+  private seconds2dateForm = (seconds: number): Date => {
+    const calcuBaseDate = "1970-1-1";
+    const date = new Date(calcuBaseDate);
+    date.setSeconds(date.getSeconds() + seconds);
+    return date;
+  };
+
+  public get_stock_data = async () => {
+    const stockDataArray = this.ticker_list.map((ticker) =>
+      this.getStockPrices(ticker)
+    );
+    await Promise.all(stockDataArray); //병렬처리를 위해 사용
+    const final_stockDataArray: TotalStockInfo[] = [];
+    stockDataArray.forEach((_stockData) => {
+      _stockData.then((_stockData) => {
+        if (_stockData != undefined) {
+          final_stockDataArray.push({
+            ticker: _stockData.ticker,
+            data: _stockData.data,
+          });
+        }
+      });
     });
-    await Promise.all(test);
-    const test2: any = [];
-    test.forEach(() => {});
-    return test;
-  }; /*
-    const totalStockData = this.ticker_list.map(async (ticker) => {
-      const stockPrices = await this.filter_stockPrices(
-          await this.get_a_yahooStockPrices(ticker)
-        ),
-        stockData = { ticker: ticker, data: stockPrices };
-      console.log(stockData);
-      if (isExists(stockData)) return stockData;
-    });
-    console.log(totalStockData);
-    return totalStockData;
-  };*/
+    return final_stockDataArray;
+  };
 }
 
 const test = async () => {
-  const test = new StockData(["LOV", "JOL", "CL", "TEST"]); //
-  const test2 = await test.stockInfo();
-  console.log(test2);
+  const test = new Stock(["LOV", "JOL", "CL", "TEST"]); //
+  const test2 = await test.get_stock_data();
+  console.log(test2[2]);
 };
 
 test();
