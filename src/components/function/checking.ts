@@ -7,7 +7,7 @@ export const checkUpdates = (api_name: string, data: any): void => {
   }
 };
 
-export const checkEmpty = (data: any) => {
+export const isExists = (data: any) => {
   if (typeof data == undefined || data == null || data == "") return false;
   else return true;
 };
