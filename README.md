@@ -1,6 +1,7 @@
 ![header](https://capsule-render.vercel.app/api?type=wave&color=auto&height=300&section=header&text=Toy%20project%20API&fontSize=50&animation=fadeIn&fontAlignY=38)
 
 ![VERSION](https://img.shields.io/badge/version-1.8.20-blue.svg?cacheSeconds=2592000)
+
 > API created for my Toy projects <br>
 
 ![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![JAVASCRIPT](https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=black) ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-&logo=Node.js&logoColor=white) ![EXPRESS](https://img.shields.io/badge/Express-4C4C4C?style=flat-square&logo=Express&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
@@ -25,12 +26,16 @@
 ## ✨ List
 
 ### [Korean-Webtoon-API](https://toy-projects-api.herokuapp.com/webtoon)
+
 SeviceNameForm : daum<br>
 WeekNum : 0~7 (7 = Finished Webtoon)
+
 ```
 https://toy-projects-api.herokuapp.com/webtoon/info?weeknum={WeekNum}&service={ServiceName}
 ```
+
 #### form
+
 ```json
 {
   "title": "0.0MHz",
@@ -42,16 +47,21 @@ https://toy-projects-api.herokuapp.com/webtoon/info?weeknum={WeekNum}&service={S
   "weekday": 7
 }
 ```
+
 ### [Insider-Trade-API](https://toy-projects-api.herokuapp.com/insidertrade)
+
 You can check the ticker in the list information<br>
 DateForm : 20210325
+
 ```
 https://toy-projects-api.herokuapp.com/insidertrade/list
 https://toy-projects-api.herokuapp.com/insidertrade/{Ticker}?from={FromDate}&to={ToDate}
 ```
+
 #### Form
 
 ##### List Info
+
 ```json
 [
   {
@@ -76,7 +86,9 @@ https://toy-projects-api.herokuapp.com/insidertrade/{Ticker}?from={FromDate}&to=
   }
 ]
 ```
+
 ##### Stock Info
+
 ```json
 {
   "ticker": "SAII",
@@ -103,24 +115,27 @@ https://toy-projects-api.herokuapp.com/insidertrade/{Ticker}?from={FromDate}&to=
 }
 ```
 
-
-
 ### [Korea-Covid19-API](https://toy-projects-api.herokuapp.com/covid19)
+
 #### RegionList
-||||
-|:---:|:---:|:---:|
-|Lazaretto|Jeju|Gyeongsangnam-do|Gyeongsangbuk-do|
-|Jeollanam-do|Jeollabuk-do|Chungcheongnam-do|
-|Chungcheongbuk-do|Gangwon-do|Gyeonggi-do|
-|Sejong|Ulsan|Daejeon|
-|Gwangju|Incheon|Daegu|
-|Busan|Seoul|**Total**|
+
+|                   |              |                   |
+| :---------------: | :----------: | :---------------: | ---------------- |
+|     Lazaretto     |     Jeju     | Gyeongsangnam-do  | Gyeongsangbuk-do |
+|   Jeollanam-do    | Jeollabuk-do | Chungcheongnam-do |
+| Chungcheongbuk-do |  Gangwon-do  |    Gyeonggi-do    |
+|      Sejong       |    Ulsan     |      Daejeon      |
+|      Gwangju      |   Incheon    |       Daegu       |
+|       Busan       |    Seoul     |     **Total**     |
 
 DateForm : 20210325<br>
+
 ```
 https://https://toy-projects-api.herokuapp.com/covid19/{Region}?from={FromDate}&to={ToDate}
 ```
+
 #### form
+
 ```json
 {
   "region": "Seoul",
@@ -153,19 +168,24 @@ https://https://toy-projects-api.herokuapp.com/covid19/{Region}?from={FromDate}&
   ]
 }
 ```
+
 ## To-Do
-- [ ] Add token authentication function<br>
-- [x] Add QueryString Filter (ver 1.8.14)<br>
+
+- [ ] Add token authentication function
+- [x] Add QueryString Filter (ver 1.8.14)
 - [ ] Create GUI API navigation
 - [ ] Create MainPage
+- [ ] Improved parallel processing method
 
 - Korean-Webtoon-API
+
   - [x] Create API (ver 1.1.0)<br>
   - [x] Add Daum Webtoon Info<br>
   - [x] Add Naver Webtoon Info<br>
   - [ ] Connect DB<br>
 
 - Insider-Trade-API
+
   - [x] Create API (ver 1.2.0)<br>
   - [x] Add Insider Trade List (ver 1.3.0)<br>
   - [x] Add Insider Trade Stock information<br>
