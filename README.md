@@ -27,6 +27,8 @@
 
 ### [Korean-Webtoon-API](https://toy-projects-api.herokuapp.com/webtoon)
 
+#### URL
+
 SeviceNameForm : daum<br>
 WeekNum : 0~7 (7 = Finished Webtoon)
 
@@ -51,6 +53,9 @@ https://toy-projects-api.herokuapp.com/webtoon/info?weeknum={WeekNum}&service={S
 ### [Insider-Trade-API](https://toy-projects-api.herokuapp.com/insidertrade)
 
 You can check the ticker in the list information<br>
+
+#### URL
+
 DateForm : 20210325
 
 ```
@@ -119,14 +124,27 @@ https://toy-projects-api.herokuapp.com/insidertrade/{Ticker}?from={FromDate}&to=
 
 #### RegionList
 
-|                   |              |                   |
-| :---------------: | :----------: | :---------------: | ---------------- |
-|     Lazaretto     |     Jeju     | Gyeongsangnam-do  | Gyeongsangbuk-do |
-|   Jeollanam-do    | Jeollabuk-do | Chungcheongnam-do |
-| Chungcheongbuk-do |  Gangwon-do  |    Gyeonggi-do    |
-|      Sejong       |    Ulsan     |      Daejeon      |
-|      Gwangju      |   Incheon    |       Daegu       |
-|       Busan       |    Seoul     |     **Total**     |
+- Lazaretto
+- Jeju
+- Gyeongsangnam-do
+- Gyeongsangbuk-do
+- Jeollanam-do
+- Jeollabuk-do
+- Chungcheongnam-do
+- Chungcheongbuk-do
+- Gangwon-do
+- Gyeonggi-do
+- Sejong
+- Gwangju
+- Busan
+- Ulsan
+- Incheon
+- Daejeon
+- Daegu
+- Seoul
+- **Total**
+
+#### URL
 
 DateForm : 20210325<br>
 
