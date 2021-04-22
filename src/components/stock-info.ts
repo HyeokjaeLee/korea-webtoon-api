@@ -19,7 +19,7 @@ export class Stock {
   };
   private ticker_list: string[] = [];
   public errorTicker: string[] = [];
-
+  public normalTicker: string[] = [];
   private getStockPrices = async (ticker: string) => {
     try {
       const stockPrices = this.filter_stockPrices(
@@ -34,8 +34,10 @@ export class Stock {
           "1d"
         )
       );
-      if (stockPrices.length != 0) return { ticker: ticker, data: stockPrices };
-      else this.errorTicker.push(ticker);
+      if (stockPrices.length != 0) {
+        this.normalTicker.push(ticker);
+        return { ticker: ticker, data: stockPrices };
+      } else this.errorTicker.push(ticker);
     } catch (e) {
       this.errorTicker.push(ticker);
     }

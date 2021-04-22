@@ -1,4 +1,4 @@
-import { getJsonAPI } from "./function/getAPI";
+import { getJsonAPI } from "./function/external-data";
 import { weekday } from "../data/weekday";
 import type { A_webtoon_info } from "../interfaces/webtoon";
 

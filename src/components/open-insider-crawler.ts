@@ -1,7 +1,7 @@
 const request = require("request-promise-native");
 import { load } from "cheerio";
 
-const get_buy_data = async () => {
+export const get_opne_insider_data = async () => {
   const openInsider_data: any[] = [],
     openInsiderURL: string = "http://openinsider.com/insider-purchases-25k";
   await request(
@@ -26,6 +26,5 @@ const get_buy_data = async () => {
       });
     }
   );
-  console.log(openInsider_data);
+  return openInsider_data;
 };
-get_buy_data();
