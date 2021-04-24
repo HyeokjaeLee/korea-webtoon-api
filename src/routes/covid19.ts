@@ -5,10 +5,10 @@ import path from "path";
 
 // router.get 으로 사용합니다
 
-const getData_from_Worker = (): any => {
+const getData_from_Worker = (_workerName:string): any => {
   return new Promise(function (resolve, reject) {
-const workerDir = path.join(__dirname,"../worker/covid19-worker.js");
-const worker = new Worker(workerDir);
+const workerDir = path.join(__dirname,`../worker/${_workerName}-worker.js`),
+ worker = new Worker(workerDir);
 worker.on("message",(data)=>resolve(data))
   });
 };
