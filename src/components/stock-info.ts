@@ -86,9 +86,7 @@ export class Stock {
 }
 
 const test = async () => {
-  const test = new Stock(["LOV", "JOL", "CL", "TEST"]); //
+  const test = new Stock(["MYF", "JOL", "CL", "TEST"]); //
   const test2 = await test.get_stock_data();
-  console.log(test2[2]);
+  console.log(test2);
 };
-
-test();

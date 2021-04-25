@@ -135,13 +135,12 @@ var test = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                test = new Stock(["LOV", "JOL", "CL", "TEST"]);
+                test = new Stock(["MYF", "JOL", "CL", "TEST"]);
                 return [4 /*yield*/, test.get_stock_data()];
             case 1:
                 test2 = _a.sent();
-                console.log(test2[2]);
+                console.log(test2);
                 return [2 /*return*/];
         }
     });
 }); };
-test();

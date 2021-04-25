@@ -70,7 +70,7 @@ var main = function () {
     keepHosting(hosting_url); //호스팅 유지
     //InsiderTradeAPI 부분
     {
-        var insiderTradeWorker_1 = pathDir("./insider-trade-api/index.ts");
+        var insiderTradeWorker_1 = pathDir("./worker/worker.insidertrade.ts");
         var updateInsiderTradeAPI = function () { return __awaiter(void 0, void 0, void 0, function () {
             var insiderTrade, wokrer_data, totalStockData, listData;
             return __generator(this, function (_a) {
@@ -81,7 +81,7 @@ var main = function () {
                     case 1:
                         wokrer_data = _a.sent();
                         totalStockData = wokrer_data.stockData;
-                        listData = wokrer_data.insiderTradeList;
+                        listData = wokrer_data.insiderTradeInfo;
                         insiderTrade.createRouter("list", function (req, res) {
                             res.json(listData);
                         });
@@ -109,7 +109,7 @@ var main = function () {
     }
     // WebtoonAPI 부분
     {
-        var webtoonWorker_1 = pathDir("./korean-webtoon-api/index.ts");
+        var webtoonWorker_1 = pathDir("./worker/worker.webtoon.ts");
         var updateWebtoonAPI = function () { return __awaiter(void 0, void 0, void 0, function () {
             var webtoon, wokrer_data;
             return __generator(this, function (_a) {
@@ -140,7 +140,7 @@ var main = function () {
     }
     //Covid19API 부분
     {
-        var covid19Worker_1 = pathDir("./korea-covid19-api/index.ts");
+        var covid19Worker_1 = pathDir("./worker/worker.covid19.ts");
         var updateCovid19API = function () { return __awaiter(void 0, void 0, void 0, function () {
             var covid19, wokrer_data;
             return __generator(this, function (_a) {

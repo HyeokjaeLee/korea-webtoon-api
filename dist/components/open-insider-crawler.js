@@ -52,7 +52,7 @@ var get_opne_insider_data = function () { return __awaiter(void 0, void 0, void 
                                 return $(element).find("td:nth-child(" + dir_num + ")").text();
                             };
                             openInsider_data.push({
-                                ticker: get_a_data(4),
+                                ticker: get_a_data(4).replace(" ", ""),
                                 trade_date: get_a_data(3),
                                 company_name: get_a_data(5),
                                 insider_name: get_a_data(6),

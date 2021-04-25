@@ -10,8 +10,8 @@ import * as InsiderTrade from "../type/type.insider-trade";
       new Set(insiderTradeArray.map((_insiderTrade) => _insiderTrade.ticker))
     ),
     stock = new Stock(uniqueTickerList),
-    stockData = stock.get_stock_data();
-
+    stockData = await stock.get_stock_data();
+  console.log(uniqueTickerList);
   //정보가 없거나 오류가 있는 Ticker 정보 제외
   insiderTradeArray = insiderTradeArray.filter((_insiderTrade) =>
     stock.errorTicker.includes(_insiderTrade.ticker) ? false : true

@@ -47,7 +47,11 @@ var checking_1 = require("../modules/checking");
             case 0: return [4 /*yield*/, open_insider_crawler_1.get_opne_insider_data()];
             case 1:
                 insiderTradeArray = _a.sent();
-                uniqueTickerList = Array.from(new Set(insiderTradeArray.map(function (_insiderTrade) { return _insiderTrade.ticker; }))), stock = new stock_info_1.Stock(uniqueTickerList), stockData = stock.get_stock_data();
+                uniqueTickerList = Array.from(new Set(insiderTradeArray.map(function (_insiderTrade) { return _insiderTrade.ticker; }))), stock = new stock_info_1.Stock(uniqueTickerList);
+                return [4 /*yield*/, stock.get_stock_data()];
+            case 2:
+                stockData = _a.sent();
+                console.log(uniqueTickerList);
                 //정보가 없거나 오류가 있는 Ticker 정보 제외
                 insiderTradeArray = insiderTradeArray.filter(function (_insiderTrade) {
                     return stock.errorTicker.includes(_insiderTrade.ticker) ? false : true;

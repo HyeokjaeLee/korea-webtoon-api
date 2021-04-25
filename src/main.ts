@@ -50,12 +50,12 @@ const main = () => {
 
   //InsiderTradeAPI 부분
   {
-    const insiderTradeWorker = pathDir("./insider-trade-api/index.ts");
+    const insiderTradeWorker = pathDir("./worker/worker.insidertrade.ts");
     const updateInsiderTradeAPI = async () => {
       const insiderTrade = new Router("insidertrade");
       const wokrer_data = await getData_from_Worker(insiderTradeWorker);
       const totalStockData: InsiderTrade.Final[] = wokrer_data.stockData;
-      const listData: InsiderTrade.OpenInsider[] = wokrer_data.insiderTradeList;
+      const listData: InsiderTrade.OpenInsider[] = wokrer_data.insiderTradeInfo;
       insiderTrade.createRouter("list", (req, res) => {
         res.json(listData);
       });
@@ -85,7 +85,7 @@ const main = () => {
 
   // WebtoonAPI 부분
   {
-    const webtoonWorker = pathDir("./korean-webtoon-api/index.ts");
+    const webtoonWorker = pathDir("./worker/worker.webtoon.ts");
     const updateWebtoonAPI = async () => {
       const webtoon = new Router("webtoon");
       const wokrer_data: Webtoon[] = await getData_from_Worker(webtoonWorker);
@@ -112,7 +112,7 @@ const main = () => {
 
   //Covid19API 부분
   {
-    const covid19Worker = pathDir("./korea-covid19-api/index.ts");
+    const covid19Worker = pathDir("./worker/worker.covid19.ts");
     const updateCovid19API = async () => {
       const covid19 = new Router("covid19");
       const wokrer_data: Covid19.Final[] = await getData_from_Worker(
