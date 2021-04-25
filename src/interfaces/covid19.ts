@@ -1,36 +1,36 @@
-interface confirmed {
-  infected: detail;
-  recovered: detail;
-  death: detail;
+interface Confirmed {
+  infected: Detail;
+  recovered: Detail;
+  death: Detail;
   total: number;
 }
-interface detail {
-  new: number | infected;
+interface Detail {
+  new: number | Infected;
   existing: number;
   total: number;
 }
 
-interface infected {
+interface Infected {
   local: number;
   overseas: number;
   total: number;
 }
-export interface covid19Info {
+export interface TotalData {
   date: Date;
-  confirmed: confirmed;
+  confirmed: Confirmed;
 }
 
-export interface regionList {
+export interface RegionList {
   kor: string;
   eng: string;
 }
 
-export interface covid19API {
+export interface Final {
   region: string;
-  data: covid19Info[];
+  data: TotalData[];
 }
 
-export interface covid19OriginalInfo {
+export interface OriginalAPI {
   date: Date;
   infected: number;
   new_local_infection: number;

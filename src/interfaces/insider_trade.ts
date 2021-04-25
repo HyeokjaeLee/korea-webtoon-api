@@ -1,4 +1,4 @@
-export interface A_trade_data {
+export interface OpenInsider {
   ticker: string;
   trade_date: Date;
   company_name: string;
@@ -9,7 +9,7 @@ export interface A_trade_data {
   value: number;
 }
 
-export interface yahooStockInfo {
+export interface YahooStock {
   date: number;
   open: number;
   high: number;
@@ -19,7 +19,7 @@ export interface yahooStockInfo {
   adjclose: number;
 }
 
-export interface stockInfo {
+export interface Stock {
   date: Date;
   open: number;
   high: number;
@@ -29,7 +29,7 @@ export interface stockInfo {
   adjclose: number;
 }
 
-export interface TotalStockInfo {
+export interface Final {
   ticker: string;
-  data: stockInfo[] | undefined;
+  data: Stock[] | undefined;
 }

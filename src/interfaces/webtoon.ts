@@ -1,4 +1,4 @@
-export interface A_webtoon_info {
+export interface Webtoon {
   title: string;
   artist: string;
   url: string;
@@ -6,8 +6,4 @@ export interface A_webtoon_info {
   service: string;
   state: string;
   weekday: number;
-}
-export interface WebtoonContainer {
-  index: string;
-  webtoon: A_webtoon_info[];
 }

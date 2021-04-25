@@ -1,16 +1,13 @@
 import { getJsonAPI } from "./function/external-data";
 import { weekday } from "../data/weekday";
-import type { A_webtoon_info } from "../interfaces/webtoon";
+import type { Webtoon } from "../interfaces/webtoon";
 
 const get_daum_webtoon_json = (fragments: string, type: string) =>
   getJsonAPI(
     `http://webtoon.daum.net/data/pc/webtoon/list_${fragments}/${type}`
   ).data;
 
-const reconstruct_webtoon_data = (
-  _json: any,
-  _week_num: number
-): A_webtoon_info[] =>
+const reconstruct_webtoon_data = (_json: any, _week_num: number): Webtoon[] =>
   _json.map((data: any) => {
     const state_value: string =
       _week_num == 7
@@ -39,7 +36,7 @@ const get_finished_webtoon = () => {
 };
 
 const get_weekly_webtoon = () => {
-  let result: A_webtoon_info[] = [];
+  let result: Webtoon[] = [];
   for (let week_num = 0; week_num < 7; week_num++) {
     const originalData = get_daum_webtoon_json("serialized", weekday[week_num]),
       reconstructedData = reconstruct_webtoon_data(originalData, week_num);

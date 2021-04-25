@@ -1,11 +1,17 @@
 import path from "path";
-import express, { request, Request, RequestHandler, response, Response } from "express";
+import express, {
+  request,
+  Request,
+  RequestHandler,
+  response,
+  Response,
+} from "express";
 import cors from "cors";
 import { setTimer_loop, ms2hour, ms2minute } from "./modules/FormatConversion";
 import { Worker } from "worker_threads";
 import http from "http";
-import { convertDateFormat } from "./modules/FormatConversion";
-import mongoose from "mongoose"
+import { convertDateFormat } from "./components/function/FormatConversion";
+import mongoose from "mongoose";
 //const User = require ("./Schema/test")
 import bodyParser from "body-parser";
 import type {
@@ -31,7 +37,7 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));*/
 
- /* User.create('inyong', '1254')
+/* User.create('inyong', '1254')
 .then((user: any)=>{
   console.log(user); // 저장된 유저 정보 출력
 });*/
@@ -49,20 +55,24 @@ const main = () => {
       const wokrer_data = await getData_from_Worker(insiderTradeWorker);
       const totalStockData: TotalStockInfo[] = wokrer_data.stockData;
       const listData: A_trade_data[] = wokrer_data.insiderTradeList;
-      insiderTrade.createRouter("list",(req,res)=>{
-        res.json(listData)
+      insiderTrade.createRouter("list", (req, res) => {
+        res.json(listData);
       });
       totalStockData.map((aStockData) => {
         const ticker = aStockData.ticker;
-        insiderTrade.createRouter(ticker,(req, res) => {
-          let stockInfo = aStockData.data
-          const from =req.query.from;
-          const to =req.query.to;
+        insiderTrade.createRouter(ticker, (req, res) => {
+          let stockInfo = aStockData.data;
+          const from = req.query.from;
+          const to = req.query.to;
           if (from != undefined) {
-            stockInfo = stockInfo?.filter((data)=>dateForm(data.date)>=Number(from))
+            stockInfo = stockInfo?.filter(
+              (data) => dateForm(data.date) >= Number(from)
+            );
           }
           if (to != undefined) {
-            stockInfo = stockInfo?.filter((data)=>dateForm(data.date)<=Number(to))
+            stockInfo = stockInfo?.filter(
+              (data) => dateForm(data.date) <= Number(to)
+            );
           }
           res.json(stockInfo);
         });
@@ -80,19 +90,23 @@ const main = () => {
       const wokrer_data: A_webtoon_info[] = await getData_from_Worker(
         webtoonWorker
       );
-        webtoon.createRouter("info",(req,res)=>{
-          let webtoonInfo = wokrer_data;
-          const weeknum = req.query.weeknum
-          const service = req.query.service
-          if(weeknum!=undefined){
-            webtoonInfo=webtoonInfo.filter((aWebtoonInfo)=>aWebtoonInfo.weekday==Number(weeknum))
-          }
-          if(service!=undefined){
-            webtoonInfo=webtoonInfo.filter((aWebtoonInfo)=>aWebtoonInfo.service==service);
-          }
-          res.json(webtoonInfo)
-        })
-        webtoon.createIndexRouter();
+      webtoon.createRouter("info", (req, res) => {
+        let webtoonInfo = wokrer_data;
+        const weeknum = req.query.weeknum;
+        const service = req.query.service;
+        if (weeknum != undefined) {
+          webtoonInfo = webtoonInfo.filter(
+            (aWebtoonInfo) => aWebtoonInfo.weekday == Number(weeknum)
+          );
+        }
+        if (service != undefined) {
+          webtoonInfo = webtoonInfo.filter(
+            (aWebtoonInfo) => aWebtoonInfo.service == service
+          );
+        }
+        res.json(webtoonInfo);
+      });
+      webtoon.createIndexRouter();
     };
     setTimer_loop(ms2minute(10), updateWebtoonAPI);
   }
@@ -106,17 +120,21 @@ const main = () => {
         covid19Worker
       );
       wokrer_data.map((covidData) => {
-        covid19.createRouter(covidData.region,(req,res)=>{
-          let covidInfo = covidData.data
-          const from =req.query.from;
-          const to =req.query.to;
-          if(from!=undefined){
-            covidInfo = covidInfo.filter((data)=>dateForm(data.date)>=Number(from))
+        covid19.createRouter(covidData.region, (req, res) => {
+          let covidInfo = covidData.data;
+          const from = req.query.from;
+          const to = req.query.to;
+          if (from != undefined) {
+            covidInfo = covidInfo.filter(
+              (data) => dateForm(data.date) >= Number(from)
+            );
           }
-          if(to!=undefined){
-            covidInfo = covidInfo.filter((data)=>dateForm(data.date)<=Number(to))
+          if (to != undefined) {
+            covidInfo = covidInfo.filter(
+              (data) => dateForm(data.date) <= Number(to)
+            );
           }
-          res.json(covidInfo)
+          res.json(covidInfo);
         });
       });
       covid19.createIndexRouter();
@@ -132,19 +150,18 @@ class Router {
     this.path = `/${title}`;
   }
 
-  public createRouter = (name: string,handler: RequestHandler) => {
-    const _path = `${this.path}/${name}`
-      this.routerList.push(_path);
+  public createRouter = (name: string, handler: RequestHandler) => {
+    const _path = `${this.path}/${name}`;
+    this.routerList.push(_path);
     exp.get(_path, handler);
   };
 
-  
   public createIndexRouter = () => {
     console.log("routerList");
     console.log(this.routerList);
-    exp.get(this.path,(req,res)=>{
+    exp.get(this.path, (req, res) => {
       res.json(this.routerList);
-    })
+    });
   };
 }
 

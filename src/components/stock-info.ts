@@ -1,10 +1,6 @@
 const yahooStockPrices = require("yahoo-stock-prices");
 import { isExists } from "./function/checking";
-import {
-  yahooStockInfo,
-  stockInfo,
-  TotalStockInfo,
-} from "../interfaces/insider_trade";
+import * as InsiderTrade from "../interfaces/insider_trade";
 
 export class Stock {
   constructor(ticker_list: string[]) {
@@ -43,9 +39,11 @@ export class Stock {
     }
   };
 
-  private filter_stockPrices = (yahooStockPrices: yahooStockInfo[]) => {
-    const filteredStockPrices: stockInfo[] = [];
-    yahooStockPrices.forEach((data: yahooStockInfo) => {
+  private filter_stockPrices = (
+    yahooStockPrices: InsiderTrade.YahooStock[]
+  ) => {
+    const filteredStockPrices: InsiderTrade.Stock[] = [];
+    yahooStockPrices.forEach((data: InsiderTrade.YahooStock) => {
       if (isExists(data.close)) {
         const date = this.seconds2dateForm(data.date);
         filteredStockPrices.push({
@@ -74,7 +72,7 @@ export class Stock {
       this.getStockPrices(ticker)
     );
     await Promise.all(stockDataArray); //병렬처리를 위해 사용
-    const final_stockDataArray: TotalStockInfo[] = [];
+    const final_stockDataArray: InsiderTrade.Final[] = [];
     stockDataArray.forEach((_stockData) => {
       _stockData.then((_stockData) => {
         if (_stockData != undefined) {

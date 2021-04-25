@@ -1,5 +1,5 @@
 import { weekday } from "../data/weekday";
-import type { A_webtoon_info } from "../interfaces/webtoon";
+import type { Webtoon } from "../interfaces/webtoon";
 const request = require("request-promise-native");
 import { load } from "cheerio";
 const naver_webtoon_url = "https://m.comic.naver.com";
@@ -9,7 +9,7 @@ const get_a_page_webtoon = async (
   query_type: string,
   week_num: number
 ) => {
-  const a_page_webtoon_info: A_webtoon_info[] = [];
+  const a_page_webtoon_info: Webtoon[] = [];
   await request(
     `${naver_webtoon_url}/webtoon/${type}.nhn?${query_type}`,
     (err: any, response: any, body: any) => {
@@ -61,9 +61,9 @@ const get_page_count = (): Promise<number> => {
   });
 };
 
-const get_finish_webtoon = async (): Promise<A_webtoon_info[]> => {
+const get_finish_webtoon = async (): Promise<Webtoon[]> => {
   const page_count = await get_page_count();
-  let webtoon_arr: A_webtoon_info[] = [];
+  let webtoon_arr: Webtoon[] = [];
   for (let page_index = 1; page_index < page_count; page_index++) {
     webtoon_arr = webtoon_arr.concat(
       await get_a_page_webtoon("finish", `page=${page_index}`, 7)
@@ -72,8 +72,8 @@ const get_finish_webtoon = async (): Promise<A_webtoon_info[]> => {
   return webtoon_arr;
 };
 
-const get_weekly_webtoon = async (): Promise<A_webtoon_info[]> => {
-  let webtoon_arr: A_webtoon_info[] = [];
+const get_weekly_webtoon = async (): Promise<Webtoon[]> => {
+  let webtoon_arr: Webtoon[] = [];
   for (let week_num = 0; week_num < 7; week_num++) {
     webtoon_arr = webtoon_arr.concat(
       await get_a_page_webtoon("weekday", `week=${weekday[week_num]}`, week_num)
