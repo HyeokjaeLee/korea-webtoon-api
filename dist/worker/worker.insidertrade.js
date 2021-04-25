@@ -37,25 +37,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
-var get_naver_webtoon_1 = require("./modules/get_naver_webtoon");
-var get_daum_webtoon_1 = require("./modules/get_daum_webtoon");
+var open_insider_crawler_1 = require("../components/open-insider-crawler");
+var stock_info_1 = require("../components/stock-info");
 var checking_1 = require("../modules/checking");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var NAVER, DAUM, total_info;
+    var insiderTradeArray, uniqueTickerList, stock, stockData, inserTradeData;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, get_naver_webtoon_1.get_naver_webtoon()];
+            case 0: return [4 /*yield*/, open_insider_crawler_1.get_opne_insider_data()];
             case 1:
-                NAVER = _a.sent();
-                DAUM = get_daum_webtoon_1.get_daum_webtoon();
-                total_info = NAVER.concat(DAUM);
-                total_info.sort(function (a, b) {
-                    return a.title < b.title ? -1 : 1;
+                insiderTradeArray = _a.sent();
+                uniqueTickerList = Array.from(new Set(insiderTradeArray.map(function (_insiderTrade) { return _insiderTrade.ticker; }))), stock = new stock_info_1.Stock(uniqueTickerList), stockData = stock.get_stock_data();
+                //정보가 없거나 오류가 있는 Ticker 정보 제외
+                insiderTradeArray = insiderTradeArray.filter(function (_insiderTrade) {
+                    return stock.errorTicker.includes(_insiderTrade.ticker) ? false : true;
                 });
-                checking_1.checkUpdates("Korean Webtoon", total_info);
-                worker_threads_1.parentPort.postMessage(total_info); //결과가 null될수도 있는 값에는 !붙이기
+                inserTradeData = {
+                    insiderTradeInfo: insiderTradeArray,
+                    stockData: stockData,
+                };
+                checking_1.checkUpdates("Insider Trade", inserTradeData);
+                console.log("Error Ticker : " + stock.errorTicker);
+                worker_threads_1.parentPort.postMessage(inserTradeData);
                 worker_threads_1.parentPort.close();
                 return [2 /*return*/];
         }
     });
 }); })();
+/* const stockData = await getTotalStockInfo(insiderTradeList);
+  //error ticker에 있는 값 예외 처리
+  const filteredInsiderTradeList = insiderTradeList.filter(
+    (data: A_trade_data) => {
+      if (stockData.errorTicker.includes(data.ticker)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  );
+  const trade_info = {
+    insiderTradeList: filteredInsiderTradeList,
+    stockData: stockData.stockData,
+  };
+  checkUpdates("Insider Trade", trade_info);
+  console.log("Error Ticker : " + stockData.errorTicker);
+  parentPort!.postMessage(trade_info); //결과가 null될수도 있는 값에는 !붙이기
+  parentPort!.close();
+};)();
+*/

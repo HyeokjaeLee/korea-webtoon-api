@@ -35,42 +35,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var worker_threads_1 = require("worker_threads");
-var get_buys_data_1 = __importDefault(require("./modules/get_buys_data"));
-var get_stock_data_1 = require("./modules/get_stock_data");
-var checking_1 = require("../modules/checking");
-var buy_data_url = "http://openinsider.com/insider-purchases-25k";
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var insiderTradeList, stockData, filteredInsiderTradeList, trade_info;
+exports.get_opne_insider_data = void 0;
+var request = require("request-promise-native");
+var cheerio_1 = require("cheerio");
+var get_opne_insider_data = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var openInsider_data, openInsiderURL;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, get_buys_data_1.default(buy_data_url)];
+            case 0:
+                openInsider_data = [], openInsiderURL = "http://openinsider.com/insider-purchases-25k";
+                return [4 /*yield*/, request(openInsiderURL, function (err, response, body) {
+                        var $ = cheerio_1.load(body), base_selector = $("#tablewrapper > table > tbody > tr"); //.toArray;
+                        base_selector.map(function (index, element) {
+                            var get_a_data = function (dir_num) {
+                                return $(element).find("td:nth-child(" + dir_num + ")").text();
+                            };
+                            openInsider_data.push({
+                                ticker: get_a_data(4),
+                                trade_date: get_a_data(3),
+                                company_name: get_a_data(5),
+                                insider_name: get_a_data(6),
+                                price: Number(get_a_data(9).replace("$", "")),
+                                qty: Number(get_a_data(10).replace(/,/gi, "")),
+                                owned: Number(get_a_data(11).replace(/,/gi, "")),
+                                value: Number(get_a_data(13).replace("$", "").replace(/,/gi, "")),
+                            });
+                        });
+                    })];
             case 1:
-                insiderTradeList = _a.sent();
-                return [4 /*yield*/, get_stock_data_1.getTotalStockInfo(insiderTradeList)];
-            case 2:
-                stockData = _a.sent();
-                filteredInsiderTradeList = insiderTradeList.filter(function (data) {
-                    if (stockData.errorTicker.includes(data.ticker)) {
-                        return false;
-                    }
-                    else {
-                        return true;
-                    }
-                });
-                trade_info = {
-                    insiderTradeList: filteredInsiderTradeList,
-                    stockData: stockData.stockData,
-                };
-                checking_1.checkUpdates("Insider Trade", trade_info);
-                console.log("Error Ticker : " + stockData.errorTicker);
-                worker_threads_1.parentPort.postMessage(trade_info); //결과가 null될수도 있는 값에는 !붙이기
-                worker_threads_1.parentPort.close();
-                return [2 /*return*/];
+                _a.sent();
+                return [2 /*return*/, openInsider_data];
         }
     });
-}); })();
+}); };
+exports.get_opne_insider_data = get_opne_insider_data;

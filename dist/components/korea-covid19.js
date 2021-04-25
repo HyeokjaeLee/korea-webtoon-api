@@ -37,9 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCovid19Data = void 0;
-var FormatConversion_1 = require("../../function/FormatConversion");
-var external_data_1 = require("../../function/external-data");
-var region_list_1 = require("../../data/region_list");
+var FormatConversion_1 = require("../function/FormatConversion");
+var external_data_1 = require("../function/external-data");
+var region_list_1 = require("../data/region_list");
 var service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D";
 var covid19_api_url = function (service_key, from, to, middle_url) {
     return "http://openapi.data.go.kr/openapi/service/rest/Covid19/" + middle_url + "?serviceKey=" + service_key + "&pageNo=1&numOfRows=1&startCreateDt=" + from + "&endCreateDt=" + to;

@@ -7,10 +7,14 @@ import express, {
   Response,
 } from "express";
 import cors from "cors";
-import { setTimer_loop, ms2hour, ms2minute } from "./modules/FormatConversion";
 import { Worker } from "worker_threads";
 import http from "http";
-import { convertDateFormat } from "./components/function/FormatConversion";
+import {
+  convertDateFormat,
+  setTimer_loop,
+  ms2hour,
+  ms2minute,
+} from "./function/FormatConversion";
 import mongoose from "mongoose";
 //const User = require ("./Schema/test")
 import bodyParser from "body-parser";
@@ -51,7 +55,7 @@ const main = () => {
       const insiderTrade = new Router("insidertrade");
       const wokrer_data = await getData_from_Worker(insiderTradeWorker);
       const totalStockData: InsiderTrade.Final[] = wokrer_data.stockData;
-      const listData: A_trade_data[] = wokrer_data.insiderTradeList;
+      const listData: InsiderTrade.OpenInsider[] = wokrer_data.insiderTradeList;
       insiderTrade.createRouter("list", (req, res) => {
         res.json(listData);
       });
@@ -84,9 +88,7 @@ const main = () => {
     const webtoonWorker = pathDir("./korean-webtoon-api/index.ts");
     const updateWebtoonAPI = async () => {
       const webtoon = new Router("webtoon");
-      const wokrer_data: A_webtoon_info[] = await getData_from_Worker(
-        webtoonWorker
-      );
+      const wokrer_data: Webtoon[] = await getData_from_Worker(webtoonWorker);
       webtoon.createRouter("info", (req, res) => {
         let webtoonInfo = wokrer_data;
         const weeknum = req.query.weeknum;
@@ -113,7 +115,7 @@ const main = () => {
     const covid19Worker = pathDir("./korea-covid19-api/index.ts");
     const updateCovid19API = async () => {
       const covid19 = new Router("covid19");
-      const wokrer_data: covid19.covid19API[] = await getData_from_Worker(
+      const wokrer_data: Covid19.Final[] = await getData_from_Worker(
         covid19Worker
       );
       wokrer_data.map((covidData) => {

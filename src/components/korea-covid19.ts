@@ -1,7 +1,7 @@
-import { convertDateFormat } from "./function/FormatConversion";
-import { getXmlAPI2JSON } from "./function/external-data";
+import { convertDateFormat } from "../function/FormatConversion";
+import { getXmlAPI2JSON } from "../function/external-data";
 import { regionListData } from "../data/region_list";
-import * as Covid19 from "../interfaces/covid19";
+import * as Covid19 from "../type/type.covid19";
 
 const service_key: string =
   "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D";

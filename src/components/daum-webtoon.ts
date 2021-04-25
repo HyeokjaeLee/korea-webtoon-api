@@ -1,6 +1,6 @@
-import { getJsonAPI } from "./function/external-data";
+import { getJsonAPI } from "../function/external-data";
 import { weekday } from "../data/weekday";
-import type { Webtoon } from "../interfaces/webtoon";
+import type { Webtoon } from "../type/type.webtoon";
 
 const get_daum_webtoon_json = (fragments: string, type: string) =>
   getJsonAPI(

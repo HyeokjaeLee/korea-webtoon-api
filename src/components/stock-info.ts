@@ -1,6 +1,6 @@
 const yahooStockPrices = require("yahoo-stock-prices");
-import { isExists } from "./function/checking";
-import * as InsiderTrade from "../interfaces/insider_trade";
+import { isExists } from "../function/checking";
+import * as InsiderTrade from "../type/type.insider-trade";
 
 export class Stock {
   constructor(ticker_list: string[]) {
@@ -15,7 +15,6 @@ export class Stock {
   };
   private ticker_list: string[] = [];
   public errorTicker: string[] = [];
-  public normalTicker: string[] = [];
   private getStockPrices = async (ticker: string) => {
     try {
       const stockPrices = this.filter_stockPrices(
@@ -31,7 +30,6 @@ export class Stock {
         )
       );
       if (stockPrices.length != 0) {
-        this.normalTicker.push(ticker);
         return { ticker: ticker, data: stockPrices };
       } else this.errorTicker.push(ticker);
     } catch (e) {

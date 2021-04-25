@@ -1,7 +1,7 @@
-import { convertDateFormat } from "../../modules/FormatConversion";
-import { getXmlAPI2JSON } from "../../modules/getAPI";
-import { regionListData } from  "../../modules/commonData";
-import { covid19API, covid19OriginalInfo } from "../../modules/types";
+import { convertDateFormat } from "../../function/FormatConversion";
+import { getXmlAPI2JSON } from "../../function/external-data";
+import { regionListData } from "../../data/region_list";
+import * as Coivd19 from "../../type/type.covid19";
 
 const service_key: string =
   "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D";
@@ -27,8 +27,8 @@ const regionCount: number = regionArr.length;
 export const getCovid19Data = async () => {
   const originalCovid19API: any = await getXmlAPI2JSON(url);
   const RequiredInfo = originalCovid19API.response.body.items.item;
-  const region_separated_Info = ((): covid19OriginalInfo[][] => {
-    const result: covid19OriginalInfo[][] = Array.from(
+  const region_separated_Info = ((): Coivd19.OriginalAPI[][] => {
+    const result: Coivd19.OriginalAPI[][] = Array.from(
       Array(regionCount),
       () => new Array()
     );
@@ -49,7 +49,7 @@ export const getCovid19Data = async () => {
   })();
 
   const junckFilteredInfo = (() => {
-    const result: covid19OriginalInfo[][] = Array.from(
+    const result: Coivd19.OriginalAPI[][] = Array.from(
       Array(regionCount),
       () => new Array()
     );
@@ -78,8 +78,8 @@ export const getCovid19Data = async () => {
     return result;
   })();
 
-  const detail_Info = ((): covid19API[] => {
-    const result: covid19API[] = [];
+  const detail_Info = (() => {
+    const result: Coivd19.Final[] = [];
     for (let regionIndex = 0; regionIndex < regionCount; regionIndex++) {
       result.push({ region: regionArr[regionIndex], data: [] });
       const aRegionInfo = junckFilteredInfo[regionIndex];

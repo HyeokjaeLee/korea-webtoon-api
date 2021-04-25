@@ -1,11 +1,11 @@
 import { parentPort } from "worker_threads";
 import { get_opne_insider_data } from "../components/open-insider-crawler";
 import { Stock } from "../components/stock-info";
-import { checkUpdates } from "../module/checking";
-import type { A_trade_data } from "../module/types";
+import { checkUpdates } from "../modules/checking";
+import * as InsiderTrade from "../type/type.insider-trade";
 
 (async () => {
-  let insiderTradeArray: A_trade_data[] = await get_opne_insider_data();
+  let insiderTradeArray: InsiderTrade.OpenInsider[] = await get_opne_insider_data();
   const uniqueTickerList = Array.from(
       new Set(insiderTradeArray.map((_insiderTrade) => _insiderTrade.ticker))
     ),
@@ -14,7 +14,7 @@ import type { A_trade_data } from "../module/types";
 
   //정보가 없거나 오류가 있는 Ticker 정보 제외
   insiderTradeArray = insiderTradeArray.filter((_insiderTrade) =>
-    stock.normalTicker.includes(_insiderTrade.ticker)
+    stock.errorTicker.includes(_insiderTrade.ticker) ? false : true
   );
   const inserTradeData = {
     insiderTradeInfo: insiderTradeArray,

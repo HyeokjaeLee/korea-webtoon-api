@@ -2,7 +2,7 @@ import { parentPort } from "worker_threads";
 import { getCovid19Data } from "../components/korea-covid19";
 //const AI_model = require("../../brain/model/covid_19_model.json");
 //import AI_data from "./modules/get_ai_data";
-import { checkUpdates } from "../module/checking";
+import { checkUpdates } from "../modules/checking";
 
 (async () => {
   const covid19_info = await getCovid19Data();

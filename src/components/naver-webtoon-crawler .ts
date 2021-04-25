@@ -1,5 +1,5 @@
 import { weekday } from "../data/weekday";
-import type { Webtoon } from "../interfaces/webtoon";
+import type { Webtoon } from "../type/type.webtoon";
 const request = require("request-promise-native");
 import { load } from "cheerio";
 const naver_webtoon_url = "https://m.comic.naver.com";

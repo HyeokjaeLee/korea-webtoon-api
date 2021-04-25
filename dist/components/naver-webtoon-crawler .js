@@ -37,8 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.get_naver_webtoon = void 0;
-var commonData_1 = require("../../modules/commonData");
-//네이버 웹툰
+var weekday_1 = require("../data/weekday");
 var request = require("request-promise-native");
 var cheerio_1 = require("cheerio");
 var naver_webtoon_url = "https://m.comic.naver.com";
@@ -123,7 +122,7 @@ var get_weekly_webtoon = function () { return __awaiter(void 0, void 0, void 0, 
             case 1:
                 if (!(week_num < 7)) return [3 /*break*/, 4];
                 _b = (_a = webtoon_arr).concat;
-                return [4 /*yield*/, get_a_page_webtoon("weekday", "week=" + commonData_1.weekday[week_num], week_num)];
+                return [4 /*yield*/, get_a_page_webtoon("weekday", "week=" + weekday_1.weekday[week_num], week_num)];
             case 2:
                 webtoon_arr = _b.apply(_a, [_c.sent()]);
                 _c.label = 3;
