@@ -1,5 +1,5 @@
-import type { regionList } from "../interfaces/covid19";
-export const regionListData: regionList[] = [
+import type { RegionList } from "../interfaces/covid19";
+export const regionListData: RegionList[] = [
   {
     kor: "검역",
     eng: "Lazaretto",

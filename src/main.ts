@@ -14,13 +14,10 @@ import { convertDateFormat } from "./components/function/FormatConversion";
 import mongoose from "mongoose";
 //const User = require ("./Schema/test")
 import bodyParser from "body-parser";
-import type {
-  TotalStockInfo,
-  A_trade_data,
-  A_webtoon_info,
-  covid19API,
-  WebtoonContainer,
-} from "./modules/types";
+import type * as Covid19 from "./type/type.covid19";
+import type * as InsiderTrade from "./type/type.insider-trade";
+import type { Webtoon } from "./type/type.webtoon";
+
 const exp = express();
 exp.use(cors());
 const hosting_url = "http://toy-projects-api.herokuapp.com/";
@@ -53,7 +50,7 @@ const main = () => {
     const updateInsiderTradeAPI = async () => {
       const insiderTrade = new Router("insidertrade");
       const wokrer_data = await getData_from_Worker(insiderTradeWorker);
-      const totalStockData: TotalStockInfo[] = wokrer_data.stockData;
+      const totalStockData: InsiderTrade.Final[] = wokrer_data.stockData;
       const listData: A_trade_data[] = wokrer_data.insiderTradeList;
       insiderTrade.createRouter("list", (req, res) => {
         res.json(listData);
@@ -116,7 +113,7 @@ const main = () => {
     const covid19Worker = pathDir("./korea-covid19-api/index.ts");
     const updateCovid19API = async () => {
       const covid19 = new Router("covid19");
-      const wokrer_data: covid19API[] = await getData_from_Worker(
+      const wokrer_data: covid19.covid19API[] = await getData_from_Worker(
         covid19Worker
       );
       wokrer_data.map((covidData) => {

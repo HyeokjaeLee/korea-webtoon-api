@@ -43,7 +43,7 @@ export class Stock {
     yahooStockPrices: InsiderTrade.YahooStock[]
   ) => {
     const filteredStockPrices: InsiderTrade.Stock[] = [];
-    yahooStockPrices.forEach((data: InsiderTrade.YahooStock) => {
+    yahooStockPrices.forEach((data) => {
       if (isExists(data.close)) {
         const date = this.seconds2dateForm(data.date);
         filteredStockPrices.push({
