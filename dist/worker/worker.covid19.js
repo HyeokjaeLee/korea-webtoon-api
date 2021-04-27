@@ -40,7 +40,7 @@ var worker_threads_1 = require("worker_threads");
 var korea_covid19_1 = require("../components/korea-covid19");
 //const AI_model = require("../../brain/model/covid_19_model.json");
 //import AI_data from "./modules/get_ai_data";
-var checking_1 = require("../modules/checking");
+var checking_1 = require("../function/checking");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var covid19_info;
     return __generator(this, function (_a) {

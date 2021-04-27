@@ -1,6 +1,6 @@
 ![header](https://capsule-render.vercel.app/api?type=wave&color=auto&height=300&section=header&text=Toy%20project%20API&fontSize=50&animation=fadeIn&fontAlignY=38)
 
-![VERSION](https://img.shields.io/badge/version-1.8.20-blue.svg?cacheSeconds=2592000)
+![VERSION](https://img.shields.io/badge/version-1.9.0-blue.svg?cacheSeconds=2592000)
 
 > API created for my Toy projects <br>
 

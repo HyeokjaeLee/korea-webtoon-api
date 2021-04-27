@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
 var naver_webtoon_crawler_1 = require("../components/naver-webtoon-crawler ");
 var daum_webtoon_1 = require("../components/daum-webtoon");
-var checking_1 = require("../modules/checking");
+var checking_1 = require("../function/checking");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var NAVER, DAUM, total_info;
     return __generator(this, function (_a) {

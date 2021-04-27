@@ -1,7 +1,7 @@
 import { parentPort } from "worker_threads";
 import { get_opne_insider_data } from "../components/open-insider-crawler";
 import { Stock } from "../components/stock-info";
-import { checkUpdates } from "../modules/checking";
+import { checkUpdates } from "../function/checking";
 import * as InsiderTrade from "../type/type.insider-trade";
 
 (async () => {
@@ -11,7 +11,6 @@ import * as InsiderTrade from "../type/type.insider-trade";
     ),
     stock = new Stock(uniqueTickerList),
     stockData = await stock.get_stock_data();
-  console.log(uniqueTickerList);
   //정보가 없거나 오류가 있는 Ticker 정보 제외
   insiderTradeArray = insiderTradeArray.filter((_insiderTrade) =>
     stock.errorTicker.includes(_insiderTrade.ticker) ? false : true

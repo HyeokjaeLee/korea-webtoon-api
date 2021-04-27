@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var worker_threads_1 = require("worker_threads");
 var open_insider_crawler_1 = require("../components/open-insider-crawler");
 var stock_info_1 = require("../components/stock-info");
-var checking_1 = require("../modules/checking");
+var checking_1 = require("../function/checking");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var insiderTradeArray, uniqueTickerList, stock, stockData, inserTradeData;
     return __generator(this, function (_a) {
@@ -51,7 +51,6 @@ var checking_1 = require("../modules/checking");
                 return [4 /*yield*/, stock.get_stock_data()];
             case 2:
                 stockData = _a.sent();
-                console.log(uniqueTickerList);
                 //정보가 없거나 오류가 있는 Ticker 정보 제외
                 insiderTradeArray = insiderTradeArray.filter(function (_insiderTrade) {
                     return stock.errorTicker.includes(_insiderTrade.ticker) ? false : true;

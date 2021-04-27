@@ -1,7 +1,7 @@
 import { parentPort } from "worker_threads";
 import { get_naver_webtoon } from "../components/naver-webtoon-crawler ";
 import { daumWebtoon } from "../components/daum-webtoon";
-import { checkUpdates } from "../modules/checking";
+import { checkUpdates } from "../function/checking";
 
 (async () => {
   const NAVER: object[] = await get_naver_webtoon();

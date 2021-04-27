@@ -112,24 +112,18 @@ var get_finish_webtoon = function () { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 var get_weekly_webtoon = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var webtoon_arr, week_num, _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var webtoon_arr, weekly_webtoon;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                webtoon_arr = [];
-                week_num = 0;
-                _c.label = 1;
+                webtoon_arr = weekday_1.weekday.map(function (_weekday, _week_num) {
+                    return get_a_page_webtoon("weekday", "week=" + _weekday, _week_num);
+                });
+                Promise.all(webtoon_arr);
+                return [4 /*yield*/, webtoon_arr[0].then(function (test) { return test; })];
             case 1:
-                if (!(week_num < 7)) return [3 /*break*/, 4];
-                _b = (_a = webtoon_arr).concat;
-                return [4 /*yield*/, get_a_page_webtoon("weekday", "week=" + weekday_1.weekday[week_num], week_num)];
-            case 2:
-                webtoon_arr = _b.apply(_a, [_c.sent()]);
-                _c.label = 3;
-            case 3:
-                week_num++;
-                return [3 /*break*/, 1];
-            case 4: return [2 /*return*/, webtoon_arr];
+                weekly_webtoon = _a.sent();
+                return [2 /*return*/, webtoon_arr[0].then(function (test) { return test; })];
         }
     });
 }); };
