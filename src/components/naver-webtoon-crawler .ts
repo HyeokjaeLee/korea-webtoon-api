@@ -72,13 +72,22 @@ const get_finish_webtoon = async (): Promise<Webtoon[]> => {
   return webtoon_arr;
 };
 
-const get_weekly_webtoon = async (): Promise<Webtoon[]> => {
-  const webtoon_arr = weekday.map((_weekday, _week_num) =>
+const get_weekly_webtoon = async () => {
+  const weeklyWebtoonArr = weekday.map((_weekday, _week_num) =>
     get_a_page_webtoon("weekday", `week=${_weekday}`, _week_num)
   );
-  Promise.all(webtoon_arr);
-  const weekly_webtoon = await webtoon_arr[0].then((test) => test);
-  return webtoon_arr[0].then((test) => test);
+  await Promise.all(weeklyWebtoonArr);
+  const result = [
+    ...(await weeklyWebtoonArr[0]),
+    ...(await weeklyWebtoonArr[1]),
+    ...(await weeklyWebtoonArr[2]),
+    ...(await weeklyWebtoonArr[3]),
+    ...(await weeklyWebtoonArr[4]),
+    ...(await weeklyWebtoonArr[5]),
+    ...(await weeklyWebtoonArr[6]),
+  ];
+  console.log(result);
+  return result;
 };
 
 export const get_naver_webtoon = async () =>

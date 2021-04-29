@@ -35,6 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.get_naver_webtoon = void 0;
 var weekday_1 = require("../data/weekday");
@@ -112,18 +117,40 @@ var get_finish_webtoon = function () { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 var get_weekly_webtoon = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var webtoon_arr, weekly_webtoon;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var weeklyWebtoonArr, result, _a, _b, _c, _d, _e, _f, _g;
+    return __generator(this, function (_h) {
+        switch (_h.label) {
             case 0:
-                webtoon_arr = weekday_1.weekday.map(function (_weekday, _week_num) {
+                weeklyWebtoonArr = weekday_1.weekday.map(function (_weekday, _week_num) {
                     return get_a_page_webtoon("weekday", "week=" + _weekday, _week_num);
                 });
-                Promise.all(webtoon_arr);
-                return [4 /*yield*/, webtoon_arr[0].then(function (test) { return test; })];
+                return [4 /*yield*/, Promise.all(weeklyWebtoonArr)];
             case 1:
-                weekly_webtoon = _a.sent();
-                return [2 /*return*/, webtoon_arr[0].then(function (test) { return test; })];
+                _h.sent();
+                _a = [[]];
+                return [4 /*yield*/, weeklyWebtoonArr[0]];
+            case 2:
+                _b = [__spreadArray.apply(void 0, _a.concat([(_h.sent())]))];
+                return [4 /*yield*/, weeklyWebtoonArr[1]];
+            case 3:
+                _c = [__spreadArray.apply(void 0, _b.concat([(_h.sent())]))];
+                return [4 /*yield*/, weeklyWebtoonArr[2]];
+            case 4:
+                _d = [__spreadArray.apply(void 0, _c.concat([(_h.sent())]))];
+                return [4 /*yield*/, weeklyWebtoonArr[3]];
+            case 5:
+                _e = [__spreadArray.apply(void 0, _d.concat([(_h.sent())]))];
+                return [4 /*yield*/, weeklyWebtoonArr[4]];
+            case 6:
+                _f = [__spreadArray.apply(void 0, _e.concat([(_h.sent())]))];
+                return [4 /*yield*/, weeklyWebtoonArr[5]];
+            case 7:
+                _g = [__spreadArray.apply(void 0, _f.concat([(_h.sent())]))];
+                return [4 /*yield*/, weeklyWebtoonArr[6]];
+            case 8:
+                result = __spreadArray.apply(void 0, _g.concat([(_h.sent())]));
+                console.log(result);
+                return [2 /*return*/, result];
         }
     });
 }); };
