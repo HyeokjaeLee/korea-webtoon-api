@@ -86,7 +86,6 @@ const get_weekly_webtoon = async () => {
     ...(await weeklyWebtoonArr[5]),
     ...(await weeklyWebtoonArr[6]),
   ];
-  console.log(result);
   return result;
 };
 
