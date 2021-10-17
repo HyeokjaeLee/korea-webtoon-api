@@ -1,42 +1,26 @@
 {
-  "name": "toy-projects-api",
+  "name": "webtoon-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "./dist/main.js",
+  "description": "korean webtoon api",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./dist/main.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec ts-node src/app.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HyeokjaeLee/Toy-projects-API.git"
+    "url": "git+https://github.com/HyeokjaeLee/webtoon-api.git"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/HyeokjaeLee/Toy-projects-API/issues"
+    "url": "https://github.com/HyeokjaeLee/webtoon-api/issues"
   },
-  "homepage": "https://github.com/HyeokjaeLee/Toy-projects-API#readme",
+  "homepage": "https://github.com/HyeokjaeLee/webtoon-api#readme",
   "dependencies": {
-    "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
-    "cheerio": "^1.0.0-rc.3",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "http": "^0.0.1-security",
-    "mongoose": "5.12.2",
-    "request": "^2.88.2",
-    "request-promise-native": "^1.0.9",
-    "xml-js": "^1.6.11",
-    "xmlhttprequest": "^1.8.0",
-    "yahoo-stock-prices": "^1.1.0"
+    "express": "^4.17.1"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.23",
-    "@types/cors": "^2.8.9",
-    "@types/express": "^4.17.9",
-    "@types/request": "^2.48.5",
-    "@types/request-promise-native": "^1.0.17",
-    "nodemon": "^2.0.7"
+    "@types/express": "^4.17.13"
   }
 }
