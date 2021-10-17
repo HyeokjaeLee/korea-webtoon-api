@@ -4,7 +4,22 @@ import request from "request-promise-native";
 import { load } from "cheerio";
 const naver_webtoon_url = "https://m.comic.naver.com";
 
-const get_a_page_webtoon = async (type: string, query_type: string, week_num: number) => {
+export const naver_crawler = async () =>
+  (await get_finished_webtoon()).concat(await get_weekly_webtoon());
+
+function get_page_count(): Promise<number> {
+  return new Promise(function (resolve, reject) {
+    request(
+      naver_webtoon_url + "/webtoon/finish.nhn?page=1",
+      (err: any, response: any, body: any) => {
+        let $ = load(body);
+        resolve(Number($("#ct > div.section_list_toon > div.paging_type2 > em > span").text()));
+      }
+    );
+  });
+}
+
+async function get_webtoon_of_one_page(type: string, query_type: string, week_num: number) {
   const a_page_webtoon_info: Webtoon[] = [];
   await request(
     `${naver_webtoon_url}/webtoon/${type}.nhn?${query_type}`,
@@ -34,32 +49,22 @@ const get_a_page_webtoon = async (type: string, query_type: string, week_num: nu
     }
   );
   return a_page_webtoon_info;
-};
+}
 
-const get_page_count = (): Promise<number> => {
-  return new Promise(function (resolve, reject) {
-    request(
-      naver_webtoon_url + "/webtoon/finish.nhn?page=1",
-      (err: any, response: any, body: any) => {
-        let $ = load(body);
-        resolve(Number($("#ct > div.section_list_toon > div.paging_type2 > em > span").text()));
-      }
-    );
-  });
-};
-
-const get_finish_webtoon = async (): Promise<Webtoon[]> => {
+async function get_finished_webtoon(): Promise<Webtoon[]> {
   const page_count = await get_page_count();
   let webtoon_arr: Webtoon[] = [];
   for (let page_index = 1; page_index < page_count; page_index++) {
-    webtoon_arr = webtoon_arr.concat(await get_a_page_webtoon("finish", `page=${page_index}`, 7));
+    webtoon_arr = webtoon_arr.concat(
+      await get_webtoon_of_one_page("finish", `page=${page_index}`, 7)
+    );
   }
   return webtoon_arr;
-};
+}
 
-const get_weekly_webtoon = async () => {
+async function get_weekly_webtoon() {
   const weeklyWebtoonArr = weekday.map((_weekday, _week_num) =>
-    get_a_page_webtoon("weekday", `week=${_weekday}`, _week_num)
+    get_webtoon_of_one_page("weekday", `week=${_weekday}`, _week_num)
   );
   await Promise.all(weeklyWebtoonArr);
   const result = [
@@ -72,11 +77,4 @@ const get_weekly_webtoon = async () => {
     ...(await weeklyWebtoonArr[6]),
   ];
   return result;
-};
-
-const get_naver_webtoon = async () => {
-  const data = (await get_finish_webtoon()).concat(await get_weekly_webtoon());
-  console.log(data);
-};
-
-get_naver_webtoon();
+}
