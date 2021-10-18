@@ -21,33 +21,24 @@ function get_page_count(): Promise<number> {
 
 async function get_webtoon_of_one_page(type: string, query_type: string, week_num: number) {
   const a_page_webtoon_info: Webtoon[] = [];
-  await request(
-    `${naver_webtoon_url}/webtoon/${type}.nhn?${query_type}`,
-    (err: any, response: any, body: any) => {
-      const $ = load(body);
-      const list_selector = $("#ct > div.section_list_toon > ul > li > a");
-      list_selector.map((index, element) => {
-        const state_type = $(element).find("div.info > span.detail > span > span").eq(0).text();
-        const state =
-          state_type == "휴재"
-            ? "휴재"
-            : state_type == "up"
-            ? "UP"
-            : type == "finish"
-            ? "완결"
-            : "";
-        a_page_webtoon_info.push({
-          title: $(element).find(".title").text(),
-          artist: $(element).find(".author").text(),
-          url: naver_webtoon_url + $(element).attr("href"),
-          img: $(element).find("div.thumbnail > img").attr("src"),
-          service: "naver",
-          state: state,
-          weekday: week_num,
-        });
+  await request(`${naver_webtoon_url}/webtoon/${type}.nhn?${query_type}`, (err, response, body) => {
+    const $ = load(body);
+    const list_selector = $("#ct > div.section_list_toon > ul > li > a");
+    list_selector.map((index, element) => {
+      const state_type = $(element).find("div.info > span.detail > span > span").eq(0).text();
+      const state =
+        state_type == "휴재" ? "휴재" : state_type == "up" ? "UP" : type == "finish" ? "완결" : "";
+      a_page_webtoon_info.push({
+        title: $(element).find(".title").text(),
+        artist: $(element).find(".author").text(),
+        url: naver_webtoon_url + $(element).attr("href"),
+        img: $(element).find("div.thumbnail > img").attr("src"),
+        service: "naver",
+        state: state,
+        weekday: week_num,
       });
-    }
-  );
+    });
+  });
   return a_page_webtoon_info;
 }
 
