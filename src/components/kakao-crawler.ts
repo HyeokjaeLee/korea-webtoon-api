@@ -1,67 +1,101 @@
-import { weekday } from "../data/base-data";
 import type { Webtoon } from "../types/webtoon";
 import { load } from "cheerio";
 import puppeteer from "puppeteer";
 import request from "request-promise-native";
-import { getName } from "domutils";
-const kakako_webtoon_url = "https://webtoon.kakao.com/";
+import { children } from "cheerio/lib/api/traversing";
+const kakako_webtoon_url: string = "https://webtoon.kakao.com";
+const weekday: string[] = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
-const original_webtoon_url = kakako_webtoon_url + "original-webtoon";
-
-async function get_url_list(endpoint: string) {
-  const get_content = async () => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(`https://webtoon.kakao.com/${endpoint}`);
-    await page.waitForSelector(".Masonry_masonry__38RyV");
-    const content = await page.content();
-    await browser.close();
-    return content;
-  };
-  const $ = load(await get_content());
-  const webtoon_container_by_index = (index: number) =>
-    `#root > main > div > div > div.swiper-container.swiper-container-initialized.swiper-container-horizontal.swiper-container-pointer-events > div > div.swiper-slide.swiper-slide-active > div > div > div > div > div > div:nth-child(${index}) > div.Masonry_masonry__38RyV > div`;
-
-  for (let i = 1; i <= 7; i++) {
-    console.log(i);
-    const webtoon_container_selector = webtoon_container_by_index(i);
-    const webtoon_container = $(webtoon_container_selector);
-    const get_uncommon_url = async (index: number) => {
-      const selector = `${webtoon_container_selector}:nth-child(${index + 1}) > div > div > div`;
-      const browser = await puppeteer.launch({ headless: false });
-      const page = await browser.newPage();
-      await page.goto(`https://webtoon.kakao.com/${endpoint}`);
-      await page.waitForSelector(selector);
-      try {
-        while (true) {
-          await page.click(selector);
-        }
-      } catch (e) {
-        page.close();
-        return page.url();
-      }
-    };
-
-    const url_list: any = [];
-    webtoon_container.each((index, element) => {
-      let url = $(element).find("div > div > div > div > a").attr("href");
-      if (url === "#none") {
-        url_list.push(get_uncommon_url(index));
-      } else {
-        url_list.push(url);
-      }
-    });
-    Promise.all(url_list).then((url_list) => {
-      console.log(url_list);
-    });
-  }
+interface UncoumnData {
+  weekday: number;
+  selector: string;
 }
 
-const main = async () => {
-  await get_url_list("original-webtoon");
-};
-main();
+interface CommonData {
+  weekday: number;
+  url: string;
+}
 
+const kakao_crawler = async () => {
+  const browser = await puppeteer.launch({ headless: false });
+  /*   let { commonDataList, uncommonDataList } = await get_dir("/original-webtoon");
+
+  const test = uncommonDataList.map(async (uncommonData) => ({
+    weekday: uncommonData.weekday,
+    url: await get_uncommon_data_url("/original-webtoon", uncommonData.selector),
+  }));
+  const dataList = await Promise.all(test);
+  console.log(dataList);*/
+
+  get_finished_dir("/original-webtoon?tab=complete");
+
+  //함수 정의
+  async function get_content(endpoint: string, referenceSelector: string) {
+    const page = await browser.newPage();
+    await page.goto(kakako_webtoon_url + endpoint);
+    await page.waitForSelector(referenceSelector);
+    while (true) {
+      page.keyboard.press("ArrowDown");
+    }
+    const content = await page.content();
+    return content;
+  }
+
+  async function get_finished_dir(endpoint: string) {
+    const $ = load(await get_content(endpoint, ".ParallaxItem_layerFront__3diPa"));
+    const test = $.html();
+    console.log(test);
+  }
+
+  /* #root > main > div > div > div.Home_page__rY72O > div > div.ParallaxContainer_parallaxContainer__1nXb9.ParallaxContainer_vertical__3CiC8.swiper-scroll-perf > div > div.common_widthFull__1hw6a.common_heightFull__3OHiU.common_positionRelative__2kMrZ > div.common_fullWidthCell__27bQf.color_bg_darkGrey02__1gwuW.MasonryItem_masonryItem__3gkfH.ParallaxItem_parallaxItem__2PdzC > div > div > div > a
+  #root > main > div > div > div.Home_page__rY72O > div > div.ParallaxContainer_parallaxContainer__1nXb9.ParallaxContainer_vertical__3CiC8.swiper-scroll-perf > div > div.common_widthFull__1hw6a.common_heightFull__3OHiU.common_positionRelative__2kMrZ > div.spacing_mx_minus_1__17S2G.CompleteContentTable_completeCardList__eVAA- > div:nth-child(1) > div > div > div > div > a
+  #root > main > div > div > div.Home_page__rY72O > div > div.ParallaxContainer_parallaxContainer__1nXb9.ParallaxContainer_vertical__3CiC8.swiper-scroll-perf > div > div.common_widthFull__1hw6a.common_heightFull__3OHiU.common_positionRelative__2kMrZ > div.spacing_mx_minus_1__17S2G.CompleteContentTable_completeCardList__eVAA- > div:nth-child(2) > div > div > div > div > a */
+  async function get_dir(endpoint: string) {
+    const $ = load(await get_content(endpoint, ".Masonry_masonry__38RyV"));
+    const commonDataList: CommonData[] = [];
+    const uncommonDataList: UncoumnData[] = [];
+    const webtoon_container_by_index = (index: number) =>
+      `#root > main > div > div > div.swiper-container.swiper-container-initialized.swiper-container-horizontal.swiper-container-pointer-events > div > div.swiper-slide.swiper-slide-active > div > div > div > div > div > div:nth-child(${index}) > div.Masonry_masonry__38RyV > div`;
+    for (let weekIndex = 0; weekIndex <= 6; weekIndex++) {
+      const webtoonContainerSelector = webtoon_container_by_index(weekIndex + 1);
+      const webtoonContainer = $(webtoonContainerSelector);
+      webtoonContainer.each((index, element) => {
+        const crawled_url = $(element).find("div > div > div > div > a").attr("href");
+        if (!!crawled_url) {
+          crawled_url === "#none"
+            ? uncommonDataList.push({
+                weekday: weekIndex,
+                selector: `${webtoonContainerSelector}:nth-child(${index + 1}) > div > div > div`,
+              })
+            : commonDataList.push({
+                weekday: weekIndex,
+                url: kakako_webtoon_url + crawled_url,
+              });
+        }
+      });
+    }
+    return {
+      commonDataList,
+      uncommonDataList,
+    };
+  }
+
+  async function get_uncommon_data_url(endpoint: string, selector: string) {
+    const page = await browser.newPage();
+    await page.goto(kakako_webtoon_url + endpoint);
+    await page.waitForSelector(selector);
+    try {
+      //한번에 클릭이 안되는 경우가 있음
+      while (true) {
+        await page.click(selector);
+      }
+    } catch (e) {
+      page.close();
+      return page.url();
+    }
+  }
+};
+kakao_crawler();
 /*
 request(`https://webtoon.kakao.com/content/%EB%AF%B8%EC%83%9D/818`, (err, response, body) => {
   const $ = load(body);
@@ -73,4 +107,23 @@ request(`https://webtoon.kakao.com/content/%EB%AF%B8%EC%83%9D/818`, (err, respon
   );
   console.log($("head > title").text());
 });
+
+const get_uncommon_url = async (index: number) => {
+        const selector = `${webtoonContainerSelector}:nth-child(${index + 1}) > div > div > div`;
+        const page = await browser.newPage();
+        await page.goto(kakako_webtoon_url + endpoint);
+        await page.waitForSelector(selector);
+        try {
+          //한번에 클릭이 안되는 경우가 있음
+          while (true) {
+            await page.click(selector);
+          }
+        } catch (e) {
+          page.close();
+          return page.url();
+        }
+      };
+
  */
+
+/**웹툰 element중 규격이 일반적이지 않은것들은 puppeteer을 이용해 크롤링*/

@@ -1,9 +1,8 @@
-import { weekday } from "../data/base-data";
 import type { Webtoon } from "../types/webtoon";
 import request from "request-promise-native";
 import { load } from "cheerio";
 const naver_webtoon_url = "https://m.comic.naver.com";
-
+const weekday: string[] = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 export const naver_crawler = async () =>
   (await get_finished_webtoon()).concat(await get_weekly_webtoon());
 
@@ -25,16 +24,12 @@ async function get_webtoon_of_one_page(type: string, query_type: string, week_nu
     const $ = load(body);
     const list_selector = $("#ct > div.section_list_toon > ul > li > a");
     list_selector.map((index, element) => {
-      const state_type = $(element).find("div.info > span.detail > span > span").eq(0).text();
-      const state =
-        state_type == "휴재" ? "휴재" : state_type == "up" ? "UP" : type == "finish" ? "완결" : "";
       a_page_webtoon_info.push({
         title: $(element).find(".title").text(),
         artist: $(element).find(".author").text(),
         url: naver_webtoon_url + $(element).attr("href"),
         img: $(element).find("div.thumbnail > img").attr("src"),
         service: "naver",
-        state: state,
         weekday: week_num,
       });
     });

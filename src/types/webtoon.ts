@@ -1,9 +1,8 @@
 export interface Webtoon {
-  title: string;
-  artist: string;
-  url: string;
+  title: string | undefined;
+  artist: string | undefined;
+  url: string | undefined;
   img: string | undefined;
-  service: string;
-  state: string;
-  weekday: number;
+  service: string | undefined;
+  weekday: number | undefined;
 }
