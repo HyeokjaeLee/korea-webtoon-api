@@ -5,4 +5,5 @@ export interface Webtoon {
   img: string | undefined;
   service: string | undefined;
   weekday: number | undefined;
+  adult: boolean | undefined;
 }

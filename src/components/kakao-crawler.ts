@@ -2,7 +2,6 @@ import type { Webtoon } from "../types/webtoon";
 import { load } from "cheerio";
 import puppeteer from "puppeteer";
 import request from "request-promise-native";
-import { children } from "cheerio/lib/api/traversing";
 const kakako_webtoon_url: string = "https://webtoon.kakao.com";
 const originalNovel = "/original-novel";
 const originalWebtoon = "/original-webtoon";
@@ -18,25 +17,81 @@ interface CommonData {
   url: string;
 }
 
+const test1 = {
+  weekday: 0,
+  url: "https://webtoon.kakao.com/content/연습생-고영신/2479",
+};
+const test2 = "/content/밤의-향/1532";
+
 export const kakao_crawler = async () => {
   const browser = await puppeteer.launch({ headless: false });
-  const weeklyWebtoonData = await get_weeklyURL(originalWebtoon);
-  const weeklyNovelData = await get_weeklyURL(originalNovel);
-  const finishedWebtoon = await get_finishedURL(originalWebtoon + finished);
-  const finishedNovel = await get_finishedURL(originalNovel + finished);
+  {
+    const weeklyWebtoonURLs = await get_weeklyURL(originalWebtoon);
+    const weeklyNovelURLs = await get_weeklyURL(originalNovel);
+    const finishedWebtoonURLs = await get_finishedURL(originalWebtoon + finished);
+    const finishedNovelURLs = await get_finishedURL(originalNovel + finished);
+    const weeklyURLs = [
+      ...weeklyWebtoonURLs.commonDataList,
+      ...(await get_uncommonURL(originalWebtoon, weeklyWebtoonURLs.uncommonDataList)),
+      ...weeklyNovelURLs.commonDataList,
+      ...(await get_uncommonURL(originalNovel, weeklyNovelURLs.uncommonDataList)),
+    ];
+    const finishedURLs = [...finishedWebtoonURLs, ...finishedNovelURLs];
+    browser.close();
 
-  const weeklyData = [
-    ...weeklyWebtoonData.commonDataList,
-    ...(await get_uncommonURL(originalWebtoon, weeklyWebtoonData.uncommonDataList)),
-    ...weeklyNovelData.commonDataList,
-    ...(await get_uncommonURL(originalNovel, weeklyNovelData.uncommonDataList)),
-  ];
+    const weeklyWebtoonData = await Promise.all(
+      weeklyURLs.map(
+        async (weeklyURL, index) => await get_a_webtoonData(weeklyURL.url, weeklyURL.weekday, index)
+      )
+    );
+    const finishedWebtoonData = await Promise.all(
+      finishedURLs.map(
+        async (finishedURL, index) =>
+          await get_a_webtoonData(originalWebtoon + finishedURL, 7, index)
+      )
+    );
+    console.log(weeklyWebtoonData);
+    console.log(finishedWebtoonData);
+    return {
+      weeklyWebtoonData,
+      finishedWebtoonData,
+    };
+  }
 
-  const finishedData = [...finishedWebtoon, ...finishedNovel];
+  function get_a_webtoonData(url: string, weekday: number, index: number): Promise<Webtoon> {
+    return new Promise(async (resolve, reject) => {
+      setTimeout(() => {
+        request(encodeURI(url), (err, response, body) => {
+          const $ = load(body);
+          let artist: string | undefined = $(
+            "#root > main > div > div.page.color_bg_black__2MXm7.activePage > div > div.Content_homeWrapper__2CMgX.common_positionRelative__2kMrZ > div.Content_metaWrapper__3srNJ > div.Content_contentMainWrapper__3AlhK.Content_current__2yPD8 > div.spacing_pb_28__VqvVT.spacing_pt_96__184F4 > div.common_positionRelative__2kMrZ.spacing_mx_a__2yxXH.spacing_my_0__1f7t6.MaxWidth_maxWidth__2Qvbl > div.Meta_meta__1HmBY.spacing_mx_20__17RDr.spacing_pt_16__zSxeh > div > p.Text_default__HZL19.textVariant_s13_regular_white__1-AxN.SingleText_singleText__3htPa.spacing_mt_minus_3__3ZjH1.opacity_opacity85__gH87s.lineHeight_lh_21__1MiQ7.Meta_author__1VKLY"
+          ).text();
+          const get_metaData = (name: string) => $(`head > meta[name=${name}]`).attr("content");
+          let title = get_metaData("og:title");
+          let adult = false;
+          if (!title || !artist) {
+            console.log(!title || !artist);
+            const metaData = get_metaData("keywords")?.split(", ");
+            title = metaData?.[0];
+            artist = metaData?.slice(1, -1)?.join(", ");
+            adult = true;
+          }
+          const webtoonData = {
+            title: title,
+            artist: artist,
+            url: encodeURI(url),
+            img: get_metaData("og:image"),
+            service: "kakao",
+            weekday: weekday,
+            adult: adult,
+          };
+          console.log(webtoonData);
+          resolve(webtoonData);
+        });
+      }, index * 5000);
+    });
+  }
 
-  console.log(weeklyData);
-  console.log(finishedWebtoon);
-  browser.close();
   //함수 정의
   async function get_finishedURL(endpoint: string) {
     const page = await browser.newPage();
@@ -112,13 +167,20 @@ export const kakao_crawler = async () => {
         return page.url();
       }
     };
-    const uncommonURL = uncommonDataList.map(async (uncommonData) => ({
-      weekday: uncommonData.weekday,
-      url: await get_a_uncommonURL(uncommonData.selector),
-    }));
+    const uncommonURL: Promise<CommonData>[] = uncommonDataList.map(async (uncommonData, index) => {
+      return new Promise((resolve) => {
+        setTimeout(async () => {
+          resolve({
+            weekday: uncommonData.weekday,
+            url: await get_a_uncommonURL(uncommonData.selector),
+          });
+        }, index * 5000);
+      });
+    });
     return await Promise.all(uncommonURL);
   }
 };
+
 kakao_crawler();
 /*
 request(`https://webtoon.kakao.com/content/%EB%AF%B8%EC%83%9D/818`, (err, response, body) => {
