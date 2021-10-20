@@ -2,10 +2,12 @@ import type { Webtoon } from "../types/webtoon";
 import { load } from "cheerio";
 import puppeteer from "puppeteer";
 import request from "request-promise-native";
+import fs from "fs";
 const kakako_webtoon_url: string = "https://webtoon.kakao.com";
 const originalNovel = "/original-novel";
 const originalWebtoon = "/original-webtoon";
 const finished = "?tab=complete";
+const crawler_delay = 3500;
 
 interface UncoumnData {
   weekday: number;
@@ -16,15 +18,24 @@ interface CommonData {
   weekday: number;
   url: string;
 }
-
-const test1 = {
-  weekday: 0,
-  url: "https://webtoon.kakao.com/content/연습생-고영신/2479",
-};
 const test2 = "/content/밤의-향/1532";
-
 export const kakao_crawler = async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  console.log(`Kakao-Webtoon crawler has started(${new Date()})`);
+  const browser = await puppeteer.launch();
+  const progress = {
+    now: 0,
+    total: 0,
+  };
+  const progress_log = () => {
+    progress.now++;
+    console.log(
+      `카카오 웹툰 크롤링 진행도(${
+        ((progress.total - progress.now + 1) * crawler_delay) / 1000
+      }초 예상): ${progress.now} / ${progress.total}`
+    );
+  };
+
+  // 실행 코드
   {
     const weeklyWebtoonURLs = await get_weeklyURL(originalWebtoon);
     const weeklyNovelURLs = await get_weeklyURL(originalNovel);
@@ -36,9 +47,10 @@ export const kakao_crawler = async () => {
       ...weeklyNovelURLs.commonDataList,
       ...(await get_uncommonURL(originalNovel, weeklyNovelURLs.uncommonDataList)),
     ];
-    const finishedURLs = [...finishedWebtoonURLs, ...finishedNovelURLs];
     browser.close();
-
+    const finishedURLs = [...finishedWebtoonURLs, ...finishedNovelURLs];
+    progress.total = weeklyURLs.length + finishedURLs.length;
+    console.log("Kakao Webtoon URL 크롤링 완료");
     const weeklyWebtoonData = await Promise.all(
       weeklyURLs.map(
         async (weeklyURL, index) => await get_a_webtoonData(weeklyURL.url, weeklyURL.weekday, index)
@@ -47,20 +59,25 @@ export const kakao_crawler = async () => {
     const finishedWebtoonData = await Promise.all(
       finishedURLs.map(
         async (finishedURL, index) =>
-          await get_a_webtoonData(originalWebtoon + finishedURL, 7, index)
+          await get_a_webtoonData(kakako_webtoon_url + finishedURL, 7, index)
       )
     );
-    console.log(weeklyWebtoonData);
-    console.log(finishedWebtoonData);
+    console.log("Kakao Webtoon 정보 크롤링 완료");
+    fs.writeFileSync("../data/kakao-weekly-webtoon.json", JSON.stringify(weeklyWebtoonData));
+    fs.writeFileSync("../data/kakao-finished-webtoon.json", JSON.stringify(finishedWebtoonData));
+    console.log("Kakao Webtoon 정보 저장 완료");
     return {
       weeklyWebtoonData,
       finishedWebtoonData,
     };
   }
 
+  //함수 선언 부분
+
   function get_a_webtoonData(url: string, weekday: number, index: number): Promise<Webtoon> {
     return new Promise(async (resolve, reject) => {
       setTimeout(() => {
+        progress_log();
         request(encodeURI(url), (err, response, body) => {
           const $ = load(body);
           let artist: string | undefined = $(
@@ -70,7 +87,6 @@ export const kakao_crawler = async () => {
           let title = get_metaData("og:title");
           let adult = false;
           if (!title || !artist) {
-            console.log(!title || !artist);
             const metaData = get_metaData("keywords")?.split(", ");
             title = metaData?.[0];
             artist = metaData?.slice(1, -1)?.join(", ");
@@ -88,11 +104,10 @@ export const kakao_crawler = async () => {
           console.log(webtoonData);
           resolve(webtoonData);
         });
-      }, index * 5000);
+      }, index * crawler_delay);
     });
   }
 
-  //함수 정의
   async function get_finishedURL(endpoint: string) {
     const page = await browser.newPage();
     await page.goto(kakako_webtoon_url + endpoint);
@@ -163,8 +178,9 @@ export const kakao_crawler = async () => {
           await page.click(selector);
         }
       } catch (e) {
-        page.close();
-        return page.url();
+        const url = page.url();
+        await page.close();
+        return url;
       }
     };
     const uncommonURL: Promise<CommonData>[] = uncommonDataList.map(async (uncommonData, index) => {
@@ -174,7 +190,7 @@ export const kakao_crawler = async () => {
             weekday: uncommonData.weekday,
             url: await get_a_uncommonURL(uncommonData.selector),
           });
-        }, index * 5000);
+        }, index * crawler_delay);
       });
     });
     return await Promise.all(uncommonURL);
@@ -182,34 +198,3 @@ export const kakao_crawler = async () => {
 };
 
 kakao_crawler();
-/*
-request(`https://webtoon.kakao.com/content/%EB%AF%B8%EC%83%9D/818`, (err, response, body) => {
-  const $ = load(body);
-  console.log($(`head > meta[name="og:image"]`).attr("content"));
-  console.log(
-    $(
-      "#root > main > div > div.page.color_bg_black__2MXm7.activePage > div > div.Content_homeWrapper__2CMgX.common_positionRelative__2kMrZ > div.Content_metaWrapper__3srNJ > div.Content_contentMainWrapper__3AlhK.Content_current__2yPD8 > div.spacing_pb_28__VqvVT.spacing_pt_96__184F4 > div.common_positionRelative__2kMrZ.spacing_mx_a__2yxXH.spacing_my_0__1f7t6.MaxWidth_maxWidth__2Qvbl > div.Meta_meta__1HmBY.spacing_mx_20__17RDr.spacing_pt_16__zSxeh > div > p.Text_default__HZL19.textVariant_s13_regular_white__1-AxN.SingleText_singleText__3htPa.spacing_mt_minus_3__3ZjH1.opacity_opacity85__gH87s.lineHeight_lh_21__1MiQ7.Meta_author__1VKLY"
-    ).text()
-  );
-  console.log($("head > title").text());
-});
-
-const get_uncommon_url = async (index: number) => {
-        const selector = `${webtoonContainerSelector}:nth-child(${index + 1}) > div > div > div`;
-        const page = await browser.newPage();
-        await page.goto(kakako_webtoon_url + endpoint);
-        await page.waitForSelector(selector);
-        try {
-          //한번에 클릭이 안되는 경우가 있음
-          while (true) {
-            await page.click(selector);
-          }
-        } catch (e) {
-          page.close();
-          return page.url();
-        }
-      };
-
- */
-
-/**웹툰 element중 규격이 일반적이지 않은것들은 puppeteer을 이용해 크롤링*/
