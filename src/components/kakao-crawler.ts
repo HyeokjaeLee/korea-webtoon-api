@@ -4,7 +4,9 @@ import puppeteer from "puppeteer";
 import request from "request-promise-native";
 import { children } from "cheerio/lib/api/traversing";
 const kakako_webtoon_url: string = "https://webtoon.kakao.com";
-const weekday: string[] = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+const originalNovel = "/original-novel";
+const originalWebtoon = "/original-webtoon";
+const finished = "?tab=complete";
 
 interface UncoumnData {
   weekday: number;
@@ -16,42 +18,57 @@ interface CommonData {
   url: string;
 }
 
-const kakao_crawler = async () => {
+export const kakao_crawler = async () => {
   const browser = await puppeteer.launch({ headless: false });
-  /*   let { commonDataList, uncommonDataList } = await get_dir("/original-webtoon");
+  const weeklyWebtoonData = await get_weeklyURL(originalWebtoon);
+  const weeklyNovelData = await get_weeklyURL(originalNovel);
+  const finishedWebtoon = await get_finishedURL(originalWebtoon + finished);
+  const finishedNovel = await get_finishedURL(originalNovel + finished);
 
-  const test = uncommonDataList.map(async (uncommonData) => ({
-    weekday: uncommonData.weekday,
-    url: await get_uncommon_data_url("/original-webtoon", uncommonData.selector),
-  }));
-  const dataList = await Promise.all(test);
-  console.log(dataList);*/
+  const weeklyData = [
+    ...weeklyWebtoonData.commonDataList,
+    ...(await get_uncommonURL(originalWebtoon, weeklyWebtoonData.uncommonDataList)),
+    ...weeklyNovelData.commonDataList,
+    ...(await get_uncommonURL(originalNovel, weeklyNovelData.uncommonDataList)),
+  ];
 
-  get_finished_dir("/original-webtoon?tab=complete");
+  const finishedData = [...finishedWebtoon, ...finishedNovel];
 
+  console.log(weeklyData);
+  console.log(finishedWebtoon);
+  browser.close();
   //함수 정의
-  async function get_content(endpoint: string, referenceSelector: string) {
+  async function get_finishedURL(endpoint: string) {
     const page = await browser.newPage();
     await page.goto(kakako_webtoon_url + endpoint);
-    await page.waitForSelector(referenceSelector);
-    while (true) {
-      page.keyboard.press("ArrowDown");
+    await page.waitForSelector(".ParallaxItem_layerFront__3diPa");
+    let i = 1;
+    const selector = (index: number) =>
+      `#root > main > div > div > div.swiper-container.swiper-container-initialized.swiper-container-horizontal.swiper-container-pointer-events > div > div.swiper-slide.swiper-slide-active > div > div > div.ParallaxContainer_parallaxContainer__1nXb9.ParallaxContainer_vertical__3CiC8.swiper-scroll-perf > div > div.common_widthFull__1hw6a.common_heightFull__3OHiU.common_positionRelative__2kMrZ > div.spacing_mx_minus_1__17S2G.CompleteContentTable_completeCardList__eVAA- > div:nth-child(${i})`;
+    try {
+      while (true) {
+        await page.waitForSelector(selector(i), {
+          timeout: 1000,
+        });
+        await page.click(selector(i), {
+          button: "right",
+        });
+
+        i++;
+      }
+    } catch (e) {
+      const $ = load(await page.content());
+      const urlList = $.html().match(/\/content.{1,20}\/\d+/g);
+      page.close();
+      return urlList as string[];
     }
-    const content = await page.content();
-    return content;
   }
 
-  async function get_finished_dir(endpoint: string) {
-    const $ = load(await get_content(endpoint, ".ParallaxItem_layerFront__3diPa"));
-    const test = $.html();
-    console.log(test);
-  }
-
-  /* #root > main > div > div > div.Home_page__rY72O > div > div.ParallaxContainer_parallaxContainer__1nXb9.ParallaxContainer_vertical__3CiC8.swiper-scroll-perf > div > div.common_widthFull__1hw6a.common_heightFull__3OHiU.common_positionRelative__2kMrZ > div.common_fullWidthCell__27bQf.color_bg_darkGrey02__1gwuW.MasonryItem_masonryItem__3gkfH.ParallaxItem_parallaxItem__2PdzC > div > div > div > a
-  #root > main > div > div > div.Home_page__rY72O > div > div.ParallaxContainer_parallaxContainer__1nXb9.ParallaxContainer_vertical__3CiC8.swiper-scroll-perf > div > div.common_widthFull__1hw6a.common_heightFull__3OHiU.common_positionRelative__2kMrZ > div.spacing_mx_minus_1__17S2G.CompleteContentTable_completeCardList__eVAA- > div:nth-child(1) > div > div > div > div > a
-  #root > main > div > div > div.Home_page__rY72O > div > div.ParallaxContainer_parallaxContainer__1nXb9.ParallaxContainer_vertical__3CiC8.swiper-scroll-perf > div > div.common_widthFull__1hw6a.common_heightFull__3OHiU.common_positionRelative__2kMrZ > div.spacing_mx_minus_1__17S2G.CompleteContentTable_completeCardList__eVAA- > div:nth-child(2) > div > div > div > div > a */
-  async function get_dir(endpoint: string) {
-    const $ = load(await get_content(endpoint, ".Masonry_masonry__38RyV"));
+  async function get_weeklyURL(endpoint: string) {
+    const page = await browser.newPage();
+    await page.goto(kakako_webtoon_url + endpoint);
+    await page.waitForSelector(".Masonry_masonry__38RyV");
+    const $ = load(await page.content());
     const commonDataList: CommonData[] = [];
     const uncommonDataList: UncoumnData[] = [];
     const webtoon_container_by_index = (index: number) =>
@@ -80,19 +97,26 @@ const kakao_crawler = async () => {
     };
   }
 
-  async function get_uncommon_data_url(endpoint: string, selector: string) {
-    const page = await browser.newPage();
-    await page.goto(kakako_webtoon_url + endpoint);
-    await page.waitForSelector(selector);
-    try {
-      //한번에 클릭이 안되는 경우가 있음
-      while (true) {
-        await page.click(selector);
+  async function get_uncommonURL(endpoint: string, uncommonDataList: UncoumnData[]) {
+    const get_a_uncommonURL = async (selector: string) => {
+      const page = await browser.newPage();
+      await page.goto(kakako_webtoon_url + endpoint);
+      await page.waitForSelector(selector);
+      try {
+        //한번에 클릭이 안되는 경우가 있음
+        while (true) {
+          await page.click(selector);
+        }
+      } catch (e) {
+        page.close();
+        return page.url();
       }
-    } catch (e) {
-      page.close();
-      return page.url();
-    }
+    };
+    const uncommonURL = uncommonDataList.map(async (uncommonData) => ({
+      weekday: uncommonData.weekday,
+      url: await get_a_uncommonURL(uncommonData.selector),
+    }));
+    return await Promise.all(uncommonURL);
   }
 };
 kakao_crawler();
