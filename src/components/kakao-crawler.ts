@@ -18,7 +18,7 @@ interface CommonData {
   weekday: number;
   url: string;
 }
-const test2 = "/content/밤의-향/1532";
+
 export const kakao_crawler = async () => {
   console.log(`Kakao-Webtoon crawler has started(${new Date()})`);
   const browser = await puppeteer.launch();
@@ -29,7 +29,7 @@ export const kakao_crawler = async () => {
   const progress_log = () => {
     progress.now++;
     console.log(
-      `카카오 웹툰 크롤링 진행도(${
+      `Kakao-Webtoon 크롤링 진행도(${
         ((progress.total - progress.now + 1) * crawler_delay) / 1000
       }초 예상): ${progress.now} / ${progress.total}`
     );
@@ -50,7 +50,7 @@ export const kakao_crawler = async () => {
     browser.close();
     const finishedURLs = [...finishedWebtoonURLs, ...finishedNovelURLs];
     progress.total = weeklyURLs.length + finishedURLs.length;
-    console.log("Kakao Webtoon URL 크롤링 완료");
+    console.log("Kakao-Webtoon URL 크롤링 완료");
     const weeklyWebtoonData = await Promise.all(
       weeklyURLs.map(
         async (weeklyURL, index) => await get_a_webtoonData(weeklyURL.url, weeklyURL.weekday, index)
@@ -62,10 +62,10 @@ export const kakao_crawler = async () => {
           await get_a_webtoonData(kakako_webtoon_url + finishedURL, 7, index)
       )
     );
-    console.log("Kakao Webtoon 정보 크롤링 완료");
+    console.log("Kakao-Webtoon 정보 크롤링 완료");
     fs.writeFileSync("../data/kakao-weekly-webtoon.json", JSON.stringify(weeklyWebtoonData));
     fs.writeFileSync("../data/kakao-finished-webtoon.json", JSON.stringify(finishedWebtoonData));
-    console.log("Kakao Webtoon 정보 저장 완료");
+    console.log("Kakao-Webtoon 정보 저장 완료");
     return {
       weeklyWebtoonData,
       finishedWebtoonData,
