@@ -21,7 +21,9 @@ interface CommonData {
 
 export const kakao_crawler = async () => {
   console.log(`Kakao-Webtoon crawler has started(${new Date()})`);
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
   const progress = {
     now: 0,
     total: 0,
