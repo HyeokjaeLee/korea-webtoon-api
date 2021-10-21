@@ -1,5 +1,5 @@
 import type { Webtoon } from '../types/webtoon';
-import request from 'request-promise-native';
+import * as request from 'request-promise-native';
 import { load } from 'cheerio';
 const naver_webtoon_url = 'https://m.comic.naver.com';
 const weekday: string[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -21,8 +21,6 @@ export const naver_crawler = async () => {
   console.log('Naver-Webtoon 정보 저장 완료');
   return { weeklyWebtoonData, finishedWebtoonData };
 };
-
-naver_crawler();
 
 function get_page_count(): Promise<number> {
   return new Promise(function (resolve, reject) {

@@ -1,7 +1,7 @@
 import type { Webtoon } from '../types/webtoon';
 import { load } from 'cheerio';
-import puppeteer from 'puppeteer';
-import request from 'request-promise-native';
+import * as puppeteer from 'puppeteer';
+import * as request from 'request-promise-native';
 import * as fs from 'fs';
 const kakako_webtoon_url: string = 'https://webtoon.kakao.com';
 const originalNovel = '/original-novel';
@@ -227,4 +227,3 @@ export const kakao_crawler = async () => {
     return await Promise.all(uncommonURL);
   }
 };
-kakao_crawler();

@@ -6,12 +6,16 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  webtoon() {
+    return this.appService.webtoon();
   }
 
   @Get('/naver')
-  test() {
+  naver() {
     return this.appService.naverWebtoon();
+  }
+  @Get('/kakao')
+  kakao() {
+    return this.appService.kakaoWebtoon();
   }
 }
