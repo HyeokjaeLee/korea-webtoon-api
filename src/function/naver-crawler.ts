@@ -51,10 +51,10 @@ async function get_webtoonData(
         service: 'naver',
         weekday: weeknum,
         additional: {
-          new: false,
+          new: isNew,
           adult: isAdult,
-          rest: false,
-          up: false,
+          rest: isRest,
+          up: isUp,
         },
       };
     })
@@ -72,7 +72,7 @@ async function get_weekdayWebtoon() {
 }
 
 async function get_finishedWebtoon() {
-  let finishedWebtoon = [];
+  let finishedWebtoon: Webtoon[] = [];
   const $ = await load_$(naver_webtoon_url + '/webtoon/finish.nhn?page=1');
   const pageCount = Number(
     $('#ct > div.section_list_toon > div.paging_type2 > em > span').text(),
@@ -89,12 +89,12 @@ export default async function naver_crawler() {
   console.log(`naver crawler start (${new Date()})`);
   const weekdayWebtoon = await get_weekdayWebtoon();
   fs.writeFileSync(
-    '../../data/naver-weekday-webtoon.json',
+    'data/naver-weekday-webtoon.json',
     JSON.stringify(weekdayWebtoon),
   );
   const finishedWebtoon = await get_finishedWebtoon();
   fs.writeFileSync(
-    '../../data/naver-finished-webtoon.json',
+    'data/naver-finished-webtoon.json',
     JSON.stringify(finishedWebtoon),
   );
   console.log(`naver crawler end (${new Date()}`);

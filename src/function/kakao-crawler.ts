@@ -73,16 +73,14 @@ export default async function kakao_crawler() {
     generalWebtoon.concat(novelWeekdayWebtoon[weeknum]),
   );
   fs.writeFileSync(
-    '../../data/kakao-weekday-webtoon.json',
+    'data/kakao-weekday-webtoon.json',
     JSON.stringify(weekdayWebtoon),
   );
   const finishedWebtoon = generalFinishedWebtoon.concat(novelFinishedWebtoon);
   fs.writeFileSync(
-    '../../data/kakao-finished-webtoon.json',
+    'data/kakao-finished-webtoon.json',
     JSON.stringify(finishedWebtoon),
   );
   console.log(`kakao crawler end (${new Date()}`);
   return { weekdayWebtoon, finishedWebtoon };
 }
-
-kakao_crawler();
