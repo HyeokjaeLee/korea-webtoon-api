@@ -1,10 +1,7 @@
 import type { Webtoon, Additional } from '../types/webtoon';
-const kakao_webtoon_url = 'https://webtoon.kakao.com/content/';
 import * as fs from 'fs';
 import axios from 'axios';
 import * as _ from 'lodash';
-
-type Original = 'novel' | 'webtoon';
 
 interface KakaoWebtoon {
   content: {
@@ -16,20 +13,14 @@ interface KakaoWebtoon {
   additional: Additional;
 }
 
-const kakaoWebtoonAPI = (original: Original, completed: boolean) => {
-  const URL = 'https://gateway-kw.kakao.com/section/v1/';
-  const _original = (_original: 'channel' | 'general') =>
-    original === 'novel' ? 'novel' : _original;
-  const completed_url = `sections?placement=${_original('channel')}_completed`;
-  const weekdays_url = `pages/${_original('general')}-weekdays`;
-  return completed ? URL + completed_url : URL + weekdays_url;
-};
-
-const img_url = (id: number) =>
-  `https://kr-a.kakaopagecdn.com/P/C/${id}/sharing/2x/eacb00ec-9034-42cb-a533-7c7690741113.jpg`;
-
-const classify_webtoonData = (dataArr: KakaoWebtoon[], weeknum: number) =>
-  dataArr.map((data) => {
+/**kakao Webtoon 기존 API의 정보를 조합해 표준화된 정보로 변환
+ * @param dataArr kakao webtoon API 정보 배열
+ * @param weeknum 웹툰의 요일(0~6) / 완결(7)
+ * @returns 표준 웹툰 정보 배열
+ * */
+function classify_webtoon(dataArr: KakaoWebtoon[], weeknum: number): Webtoon[] {
+  const kakao_webtoon_url = 'https://webtoon.kakao.com/content/';
+  return dataArr.map((data) => {
     const { content, additional } = data;
     const authors = _.uniqBy(content.authors, 'name');
     const onlyAuthorIllustrator = authors.filter(
@@ -37,10 +28,10 @@ const classify_webtoonData = (dataArr: KakaoWebtoon[], weeknum: number) =>
     );
     const authorsName = onlyAuthorIllustrator.map((author) => author.name);
     return {
-      title: data.content.title,
-      artist: authorsName.join(', '),
-      url: `${kakao_webtoon_url + data.content.seoId}/${data.content.id}`,
-      img: img_url(content.id),
+      title: content.title,
+      author: authorsName.join(', '),
+      url: `${kakao_webtoon_url + content.seoId}/${content.id}`,
+      img: `https://kr-a.kakaopagecdn.com/P/C/${content.id}/sharing/2x/eacb00ec-9034-42cb-a533-7c7690741113.jpg`,
       service: 'kakao',
       weekday: weeknum,
       additional: {
@@ -51,17 +42,47 @@ const classify_webtoonData = (dataArr: KakaoWebtoon[], weeknum: number) =>
       },
     };
   });
-
-const get_weekdayWebtoon = async (original: Original): Promise<Webtoon[][]> => {
-  const { data }: any = await axios.get(kakaoWebtoonAPI(original, false));
-  return data.data.sections.map((sections, weeknum: number) =>
-    classify_webtoonData(sections.cardGroups[0].cards, weeknum),
-  );
-};
-
-async function get_completedWebtoon(original: Original): Promise<Webtoon[]> {
-  const { data }: any = await axios.get(kakaoWebtoonAPI(original, true));
-  return classify_webtoonData(data.data[0].cardGroups[0].cards, 7);
 }
 
-get_completedWebtoon('novel');
+const apiURL = 'https://gateway-kw.kakao.com/section/v1/';
+async function get_weekdayWebtoon(
+  original: 'general' | 'novel',
+): Promise<Webtoon[][]> {
+  const { data }: any = await axios.get(`${apiURL}pages/${original}-weekdays`);
+  return data.data.sections.map((sections, weeknum: number) =>
+    classify_webtoon(sections.cardGroups[0].cards, weeknum),
+  );
+}
+
+async function get_finishedWebtoon(
+  placement: 'channel' | 'novel',
+): Promise<Webtoon[]> {
+  const { data }: any = await axios.get(
+    `${apiURL}sections?placement=${placement}_completed`,
+  );
+  return classify_webtoon(data.data[0].cardGroups[0].cards, 7);
+}
+
+export default async function kakao_crawler() {
+  console.log(`kakao crawler start (${new Date()})`);
+  const generalWeekdayWebtoon = await get_weekdayWebtoon('general');
+  const novelWeekdayWebtoon = await get_weekdayWebtoon('novel');
+  const generalFinishedWebtoon = await get_finishedWebtoon('channel');
+  const novelFinishedWebtoon = await get_finishedWebtoon('novel');
+  const weekdayWebtoon = generalWeekdayWebtoon.map((generalWebtoon, weeknum) =>
+    generalWebtoon.concat(novelWeekdayWebtoon[weeknum]),
+  );
+  fs.writeFileSync(
+    '../../data/kakao-weekday-webtoon.json',
+    JSON.stringify(weekdayWebtoon),
+  );
+  const finishedWebtoon = generalFinishedWebtoon.concat(novelFinishedWebtoon);
+  fs.writeFileSync(
+    '../../data/kakao-finished-webtoon.json',
+    JSON.stringify(finishedWebtoon),
+  );
+  console.log(`kakao crawler end (${new Date()}`);
+  return { weekdayWebtoon, finishedWebtoon };
+}
+
+kakao_crawler();
