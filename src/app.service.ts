@@ -1,70 +1,75 @@
 import { Injectable } from '@nestjs/common';
-import { naver_crawler } from './function/naver-crawler';
-import { kakao_crawler } from './function/kakao-crawler';
+import naver_crawler from './function/naver-crawler';
+import kakao_crawler from './function/kakao-crawler';
 import { Webtoon } from './types/webtoon';
 import * as fs from 'fs';
 
 interface PlatformObject {
-  weeklyWebtoonData: Webtoon[];
-  finishedWebtoonData: Webtoon[];
+  weekdayWebtoon: Webtoon[][];
+  finishedWebtoon: Webtoon[];
 }
 
 let naver: PlatformObject = {
-  weeklyWebtoonData: JSON.parse(
-    fs.readFileSync('data/naver-weekly-webtoon.json', 'utf8'),
+  weekdayWebtoon: JSON.parse(
+    fs.readFileSync('data/naver-weekday-webtoon.json', 'utf8'),
   ),
-  finishedWebtoonData: JSON.parse(
+  finishedWebtoon: JSON.parse(
     fs.readFileSync('data/naver-finished-webtoon.json', 'utf8'),
   ),
 };
 
 let kakao: PlatformObject = {
-  weeklyWebtoonData: JSON.parse(
-    fs.readFileSync('data/kakao-weekly-webtoon.json', 'utf8'),
+  weekdayWebtoon: JSON.parse(
+    fs.readFileSync('data/kakao-weekday-webtoon.json', 'utf8'),
   ),
-  finishedWebtoonData: JSON.parse(
+  finishedWebtoon: JSON.parse(
     fs.readFileSync('data/kakao-finished-webtoon.json', 'utf8'),
   ),
 };
 
-setTimeout(async () => {
+const combineWeekdayWebtoon = (weekdayWebtoon: Webtoon[][]) => [
+  ...weekdayWebtoon[0],
+  ...weekdayWebtoon[1],
+  ...weekdayWebtoon[2],
+  ...weekdayWebtoon[3],
+  ...weekdayWebtoon[4],
+  ...weekdayWebtoon[5],
+  ...weekdayWebtoon[6],
+];
+
+(async () => {
   console.log('first update');
   naver = await naver_crawler();
   kakao = await kakao_crawler();
-}, 60000);
+})();
 
 setInterval(async () => {
   console.log('update');
   naver = await naver_crawler();
   kakao = await kakao_crawler();
-}, 43200000);
+}, 3600000);
 
 @Injectable()
 export class AppService {
-  webtoon() {
-    return [
-      ...naver.weeklyWebtoonData,
-      ...naver.finishedWebtoonData,
-      ...kakao.weeklyWebtoonData,
-      ...kakao.finishedWebtoonData,
-    ];
-  }
-  kakaoWebtoon() {
-    return [...kakao.weeklyWebtoonData, ...kakao.finishedWebtoonData];
+  kakaoFinishedWebtoon() {
+    return kakao.finishedWebtoon;
   }
   kakaoWeeklyWebtoon() {
-    return kakao.weeklyWebtoonData;
+    return combineWeekdayWebtoon(kakao.weekdayWebtoon);
   }
-  kakaoFinishedWebtoon() {
-    return kakao.finishedWebtoonData;
-  }
-  naverWebtoon() {
-    return [...naver.weeklyWebtoonData, ...naver.finishedWebtoonData];
-  }
-  naverWeeklyWebtoon() {
-    return naver.weeklyWebtoonData;
+  kakaoWebtoon() {
+    return this.kakaoWeeklyWebtoon().concat(this.kakaoFinishedWebtoon());
   }
   naverFinishedWebtoon() {
-    return naver.finishedWebtoonData;
+    return naver.finishedWebtoon;
+  }
+  naverWeeklyWebtoon() {
+    return combineWeekdayWebtoon(naver.weekdayWebtoon);
+  }
+  naverWebtoon() {
+    return this.naverWeeklyWebtoon().concat(this.naverFinishedWebtoon());
+  }
+  webtoon() {
+    return this.kakaoWebtoon().concat(this.naverWebtoon());
   }
 }
