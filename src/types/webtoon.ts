@@ -5,5 +5,12 @@ export interface Webtoon {
   img: string | undefined;
   service: string | undefined;
   weekday: number | undefined;
-  adult: boolean | undefined;
+  additional: Additional;
+}
+
+export interface Additional {
+  new: boolean;
+  rest: boolean;
+  up: boolean;
+  adult: boolean;
 }
