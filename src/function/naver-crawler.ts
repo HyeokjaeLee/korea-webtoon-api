@@ -41,9 +41,13 @@ async function get_webtoonData(
         isRest = detailInfo.includes('break');
         isUp = detailInfo.includes('up');
       }
+      const author = $(element)
+        .find('.author')
+        .text()
+        .replace(/, |\ \/ /g, ',');
       return {
         title: $(element).find('.title').text(),
-        author: $(element).find('.author').text(),
+        author: author,
         url: naver_webtoon_url + $(element).attr('href'),
         img: $(element).find('div.thumbnail > img').attr('src'),
         service: 'naver',
