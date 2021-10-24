@@ -29,7 +29,7 @@ function classify_webtoon(dataArr: KakaoWebtoon[], weeknum: number): Webtoon[] {
     const authorsName = onlyAuthorIllustrator.map((author) => author.name);
     return {
       title: content.title,
-      author: authorsName.join(', '),
+      author: authorsName.join(','),
       url: `${kakao_webtoon_url + content.seoId}/${content.id}`,
       img: `https://kr-a.kakaopagecdn.com/P/C/${content.id}/sharing/2x/eacb00ec-9034-42cb-a533-7c7690741113.jpg`,
       service: 'kakao',
@@ -72,15 +72,7 @@ export default async function kakao_crawler() {
   const weekdayWebtoon = generalWeekdayWebtoon.map((generalWebtoon, weeknum) =>
     generalWebtoon.concat(novelWeekdayWebtoon[weeknum]),
   );
-  fs.writeFileSync(
-    'data/kakao-weekday-webtoon.json',
-    JSON.stringify(weekdayWebtoon),
-  );
   const finishedWebtoon = generalFinishedWebtoon.concat(novelFinishedWebtoon);
-  fs.writeFileSync(
-    'data/kakao-finished-webtoon.json',
-    JSON.stringify(finishedWebtoon),
-  );
   console.log(`kakao crawler end (${new Date()}`);
   return { weekdayWebtoon, finishedWebtoon };
 }
