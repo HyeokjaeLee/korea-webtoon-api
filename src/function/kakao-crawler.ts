@@ -1,5 +1,4 @@
 import type { Webtoon, Additional } from '../types/webtoon';
-import * as fs from 'fs';
 import axios from 'axios';
 import * as _ from 'lodash';
 
@@ -14,14 +13,17 @@ interface KakaoWebtoon {
 }
 
 /**kakao Webtoon 기존 API의 정보를 조합해 표준화된 정보로 변환
- * @param dataArr kakao webtoon API 정보 배열
+ * @param webtoonDataArr kakao webtoon API 정보 배열
  * @param weeknum 웹툰의 요일(0~6) / 완결(7)
  * @returns 표준 웹툰 정보 배열
  * */
-function classify_webtoon(dataArr: KakaoWebtoon[], weeknum: number): Webtoon[] {
+function classify_webtoon(
+  webtoonDataArr: KakaoWebtoon[],
+  weeknum: number,
+): Webtoon[] {
   const kakao_webtoon_url = 'https://webtoon.kakao.com/content/';
-  return dataArr.map((data) => {
-    const { content, additional } = data;
+  return webtoonDataArr.map((webtoonData) => {
+    const { content, additional } = webtoonData;
     const authors = _.uniqBy(content.authors, 'name');
     const onlyAuthorIllustrator = authors.filter(
       (author) => author.type === 'AUTHOR' || author.type === 'ILLUSTRATOR',
