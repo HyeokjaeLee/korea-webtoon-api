@@ -61,7 +61,6 @@ export default async function kakaoPage_crawler() {
   console.log(`kakao-page crawler start (${new Date()})`);
   const weekdayWebtoon = [];
   for (let i = 0; i < 7; i++) {
-    console.log(i);
     weekdayWebtoon.push(await get_one_DayWebtoonData(i));
   }
   const finishedWebtoon = await get_one_DayWebtoonData(7);
