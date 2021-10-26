@@ -1,8 +1,6 @@
 import type { Webtoon } from '../types/webtoon';
 import axios from 'axios';
 import { load } from 'cheerio';
-
-import * as fs from 'fs';
 const load_$ = async (url: string) => {
   const html: { data: string } = await axios.get(url);
   return load(html.data);
@@ -43,9 +41,13 @@ async function get_webtoonData(
         isRest = detailInfo.includes('break');
         isUp = detailInfo.includes('up');
       }
+      const author = $(element)
+        .find('.author')
+        .text()
+        .replace(/, |\ \/ /g, ',');
       return {
         title: $(element).find('.title').text(),
-        author: $(element).find('.author').text(),
+        author: author,
         url: naver_webtoon_url + $(element).attr('href'),
         img: $(element).find('div.thumbnail > img').attr('src'),
         service: 'naver',
@@ -88,15 +90,7 @@ async function get_finishedWebtoon() {
 export default async function naver_crawler() {
   console.log(`naver crawler start (${new Date()})`);
   const weekdayWebtoon = await get_weekdayWebtoon();
-  fs.writeFileSync(
-    'data/naver-weekday-webtoon.json',
-    JSON.stringify(weekdayWebtoon),
-  );
   const finishedWebtoon = await get_finishedWebtoon();
-  fs.writeFileSync(
-    'data/naver-finished-webtoon.json',
-    JSON.stringify(finishedWebtoon),
-  );
   console.log(`naver crawler end (${new Date()}`);
   return { weekdayWebtoon, finishedWebtoon };
 }
