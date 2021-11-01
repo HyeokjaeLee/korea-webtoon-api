@@ -16,7 +16,6 @@ export class AppService {
     kakao: readJSON('kakao'),
     kakaoPage: readJSON('kakaoPage'),
   };
-  updatedTimeStamp: Date;
   private platformList = Object.keys(this.webtoon);
   constructor() {
     this.update_data();
@@ -34,8 +33,7 @@ export class AppService {
       fs.writeFileSync(`data/${key}.json`, JSON.stringify(this.webtoon[key]));
       console.log(`${key}.json save`);
     });
-    this.updatedTimeStamp = new Date();
-    console.log(`update end (${this.updatedTimeStamp})`);
+    console.log(`update end (${new Date()})`);
   }
   getAllWebtoon() {
     const weekWebtoon = [];

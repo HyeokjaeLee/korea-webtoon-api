@@ -62,14 +62,10 @@ export class KakaoPageController extends WebtoonController {
   }
 }
 
-@Controller()
+@Controller('all')
 export class RootController extends WebtoonController {
   constructor(private readonly appService: AppService) {
     super();
     this.platform = this.appService.getAllWebtoon();
-  }
-  @Get('updated')
-  updated() {
-    return this.appService.updatedTimeStamp;
   }
 }
