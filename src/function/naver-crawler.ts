@@ -1,4 +1,4 @@
-import type { Webtoon } from '../types/webtoon';
+import { Webtoon } from '../types/webtoon';
 import axios from 'axios';
 import { load } from 'cheerio';
 const load_$ = async (url: string) => {
@@ -51,7 +51,7 @@ async function get_webtoonData(
         url: naver_webtoon_url + $(element).attr('href'),
         img: $(element).find('div.thumbnail > img').attr('src'),
         service: 'naver',
-        weekday: weeknum,
+        week: weeknum,
         additional: {
           new: isNew,
           adult: isAdult,
@@ -63,12 +63,12 @@ async function get_webtoonData(
     .get();
 }
 
-async function get_weekdayWebtoon() {
-  const weekdayArr = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+async function get_weekWebtoon() {
+  const weekArr = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
   return await Promise.all(
-    weekdayArr.map(
-      async (weekday, weeknum) =>
-        await get_webtoonData('weekday', `week=${weekday}`, weeknum),
+    weekArr.map(
+      async (week, weeknum) =>
+        await get_webtoonData('weekday', `week=${week}`, weeknum),
     ),
   );
 }
@@ -88,9 +88,9 @@ async function get_finishedWebtoon() {
 }
 
 export default async function naver_crawler() {
-  console.log(`naver crawler start (${new Date()})`);
-  const weekdayWebtoon = await get_weekdayWebtoon();
+  console.log('naver crawler start');
+  const weekWebtoon = await get_weekWebtoon();
   const finishedWebtoon = await get_finishedWebtoon();
-  console.log(`naver crawler end (${new Date()}`);
-  return { weekdayWebtoon, finishedWebtoon };
+  console.log('naver crawler end');
+  return { weekWebtoon, finishedWebtoon };
 }

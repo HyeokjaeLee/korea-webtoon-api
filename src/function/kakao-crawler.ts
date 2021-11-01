@@ -1,4 +1,4 @@
-import type { Webtoon, Additional } from '../types/webtoon';
+import { Webtoon, Additional } from '../types/webtoon';
 import axios from 'axios';
 import * as _ from 'lodash';
 
@@ -35,7 +35,7 @@ function classify_webtoon(
       url: `${kakao_webtoon_url + content.seoId}/${content.id}`,
       img: `https://kr-a.kakaopagecdn.com/P/C/${content.id}/sharing/2x/eacb00ec-9034-42cb-a533-7c7690741113.jpg`,
       service: 'kakao',
-      weekday: weeknum,
+      week: weeknum,
       additional: {
         new: additional.new,
         rest: additional.rest,
@@ -47,7 +47,7 @@ function classify_webtoon(
 }
 
 const apiURL = 'https://gateway-kw.kakao.com/section/v1/';
-async function get_weekdayWebtoon(
+async function get_weekWebtoon(
   original: 'general' | 'novel',
 ): Promise<Webtoon[][]> {
   const { data }: any = await axios.get(`${apiURL}pages/${original}-weekdays`);
@@ -66,15 +66,15 @@ async function get_finishedWebtoon(
 }
 
 export default async function kakao_crawler() {
-  console.log(`kakao crawler start (${new Date()})`);
-  const generalWeekdayWebtoon = await get_weekdayWebtoon('general');
-  const novelWeekdayWebtoon = await get_weekdayWebtoon('novel');
+  console.log('kakao crawler start');
+  const generalWeekWebtoon = await get_weekWebtoon('general');
+  const novelWeekWebtoon = await get_weekWebtoon('novel');
   const generalFinishedWebtoon = await get_finishedWebtoon('channel');
   const novelFinishedWebtoon = await get_finishedWebtoon('novel');
-  const weekdayWebtoon = generalWeekdayWebtoon.map((generalWebtoon, weeknum) =>
-    generalWebtoon.concat(novelWeekdayWebtoon[weeknum]),
+  const weekWebtoon = generalWeekWebtoon.map((generalWebtoon, weeknum) =>
+    generalWebtoon.concat(novelWeekWebtoon[weeknum]),
   );
   const finishedWebtoon = generalFinishedWebtoon.concat(novelFinishedWebtoon);
-  console.log(`kakao crawler end (${new Date()}`);
-  return { weekdayWebtoon, finishedWebtoon };
+  console.log('kakao crawler end');
+  return { weekWebtoon, finishedWebtoon };
 }

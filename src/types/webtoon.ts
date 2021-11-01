@@ -11,7 +11,7 @@ export interface Webtoon {
   author: string;
   img: string;
   service: string;
-  weekday: number;
+  week: number;
   additional: Additional;
 }
 
@@ -26,4 +26,9 @@ export interface Additional {
   rest: boolean;
   up: boolean;
   adult: boolean;
+}
+
+export interface PlatformObject {
+  weekWebtoon: Webtoon[][];
+  finishedWebtoon: Webtoon[];
 }
