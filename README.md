@@ -36,7 +36,7 @@ Json 형식으로 제공됩니다.
 
 요청 가능한 `platform`은 다음과 같습니다.
 
-- `all` 모든 플랫폼의 웹툰
+- `all` 모든 플랫폼
 - `naver` 네이버웹툰
 - `kakao` 카카오웹툰
 - `kakao-page` 카카오페이지
@@ -47,8 +47,8 @@ Json 형식으로 제공됩니다.
 
 요청 가능한 `type`은 다음과 같습니다.
 
-- `week` 연재중인 웹툰 정보
-- `finished` 완결된 웹툰의 정보
+- `week` 연재중
+- `finished` 완결
 
 ### day
 
@@ -58,10 +58,10 @@ Json 형식으로 제공됩니다.
 
 요청 가능한 `day`는 다음과 같습니다.
 
-- `mon` 월요일 웹툰 정보
-- `tue` 화요일 웹툰 정보
-- `wed` 수요일 웹툰 정보
-- `thu` 목요일 웹툰 정보
-- `fri` 금요일 웹툰 정보
-- `sat` 토요일 웹툰 정보
-- `sun` 일요일 웹툰 정보
+- `mon` week=0
+- `tue` week=1
+- `wed` week=2
+- `thu` week=3
+- `fri` week=4
+- `sat` week=5
+- `sun` week=6
