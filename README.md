@@ -20,7 +20,7 @@ Json 형식으로 제공됩니다.
 
 | Method | Request URL                                                 | Format |
 | ------ | ----------------------------------------------------------- | ------ |
-| Get    | `https://korea-webtoon-api.herokuapp.com/{platform}/{type}` | JSON   |
+| Get    | [`https://korea-webtoon-api.herokuapp.com/{platform}/{type}`](https://korea-webtoon-api.herokuapp.com/all) | JSON   |
 
 ## URL Params
 
