@@ -16,52 +16,24 @@ Json 형식으로 제공됩니다.
 - 카카오웹툰
 - 카카오페이지
 
-## URL
+## API Basic information
 
-`https://korea-webtoon-api.herokuapp.com/{platform}/{type}`
-
-## Method
-
-`Get`
+| Method | Request URL                                                 | Format |
+| ------ | ----------------------------------------------------------- | ------ |
+| Get    | `https://korea-webtoon-api.herokuapp.com/{platform}/{type}` | JSON   |
 
 ## URL Params
 
-| Name       | Required | Type   | Description                  |
-| ---------- | -------- | ------ | ---------------------------- |
-| `platform` | True     | string | 요청할 웹툰의 플랫폼 입니다. |
-| `type`     | False    | string | 요청할 웹툰의 타입입니다.    |
-| `day`      | False    | string | 요청할 웹툰의 요일입니다.    |
+| Name       | Required | Type   | Description                                                                     |
+| ---------- | -------- | ------ | ------------------------------------------------------------------------------- |
+| `platform` | Y        | string | 요청할 웹툰의 플랫폼 입니다.<br/>요청 가능한 `platform`은 다음과 같습니다.<ul><li>`all` 모든 플랫폼</li><li>`naver` 네이버웹툰</li><li>`kakao` 카카오웹툰</li><li>`kakao-page` 카카오페이지</li></ul> |
+| `type`     | N        | string | 요청할 웹툰의 타입입니다.<br/>미입력시 모든 타입의 웹툰 정보를 요청합니다.<br/>요청 가능한 `type`은 다음과 같습니다.<ul><li>`week` 연재중</li><li>`finished` 완결</li></ul>|
 
-### platform
 
-요청 가능한 `platform`은 다음과 같습니다.
+# Request variable
+| Name       | Required | Type   | Description                                                                     |
+| ---------- | -------- | ------ | ------------------------------------------------------------------------------- |
+| `day`      | N        | string | 요청할 웹툰의 요일입니다.<br/>`type`이 `week`인 경우에만 가능합니다.<br/>미입력시 모든 요일의 웹툰 정보를 요청합니다.</br>요청 가능한 `day`는 다음과 같습니다.<ul><li>`mon` 월 week=0</li><li>`tue` 화 week=1</li><li>`wed` 수 week=2</li><li>`thu` 목 week=3</li><li>`fri` 금 week=4</li><li>`sat` 토 week=5</li><li>`sun` 일 week=6</li></ul>|
 
-- `all` 모든 플랫폼
-- `naver` 네이버웹툰
-- `kakao` 카카오웹툰
-- `kakao-page` 카카오페이지
 
-### type
 
-미입력시 모든 타입의 웹툰 정보를 요청합니다.
-
-요청 가능한 `type`은 다음과 같습니다.
-
-- `week` 연재중
-- `finished` 완결
-
-### day
-
-`type`이 `week`인 경우에만 가능합니다.
-
-미입력시 모든 요일의 웹툰 정보를 요청합니다.
-
-요청 가능한 `day`는 다음과 같습니다.
-
-- `mon` week=0
-- `tue` week=1
-- `wed` week=2
-- `thu` week=3
-- `fri` week=4
-- `sat` week=5
-- `sun` week=6
