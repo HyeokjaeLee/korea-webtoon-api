@@ -16,7 +16,7 @@ Json 형식으로 제공됩니다.
 - 카카오웹툰
 - 카카오페이지
 
-## API Request
+## ⬆️ API Request
 
 ### URL
 
@@ -38,7 +38,7 @@ Json 형식으로 제공됩니다.
 | `day`      | N        | string | 요청할 웹툰의 요일입니다.<br/>`type`이 `week`인 경우에만 가능합니다.<br/>미입력시 모든 요일의 웹툰 정보를 요청합니다.</br>요청 가능한 `day`는 다음과 같습니다.<ul><li>`mon` 월 week=0</li><li>`tue` 화 week=1</li><li>`wed` 수 week=2</li><li>`thu` 목 week=3</li><li>`fri` 금 week=4</li><li>`sat` 토 week=5</li><li>`sun` 일 week=6</li></ul>|
 
 
-## API Response
+## ⬇️ API Response
 
 ### Key
 
