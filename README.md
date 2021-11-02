@@ -69,8 +69,7 @@ Json 형식으로 제공됩니다.
 | adult | boolean | 19세 이상  |
 
 ### Response sample
-```json
-[
+```JSON
  {
     "title": "참교육",
     "author": "채용택,한가람",
@@ -83,36 +82,8 @@ Json 형식으로 제공됩니다.
       "adult": false,
       "rest": true,
       "up": false
-    },
-  {
-    "title": "하렘생존기",
-    "author": "오리발",
-    "url": "https://webtoon.kakao.com/content/하렘생존기/1776",
-    "img": "https://kr-a.kakaopagecdn.com/P/C/1776/sharing/2x/eacb00ec-9034-42cb-a533-7c7690741113.jpg",
-    "service": "kakao",
-    "week": 6,
-    "additional": {
-      "new": false,
-      "rest": false,
-      "up": true,
-      "adult": false
     }
-  },
-  {
-    "title": "늑대가 우는 약국",
-    "author": "김지숙,신록",
-    "url": "https://page.kakao.com/home?seriesId=53805174",
-    "img": "http://dn-img-page.kakao.com/download/resource?kid=YfXqz/hyORYYApnt/ZCwru3ueNDXqQnMt8SR0xk&filename=th2",
-    "service": "kakao-page",
-    "week": 7,
-    "additional": {
-      "new": false,
-      "rest": false,
-      "up": false,
-      "adult": false
-    }
-  }
-]
+ }
 ```
 
 ### Error
