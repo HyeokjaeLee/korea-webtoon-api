@@ -48,7 +48,7 @@ Json 형식으로 제공됩니다.
 | author | string | 작가 |
 | img | string | Thumbnail img URL |
 | service | string | 서비스 플랫폼 |
-| week | integer  | 요일 번호 0~6 (월~일)<br/>완결 7 |
+| week | integer  | 요일 번호 0 ~ 6 (월 ~ 일)<br/>완결 7 |
 | additional | object | 추가적인 정보 |
 | new | boolean | 신규 |
 | rest | boolean | 휴재 |
