@@ -2,9 +2,10 @@
 
 ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white)&nbsp;&nbsp;&nbsp;![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=flat-square&logo=NestJS&logoColor=white) ![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
 
-### ⚠️ Use Heroku to deploy
-해당 API는 Toy Projects를 위한 API로 Heroku 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요되며
-외부 정보를 불러오기 전까지 로컬 파일의 데이터를 제공합니다.
+ 
+| ⚠️ Use Heroku to deploy |
+| ----------------------- |
+| 해당 API는 Toy Projects를 위한 API로 Heroku 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요되며 외부 정보를 불러오기 전까지 로컬 파일의 데이터를 제공합니다. |
 
 ## 📝 About
 
