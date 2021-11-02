@@ -5,7 +5,7 @@
  
 | ⚠️ Use Heroku to deploy |
 | ----------------------- |
-| 해당 API는 Toy Projects를 위한 API로 Heroku 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요되며 외부 정보를 불러오기 전까지 로컬 파일의 데이터를 제공합니다. |
+| 해당 API는 Toy Projects를 위한 API로 Heroku 서버가 Sleep 상태일 경우 첫 요청시 **1분** 가량 소요되며<br/> 외부 정보를 불러오기 전까지 **로컬 파일의 데이터**를 제공합니다. |
 
 ## 📝 About
 
