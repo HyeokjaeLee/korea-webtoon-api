@@ -25,8 +25,16 @@ class WebtoonController {
 
   @Get('week')
   weekday(@Query('day') day: string) {
+    console.log(week[day]);
     if (!day) return this.combine_weekWebtoon();
-    else return this.platform.weekWebtoon[week[day]];
+    else if (0 <= week[day] && week[day] <= 6)
+      return this.platform.weekWebtoon[week[day]];
+    else
+      return {
+        statusCode: 400,
+        message: 'Invalid day value',
+        error: 'Not Found',
+      };
   }
   @Get('finished')
   finished() {
