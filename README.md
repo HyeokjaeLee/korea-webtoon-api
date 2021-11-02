@@ -111,7 +111,7 @@ Json 형식으로 제공됩니다.
       "up": false,
       "adult": false
     }
-  },
+  }
 ]
 ```
 
