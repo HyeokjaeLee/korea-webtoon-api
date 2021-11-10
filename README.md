@@ -9,9 +9,7 @@
 
 ## 📝 About
 
-여러 가지 한국 플랫폼의 웹툰에 대한 정보를 제공합니다.
-
-Json 형식으로 제공됩니다.
+여러 가지 플랫폼의 웹툰에 대한 정보를 제공합니다.
 
 현재 정보가 제공되는 웹툰 플랫폼은 다음과 같습니다.
 
@@ -21,74 +19,74 @@ Json 형식으로 제공됩니다.
 
 ## ⬆️ API Request
 
-### URL
+- ### URL
 
-| Method | Request URL | Format |
-|:------:|:-----------:|:------:|
-| Get | [`https://korea-webtoon-api.herokuapp.com/{platform}/{type}`](https://korea-webtoon-api.herokuapp.com/all) | JSON |
+  | Method | Request URL | Format |
+  |:------:|:-----------:|:------:|
+  | Get | [`https://korea-webtoon-api.herokuapp.com/{platform}/{type}`](https://korea-webtoon-api.herokuapp.com/all) | JSON |
 
-### URL Params
+- ### URL Params
 
-| Name       | Required | Type | Description |
-|:----------:|:--------:|:----:| ----------- |
-| `platform` | Y | string | 요청할 웹툰의 플랫폼 입니다.<br/>요청 가능한 `platform`은 다음과 같습니다.<ul><li>`all` 모든 플랫폼</li><li>`naver` 네이버웹툰</li><li>`kakao` 카카오웹툰</li><li>`kakao-page` 카카오페이지</li></ul> |
-| `type` | N | string | 요청할 웹툰의 타입입니다.<br/>미입력시 모든 타입의 웹툰 정보를 요청합니다.<br/>요청 가능한 `type`은 다음과 같습니다.<ul><li>`week` 연재중</li><li>`finished` 완결</li></ul> |
+  | Name       | Required | Type | Description |
+  |:----------:|:--------:|:----:| ----------- |
+  | `platform` | Y | string | 요청할 웹툰의 플랫폼 입니다.<br/>요청 가능한 `platform`은 다음과 같습니다.<ul><li>`all` 모든 플랫폼</li><li>`naver` 네이버웹툰</li><li>`kakao` 카카오웹툰</li><li>`kakao-page` 카카오페이지</li></ul> |
+  | `type` | N | string | 요청할 웹툰의 타입입니다.<br/>미입력시 모든 타입의 웹툰 정보를 요청합니다.<br/>요청 가능한 `type`은 다음과 같습니다.<ul><li>`week` 연재중</li><li>`finished` 완결</li></ul> |
 
 
-### Request variable
-| Name | Required | Type | Description |
-|:----:|:--------:|:----:| ----------- |
-| `day` | N | string | 요청할 웹툰의 요일입니다.<br/>`type`이 `week`인 경우에만 가능합니다.<br/>미입력시 모든 요일의 웹툰 정보를 요청합니다.</br>요청 가능한 `day`는 다음과 같습니다.<ul><li>`mon` 월 week=0</li><li>`tue` 화 week=1</li><li>`wed` 수 week=2</li><li>`thu` 목 week=3</li><li>`fri` 금 week=4</li><li>`sat` 토 week=5</li><li>`sun` 일 week=6</li></ul> |
+- ### Request variable
+  | Name | Required | Type | Description |
+  |:----:|:--------:|:----:| ----------- |
+  | `day` | N | string | 요청할 웹툰의 요일입니다.<br/>`type`이 `week`인 경우에만 가능합니다.<br/>미입력시 모든 요일의 웹툰 정보를 요청합니다.</br>요청 가능한 `day`는 다음과 같습니다.<ul><li>`mon` 월 week=0</li><li>`tue` 화 week=1</li><li>`wed` 수 week=2</li><li>`thu` 목 week=3</li><li>`fri` 금 week=4</li><li>`sat` 토 week=5</li><li>`sun` 일 week=6</li></ul> |
 
-### Request sample (Javascript)
-```javascript
-(async () => {
-  const res = await fetch("https://korea-webtoon-api.herokuapp.com/naver/week?day=mon", {
-      method: "GET",
-    }),
-    json = await res.json();
-  console.log(json);
-  return json;
-})();
-```
+- ### Request sample (Javascript)
+  ```javascript
+  (async () => {
+    const res = await fetch("https://korea-webtoon-api.herokuapp.com/naver/week?day=mon", {
+        method: "GET",
+      }),
+      json = await res.json();
+    console.log(json);
+    return json;
+  })();
+  ```
 ## ⬇️ API Response
 
-### Key
+- ### Key
 
-| name | type | Description |
-|:----:|:----:| ----------- |
-| title | string | 제목 |
-| author | string | 작가 |
-| img | string | Thumbnail img URL |
-| service | string | 서비스 플랫폼 |
-| week | integer  | 요일 번호 0 ~ 6 (월 ~ 일)<br/>완결 7 |
-| additional | object | 추가적인 정보 |
-| new | boolean | 신규 |
-| rest | boolean | 휴재 |
-| up | boolean | 새로운 회차가 업로드 |
-| adult | boolean | 19세 이상  |
+  | name | type | Description |
+  |:----:|:----:| ----------- |
+  | title | string | 제목 |
+  | author | string | 작가 |
+  | img | string | Thumbnail img URL |
+  | service | string | 서비스 플랫폼 |
+  | week | integer  | 요일 번호 0 ~ 6 (월 ~ 일)<br/>완결 7 |
+  | additional | object | 추가적인 정보 |
+  | new | boolean | 신규 |
+  | rest | boolean | 휴재 |
+  | up | boolean | 새로운 회차가 업로드 |
+  | adult | boolean | 19세 이상  |
 
-### Response sample
-```JSON
- {
-    "title": "참교육",
-    "author": "채용택,한가람",
-    "url": "https://m.comic.naver.com/webtoon/list?titleId=758037&week=mon",
-    "img": "https://image-comic.pstatic.net/webtoon/758037/thumbnail/thumbnail_IMAG19_67290a02-fe7f-448d-aed9-6ec88e558088.jpg",
-    "service": "naver",
-    "week": 0,
-    "additional": {
-      "new": false,
-      "adult": false,
-      "rest": true,
-      "up": false
-    }
- }
-```
+- ### Response sample
+  ```JSON
+  {
+      "title": "참교육",
+      "author": "채용택,한가람",
+      "url": "https://m.comic.naver.com/webtoon/list?titleId=758037&week=mon",
+      "img": "https://image-comic.pstatic.net/webtoon/758037/thumbnail/thumbnail_IMAG19_67290a02-fe7f-448d-aed9-6ec88e558088.jpg",
+      "service": "naver",
+      "week": 0,
+      "additional": {
+        "new": false,
+        "adult": false,
+        "rest": true,
+        "up": false
+      }
+  }
+  ```
 
-### Error
+- ### Error
 
-| statusCode | message | error |
-|:----------:|:-------:|:-----:|
-| 400 | Invalid day value | Not Found |
-| 404 | Cannot GET {path} | Not Found |
+  | statusCode | message | error |
+  |:----------:|:-------:|:-----:|
+  | 400 | Invalid day value | Not Found |
+  | 404 | Cannot GET {path} | Not Found |
