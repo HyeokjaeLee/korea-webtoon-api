@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import naver_crawler from './function/naver-crawler';
-import kakao_crawler from './function/kakao-crawler';
-import kakaoPage_crawler from './function/kakaoPage-crawler';
-import { Webtoon, PlatformObject } from './types/webtoon';
+import naver_crawler from 'function/naver-crawler';
+import kakao_crawler from 'function/kakao-crawler';
+import kakaoPage_crawler from 'function/kakaoPage-crawler';
 import * as fs from 'fs';
-import { platform } from 'os';
 
 const readJSON = (platform: string): PlatformObject =>
   JSON.parse(fs.readFileSync(`data/${platform}.json`, 'utf8'));
@@ -19,9 +17,10 @@ export class AppService {
   private platformList = Object.keys(this.webtoon);
   constructor() {
     this.update_data();
+    const ONE_HOUR = 1000 * 60 * 60;
     setInterval(() => {
       this.update_data();
-    }, 1000 * 60 * 60);
+    }, ONE_HOUR);
   }
   private async update_data() {
     console.log(`update start (${new Date()})`);
