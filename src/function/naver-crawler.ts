@@ -1,4 +1,3 @@
-import { Webtoon } from '../types/webtoon';
 import axios from 'axios';
 import { load } from 'cheerio';
 const load_$ = async (url: string) => {

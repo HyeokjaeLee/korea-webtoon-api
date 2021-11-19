@@ -6,9 +6,10 @@
  * @weekday 요일번호 (0:월, 1:화, 2:수, 3:목, 4:금, 5:토, 6:일, 7:완결)
  * @additional 추가정보
  */
-export interface Webtoon {
+interface Webtoon {
   title: string;
   author: string;
+  url: string;
   img: string;
   service: string;
   week: number;
@@ -21,14 +22,14 @@ export interface Webtoon {
  * @up 업데이트
  * @adult 성인작품
  */
-export interface Additional {
+interface Additional {
   new: boolean;
   rest: boolean;
   up: boolean;
   adult: boolean;
 }
 
-export interface PlatformObject {
+interface PlatformObject {
   weekWebtoon: Webtoon[][];
   finishedWebtoon: Webtoon[];
 }

@@ -1,6 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { AppService } from './app.service';
-import { PlatformObject, Webtoon } from './types/webtoon';
 
 enum week {
   'mon' = 0,
