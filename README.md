@@ -61,7 +61,7 @@
   | title | string | 제목 |
   | author | string | 작가 |
   | img | string | Thumbnail img URL |
-  | url | string | 웹툰 페이지 url |
+  | url | string | 웹툰 페이지 URL |
   | service | string | 서비스 플랫폼 |
   | week | integer  | 요일 번호 0 ~ 6 (월 ~ 일)<br/>완결 7 |
   | additional | object | 추가적인 정보 |
