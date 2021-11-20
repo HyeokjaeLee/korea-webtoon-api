@@ -7,6 +7,7 @@ interface KakaoWebtoon {
     id: number;
     seoId: string;
     authors: { name: string; type: 'AUTHOR' | 'ILLUSTRATOR'; order: number }[];
+    featuredCharacterImageA: string;
   };
   additional: Additional;
 }
@@ -32,7 +33,7 @@ function classify_webtoon(
       title: content.title,
       author: authorsName.join(','),
       url: `${kakao_webtoon_url + content.seoId}/${content.id}`,
-      img: `https://kr-a.kakaopagecdn.com/P/C/${content.id}/sharing/2x/eacb00ec-9034-42cb-a533-7c7690741113.jpg`,
+      img: `${content.featuredCharacterImageA}.png`,
       service: 'kakao',
       week: weeknum,
       additional: {
