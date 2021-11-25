@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
-const _ = require("lodash");
+const lodash_1 = require("lodash");
 function classify_webtoon(webtoonDataArr, weeknum) {
     const kakao_webtoon_url = 'https://webtoon.kakao.com/content/';
     return webtoonDataArr.map((webtoonData) => {
         const { content, additional } = webtoonData;
-        const authors = _.uniqBy(content.authors, 'name');
+        const authors = (0, lodash_1.uniqBy)(content.authors, 'name');
         const onlyAuthorIllustrator = authors.filter((author) => author.type === 'AUTHOR' || author.type === 'ILLUSTRATOR');
         const authorsName = onlyAuthorIllustrator.map((author) => author.name);
         return {
