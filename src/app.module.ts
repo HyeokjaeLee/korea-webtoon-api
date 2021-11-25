@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import {
-  RootController,
+  SearchController,
+  AllPlatformController,
   KakaoController,
   KakaoPageController,
   NaverController,
@@ -10,7 +11,8 @@ import { AppService } from './app.service';
 @Module({
   imports: [],
   controllers: [
-    RootController,
+    SearchController,
+    AllPlatformController,
     KakaoController,
     KakaoPageController,
     NaverController,

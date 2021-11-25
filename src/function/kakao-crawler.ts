@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as _ from 'lodash';
+import { uniqBy } from 'lodash';
 
 interface KakaoWebtoon {
   content: {
@@ -24,7 +24,7 @@ function classify_webtoon(
   const kakao_webtoon_url = 'https://webtoon.kakao.com/content/';
   return webtoonDataArr.map((webtoonData) => {
     const { content, additional } = webtoonData;
-    const authors = _.uniqBy(content.authors, 'name');
+    const authors = uniqBy(content.authors, 'name');
     const onlyAuthorIllustrator = authors.filter(
       (author) => author.type === 'AUTHOR' || author.type === 'ILLUSTRATOR',
     );

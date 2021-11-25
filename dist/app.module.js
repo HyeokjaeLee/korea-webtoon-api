@@ -16,7 +16,8 @@ AppModule = __decorate([
     (0, common_1.Module)({
         imports: [],
         controllers: [
-            app_controller_1.RootController,
+            app_controller_1.SearchController,
+            app_controller_1.AllPlatformController,
             app_controller_1.KakaoController,
             app_controller_1.KakaoPageController,
             app_controller_1.NaverController,
