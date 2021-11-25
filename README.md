@@ -26,7 +26,7 @@
 
   | Method | Request URL | Format |
   |:------:|:-----------:|:------:|
-  | Get | [`https://korea-webtoon-api.herokuapp.com/{platform}/{type}`](https://korea-webtoon-api.herokuapp.com/all) | JSON |
+  | Get | [`https://korea-webtoon-api.herokuapp.com/{platform}/{type}`](https://korea-webtoon-api.herokuapp.com/all/week?day=fri) | JSON |
 
 ### 📩 URL Params
 
@@ -40,17 +40,22 @@
   | Name | Required | Type | Description |
   |:----:|:--------:|:----:| ----------- |
   | `day` | N | string | 요청할 웹툰의 요일입니다.<br/>`type`이 `week`인 경우에만 가능합니다.<br/>미입력시 모든 요일의 웹툰 정보를 요청합니다.</br>요청 가능한 `day`는 다음과 같습니다.<ul><li>`mon` 월 week=0</li><li>`tue` 화 week=1</li><li>`wed` 수 week=2</li><li>`thu` 목 week=3</li><li>`fri` 금 week=4</li><li>`sat` 토 week=5</li><li>`sun` 일 week=6</li></ul> |
+  | `search` | Y | string | 검색할 키워드입니다.<br/> Root endpoint에서만 가능합니다.<br/> 웹툰의 작가, 제목 검색을 지원합니다. |
 
 ### 🔍 Request sample (Javascript)
   ```javascript
-  (async () => {
-    const res = await fetch("https://korea-webtoon-api.herokuapp.com/naver/week?day=mon", {
-        method: "GET",
-      }),
-      json = await res.json();
+  async function get_webtoonData(params){
+    const res = await fetch(`https://korea-webtoon-api.herokuapp.com/${params}`, {
+      method: "GET",
+    }),
+    json = await res.json();
     console.log(json);
     return json;
-  })();
+  }
+
+  const naverMon = get_webtoonData("naver/week?day=mon");
+  const juhominWebtoon = get_webtoonData("?search=주호민");
+  
   ```
 ## API Response
 
@@ -94,3 +99,6 @@
   |:----------:|:-------:|:-----:|
   | 400 | Invalid day value | Not Found |
   | 404 | Cannot GET {path} | Not Found |
+  | 404 | No webtoon found | Not Found |
+  | 500 | Required request variable does not exist or request variable name is invalid | Error |
+  
