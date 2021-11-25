@@ -7,6 +7,7 @@ declare class WebtoonController {
         message: string;
         error: string;
     };
+    search(keyword: string): Webtoon[];
     finished(): Webtoon[];
     all(): Webtoon[];
 }

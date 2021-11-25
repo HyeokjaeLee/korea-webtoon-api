@@ -35,6 +35,16 @@ class WebtoonController {
         error: 'Not Found',
       };
   }
+  @Get('search')
+  search(@Query('keyword') keyword: string) {
+    const allWebtoon = this.all();
+    const filteredResult = allWebtoon.filter((webtoon) => {
+      const str4search =
+        webtoon.title.toLowerCase() + webtoon.author.toLowerCase();
+      return str4search.includes(keyword);
+    });
+    return filteredResult;
+  }
   @Get('finished')
   finished() {
     return this.platform.finishedWebtoon;

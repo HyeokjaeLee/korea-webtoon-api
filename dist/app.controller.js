@@ -46,6 +46,14 @@ class WebtoonController {
                 error: 'Not Found',
             };
     }
+    search(keyword) {
+        const allWebtoon = this.all();
+        const filteredResult = allWebtoon.filter((webtoon) => {
+            const str4search = webtoon.title.toLowerCase() + webtoon.author.toLowerCase();
+            return str4search.includes(keyword);
+        });
+        return filteredResult;
+    }
     finished() {
         return this.platform.finishedWebtoon;
     }
@@ -60,6 +68,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], WebtoonController.prototype, "weekday", null);
+__decorate([
+    (0, common_1.Get)('search'),
+    __param(0, (0, common_1.Query)('keyword')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], WebtoonController.prototype, "search", null);
 __decorate([
     (0, common_1.Get)('finished'),
     __metadata("design:type", Function),
