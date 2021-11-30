@@ -5,64 +5,71 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
-const naver_crawler_1 = require("./function/naver-crawler");
-const kakao_crawler_1 = require("./function/kakao-crawler");
-const kakaoPage_crawler_1 = require("./function/kakaoPage-crawler");
-const fs = require("fs");
-const readJSON = (platform) => JSON.parse(fs.readFileSync(`data/${platform}.json`, 'utf8'));
+const lodash_1 = require("lodash");
+var week;
+(function (week) {
+    week[week["mon"] = 0] = "mon";
+    week[week["tue"] = 1] = "tue";
+    week[week["wed"] = 2] = "wed";
+    week[week["thu"] = 3] = "thu";
+    week[week["fri"] = 4] = "fri";
+    week[week["sat"] = 5] = "sat";
+    week[week["sun"] = 6] = "sun";
+})(week || (week = {}));
 let AppService = class AppService {
-    constructor() {
-        this.webtoon = {
-            naver: readJSON('naver'),
-            kakao: readJSON('kakao'),
-            kakaoPage: readJSON('kakaoPage'),
-        };
-        this.platformList = Object.keys(this.webtoon);
-        this.update_data();
-        const ONE_HOUR = 1000 * 60 * 60;
-        setInterval(() => {
-            this.update_data();
-        }, ONE_HOUR);
-    }
-    async update_data() {
-        console.log(`update start (${new Date()})`);
-        this.webtoon.naver = await (0, naver_crawler_1.default)();
-        this.webtoon.kakao = await (0, kakao_crawler_1.default)();
-        this.webtoon.kakaoPage = await (0, kakaoPage_crawler_1.default)();
-        this.platformList.forEach((key) => {
-            fs.writeFileSync(`data/${key}.json`, JSON.stringify(this.webtoon[key]));
-            console.log(`${key}.json save`);
+    combine_weekWebtoon(weekWebtoon) {
+        const combinedWeekWebtoon = [];
+        weekWebtoon.forEach((webtoon) => {
+            combinedWeekWebtoon.push(...webtoon);
         });
-        console.log(`update end (${new Date()})`);
+        return combinedWeekWebtoon;
     }
-    getAllWebtoon() {
-        const weekWebtoon = [];
-        for (let i = 0; i < 7; i++) {
-            const oneDayWebtoon = [];
-            this.platformList.forEach((platform) => {
-                oneDayWebtoon.push(...this.webtoon[platform].weekWebtoon[i]);
-            });
-            weekWebtoon.push(oneDayWebtoon);
-        }
-        const finishedWebtoon = [];
-        this.platformList.forEach((platform) => {
-            finishedWebtoon.push(...this.webtoon[platform].finishedWebtoon);
+    weekday(weekWebtoon, day) {
+        if (!day)
+            return this.combine_weekWebtoon(weekWebtoon);
+        if (0 <= week[day] && week[day] <= 6)
+            return weekWebtoon[week[day]];
+        else
+            return {
+                statusCode: 400,
+                message: 'Invalid day value',
+                error: 'Not Found',
+            };
+    }
+    all(platformObject) {
+        const combinedWeekWebtoon = this.combine_weekWebtoon(platformObject.weekWebtoon);
+        return platformObject.finishedWebtoon.concat(combinedWeekWebtoon);
+    }
+    search(platformObject, search) {
+        const searchResult = [];
+        const allWebtoon = this.all(platformObject);
+        if (!search)
+            return {
+                statusCode: 500,
+                message: 'Required request variable does not exist or request variable name is invalid',
+                error: 'Error',
+            };
+        const filteredWebtoon = allWebtoon.filter((webtoon) => {
+            const str4search = (webtoon.title.toLowerCase() + webtoon.author.toLowerCase()).replace(/\s/g, '');
+            return str4search.includes(search);
         });
-        return {
-            weekWebtoon,
-            finishedWebtoon,
-        };
+        if (filteredWebtoon.length === 0)
+            return {
+                statusCode: 404,
+                message: 'No webtoon found',
+                error: 'Not Found',
+            };
+        return (0, lodash_1.uniqBy)(filteredWebtoon, (e) => e.title + e.author).map((webtoon) => {
+            delete webtoon.week;
+            return webtoon;
+        });
     }
 };
 AppService = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [])
+    (0, common_1.Injectable)()
 ], AppService);
 exports.AppService = AppService;
 //# sourceMappingURL=app.service.js.map

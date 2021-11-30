@@ -1,57 +1,70 @@
 import { Injectable } from '@nestjs/common';
-import naver_crawler from 'function/naver-crawler';
-import kakao_crawler from 'function/kakao-crawler';
-import kakaoPage_crawler from 'function/kakaoPage-crawler';
-import * as fs from 'fs';
+import { uniqBy } from 'lodash';
 
-const readJSON = (platform: string): PlatformObject =>
-  JSON.parse(fs.readFileSync(`data/${platform}.json`, 'utf8'));
+enum week {
+  'mon' = 0,
+  'tue' = 1,
+  'wed' = 2,
+  'thu' = 3,
+  'fri' = 4,
+  'sat' = 5,
+  'sun' = 6,
+}
 
 @Injectable()
 export class AppService {
-  webtoon = {
-    naver: readJSON('naver'),
-    kakao: readJSON('kakao'),
-    kakaoPage: readJSON('kakaoPage'),
-  };
-  private platformList = Object.keys(this.webtoon);
-  constructor() {
-    this.update_data();
-    const ONE_HOUR = 1000 * 60 * 60;
-    setInterval(() => {
-      this.update_data();
-    }, ONE_HOUR);
-  }
-  private async update_data() {
-    console.log(`update start (${new Date()})`);
-    this.webtoon.naver = await naver_crawler();
-    this.webtoon.kakao = await kakao_crawler();
-    this.webtoon.kakaoPage = await kakaoPage_crawler();
-    //json 파일 업데이트
-    this.platformList.forEach((key) => {
-      fs.writeFileSync(`data/${key}.json`, JSON.stringify(this.webtoon[key]));
-      console.log(`${key}.json save`);
+  private combine_weekWebtoon(weekWebtoon: Webtoon[][]) {
+    const combinedWeekWebtoon: Webtoon[] = [];
+    weekWebtoon.forEach((webtoon) => {
+      combinedWeekWebtoon.push(...webtoon);
     });
-    console.log(`update end (${new Date()})`);
+    return combinedWeekWebtoon;
   }
-  getAllWebtoon() {
-    const weekWebtoon = [];
-    for (let i = 0; i < 7; i++) {
-      const oneDayWebtoon: Webtoon[] = [];
-      this.platformList.forEach((platform) => {
-        oneDayWebtoon.push(...this.webtoon[platform].weekWebtoon[i]);
-      });
-      weekWebtoon.push(oneDayWebtoon);
-    }
 
-    const finishedWebtoon = [];
-    this.platformList.forEach((platform) => {
-      finishedWebtoon.push(...this.webtoon[platform].finishedWebtoon);
+  weekday(weekWebtoon: Webtoon[][], day: string | undefined) {
+    if (!day) return this.combine_weekWebtoon(weekWebtoon);
+    if (0 <= week[day] && week[day] <= 6) return weekWebtoon[week[day]];
+    else
+      return {
+        statusCode: 400,
+        message: 'Invalid day value',
+        error: 'Not Found',
+      };
+  }
+
+  all(platformObject: PlatformObject) {
+    const combinedWeekWebtoon = this.combine_weekWebtoon(
+      platformObject.weekWebtoon,
+    );
+    return platformObject.finishedWebtoon.concat(combinedWeekWebtoon);
+  }
+
+  search(platformObject: PlatformObject, search: string) {
+    const searchResult: Webtoon[] = [];
+    const allWebtoon = this.all(platformObject);
+    if (!search)
+      return {
+        statusCode: 500,
+        message:
+          'Required request variable does not exist or request variable name is invalid',
+        error: 'Error',
+      };
+    const filteredWebtoon = allWebtoon.filter((webtoon) => {
+      const str4search = (
+        webtoon.title.toLowerCase() + webtoon.author.toLowerCase()
+      ).replace(/\s/g, '');
+      return str4search.includes(search);
     });
+    if (filteredWebtoon.length === 0)
+      return {
+        statusCode: 404,
+        message: 'No webtoon found',
+        error: 'Not Found',
+      };
 
-    return {
-      weekWebtoon,
-      finishedWebtoon,
-    };
+    return uniqBy(filteredWebtoon, (e) => e.title + e.author).map((webtoon) => {
+      delete webtoon.week;
+      return webtoon;
+    });
   }
 }

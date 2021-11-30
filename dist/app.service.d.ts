@@ -1,14 +1,14 @@
 export declare class AppService {
-    webtoon: {
-        naver: PlatformObject;
-        kakao: PlatformObject;
-        kakaoPage: PlatformObject;
+    private combine_weekWebtoon;
+    weekday(weekWebtoon: Webtoon[][], day: string | undefined): Webtoon[] | {
+        statusCode: number;
+        message: string;
+        error: string;
     };
-    private platformList;
-    constructor();
-    private update_data;
-    getAllWebtoon(): {
-        weekWebtoon: any[];
-        finishedWebtoon: any[];
+    all(platformObject: PlatformObject): Webtoon[];
+    search(platformObject: PlatformObject, search: string): Webtoon[] | {
+        statusCode: number;
+        message: string;
+        error: string;
     };
 }

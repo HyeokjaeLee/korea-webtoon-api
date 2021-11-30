@@ -15,50 +15,49 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AllPlatformController = exports.KakaoPageController = exports.KakaoController = exports.NaverController = exports.SearchController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
-const lodash_1 = require("lodash");
-var week;
-(function (week) {
-    week[week["mon"] = 0] = "mon";
-    week[week["tue"] = 1] = "tue";
-    week[week["wed"] = 2] = "wed";
-    week[week["thu"] = 3] = "thu";
-    week[week["fri"] = 4] = "fri";
-    week[week["sat"] = 5] = "sat";
-    week[week["sun"] = 6] = "sun";
-})(week || (week = {}));
-function combine_weekWebtoon(weekWebtoon) {
-    const combinedWeekWebtoon = [];
-    weekWebtoon.forEach((webtoon) => {
-        combinedWeekWebtoon.push(...webtoon);
-    });
-    return combinedWeekWebtoon;
-}
+const naver_crawler_1 = require("./function/naver-crawler");
+const kakao_crawler_1 = require("./function/kakao-crawler");
+const kakaoPage_crawler_1 = require("./function/kakaoPage-crawler");
+const fs = require("fs");
+let webtoonData = add_combinedData(get_localData());
+const ONE_HOUR = 1000 * 60 * 60;
+update();
+setInterval(() => {
+    update();
+}, ONE_HOUR);
+let SearchController = class SearchController {
+    constructor(appService) {
+        this.appService = appService;
+    }
+    search(search) {
+        return this.appService.search(webtoonData.all, search);
+    }
+};
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)('search')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], SearchController.prototype, "search", null);
+SearchController = __decorate([
+    (0, common_1.Controller)(),
+    __metadata("design:paramtypes", [app_service_1.AppService])
+], SearchController);
+exports.SearchController = SearchController;
 class WebtoonController {
-    constructor(platform) {
+    constructor(appService, platform) {
+        this.appService = appService;
         this.platform = platform;
-        this.combined_weekWebtoon = combine_weekWebtoon(this.platform.weekWebtoon);
-        this.allWebtoon = this.combined_weekWebtoon.concat(this.platform.finishedWebtoon);
     }
     weekday(day) {
-        if (!day)
-            return this.combined_weekWebtoon;
-        else if (0 <= week[day] && week[day] <= 6)
-            return this.platform.weekWebtoon[week[day]];
-        else
-            return {
-                statusCode: 400,
-                message: 'Invalid day value',
-                error: 'Not Found',
-            };
+        return this.appService.weekday(webtoonData[this.platform].weekWebtoon, day);
     }
     finished() {
-        return this.platform.finishedWebtoon;
+        return webtoonData[this.platform].finishedWebtoon;
     }
     all() {
-        return this.allWebtoon;
-    }
-    test() {
-        return this.platform;
+        return this.appService.all(webtoonData[this.platform]);
     }
 }
 __decorate([
@@ -75,64 +74,15 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WebtoonController.prototype, "finished", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('all'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], WebtoonController.prototype, "all", null);
-__decorate([
-    (0, common_1.Get)('test'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], WebtoonController.prototype, "test", null);
-let SearchController = class SearchController {
-    constructor(appService) {
-        this.appService = appService;
-        const platform = this.appService.getAllWebtoon();
-        const combined_weekWebtoon = combine_weekWebtoon(platform.weekWebtoon);
-        this.allWebtoon = combined_weekWebtoon.concat(platform.finishedWebtoon);
-    }
-    search(search) {
-        if (!search)
-            return {
-                statusCode: 500,
-                message: 'Required request variable does not exist or request variable name is invalid',
-                error: 'Error',
-            };
-        search = search.toLowerCase().replace(/\s/g, '');
-        const filteredWebtoon = this.allWebtoon.filter((webtoon) => {
-            const str4search = (webtoon.title.toLowerCase() + webtoon.author.toLowerCase()).replace(/\s/g, '');
-            return str4search.includes(search);
-        });
-        if (filteredWebtoon.length === 0)
-            return {
-                statusCode: 404,
-                message: 'No webtoon found',
-                error: 'Not Found',
-            };
-        return (0, lodash_1.uniqBy)(filteredWebtoon, (e) => e.title + e.author).map((webtoon) => {
-            delete webtoon.week;
-            return webtoon;
-        });
-    }
-};
-__decorate([
-    (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('search')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], SearchController.prototype, "search", null);
-SearchController = __decorate([
-    (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [app_service_1.AppService])
-], SearchController);
-exports.SearchController = SearchController;
 let NaverController = class NaverController extends WebtoonController {
-    constructor(appService) {
-        super(appService.webtoon.naver);
-        this.appService = appService;
+    constructor(_appService) {
+        super(_appService, 'naver');
+        this._appService = _appService;
     }
 };
 NaverController = __decorate([
@@ -141,9 +91,9 @@ NaverController = __decorate([
 ], NaverController);
 exports.NaverController = NaverController;
 let KakaoController = class KakaoController extends WebtoonController {
-    constructor(appService) {
-        super(appService.webtoon.kakao);
-        this.appService = appService;
+    constructor(_appService) {
+        super(_appService, 'kakao');
+        this._appService = _appService;
     }
 };
 KakaoController = __decorate([
@@ -152,9 +102,9 @@ KakaoController = __decorate([
 ], KakaoController);
 exports.KakaoController = KakaoController;
 let KakaoPageController = class KakaoPageController extends WebtoonController {
-    constructor(appService) {
-        super(appService.webtoon.kakaoPage);
-        this.appService = appService;
+    constructor(_appService) {
+        super(_appService, 'kakaoPage');
+        this._appService = _appService;
     }
 };
 KakaoPageController = __decorate([
@@ -163,9 +113,9 @@ KakaoPageController = __decorate([
 ], KakaoPageController);
 exports.KakaoPageController = KakaoPageController;
 let AllPlatformController = class AllPlatformController extends WebtoonController {
-    constructor(appService) {
-        super(appService.getAllWebtoon());
-        this.appService = appService;
+    constructor(_appService) {
+        super(_appService, 'all');
+        this._appService = _appService;
     }
 };
 AllPlatformController = __decorate([
@@ -173,4 +123,48 @@ AllPlatformController = __decorate([
     __metadata("design:paramtypes", [app_service_1.AppService])
 ], AllPlatformController);
 exports.AllPlatformController = AllPlatformController;
+function get_localData() {
+    const readJSON = (platform) => JSON.parse(fs.readFileSync(`data/${platform}.json`, 'utf8'));
+    return {
+        naver: readJSON('naver'),
+        kakao: readJSON('kakao'),
+        kakaoPage: readJSON('kakaoPage'),
+    };
+}
+async function update() {
+    const externalData = await get_externalData();
+    const platformList = Object.keys(externalData);
+    platformList.forEach((key) => {
+        fs.writeFileSync(`data/${key}.json`, JSON.stringify(externalData[key]));
+        console.log(`${key}.json save`);
+    });
+    webtoonData = add_combinedData(externalData);
+    console.log(`update end (${new Date()})`);
+}
+async function get_externalData() {
+    return {
+        naver: await (0, naver_crawler_1.default)(),
+        kakao: await (0, kakao_crawler_1.default)(),
+        kakaoPage: await (0, kakaoPage_crawler_1.default)(),
+    };
+}
+function add_combinedData(platformObj) {
+    const platformList = Object.keys(platformObj);
+    let weekWebtoonArr = [[], [], [], [], [], [], []];
+    platformList.forEach((platform) => {
+        platformObj[platform].weekWebtoon.forEach((_weekWebtoon, weekNum) => {
+            weekWebtoonArr[weekNum].push(..._weekWebtoon);
+        });
+    });
+    let finishedWebtoon = [];
+    platformList.forEach((platform) => {
+        finishedWebtoon.push(...platformObj[platform].finishedWebtoon);
+    });
+    const all = {
+        weekWebtoon: weekWebtoonArr,
+        finishedWebtoon,
+    };
+    platformObj.all = all;
+    return platformObj;
+}
 //# sourceMappingURL=app.controller.js.map

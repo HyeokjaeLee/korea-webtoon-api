@@ -1,127 +1,133 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { AppService } from './app.service';
-import { uniqBy } from 'lodash';
+import naver_crawler from 'function/naver-crawler';
+import kakao_crawler from 'function/kakao-crawler';
+import kakaoPage_crawler from 'function/kakaoPage-crawler';
+import * as fs from 'fs';
 
-enum week {
-  'mon' = 0,
-  'tue' = 1,
-  'wed' = 2,
-  'thu' = 3,
-  'fri' = 4,
-  'sat' = 5,
-  'sun' = 6,
-}
+let webtoonData = add_combinedData(get_localData());
 
-function combine_weekWebtoon(weekWebtoon: Webtoon[][]) {
-  const combinedWeekWebtoon: Webtoon[] = [];
-  weekWebtoon.forEach((webtoon) => {
-    combinedWeekWebtoon.push(...webtoon);
-  });
-  return combinedWeekWebtoon;
+const ONE_HOUR = 1000 * 60 * 60;
+update();
+setInterval(() => {
+  update();
+}, ONE_HOUR);
+
+@Controller()
+export class SearchController {
+  constructor(private readonly appService: AppService) {}
+  @Get()
+  search(@Query('search') search: string) {
+    return this.appService.search(webtoonData.all, search);
+  }
 }
 
 class WebtoonController {
-  platform: PlatformObject;
-  combined_weekWebtoon: Webtoon[];
-  allWebtoon: Webtoon[];
-  constructor(platform: PlatformObject) {
+  constructor(private readonly appService: AppService, platform: string) {
     this.platform = platform;
-    this.combined_weekWebtoon = combine_weekWebtoon(this.platform.weekWebtoon);
-    this.allWebtoon = this.combined_weekWebtoon.concat(
-      this.platform.finishedWebtoon,
-    );
   }
+  platform: string;
   @Get('week')
   weekday(@Query('day') day: string) {
-    if (!day) return this.combined_weekWebtoon;
-    else if (0 <= week[day] && week[day] <= 6)
-      return this.platform.weekWebtoon[week[day]];
-    else
-      return {
-        statusCode: 400,
-        message: 'Invalid day value',
-        error: 'Not Found',
-      };
+    return this.appService.weekday(webtoonData[this.platform].weekWebtoon, day);
   }
 
   @Get('finished')
   finished() {
-    return this.platform.finishedWebtoon;
+    return webtoonData[this.platform].finishedWebtoon;
   }
-  @Get()
+
+  @Get('all')
   all() {
-    return this.allWebtoon;
-  }
-  @Get('test')
-  test() {
-    return this.platform;
-  }
-}
-
-@Controller()
-export class SearchController {
-  allWebtoon: Webtoon[];
-  constructor(private readonly appService: AppService) {
-    const platform = this.appService.getAllWebtoon();
-    const combined_weekWebtoon = combine_weekWebtoon(platform.weekWebtoon);
-    this.allWebtoon = combined_weekWebtoon.concat(platform.finishedWebtoon);
-  }
-  @Get()
-  search(@Query('search') search: string) {
-    if (!search)
-      return {
-        statusCode: 500,
-        message:
-          'Required request variable does not exist or request variable name is invalid',
-        error: 'Error',
-      };
-    search = search.toLowerCase().replace(/\s/g, '');
-
-    const filteredWebtoon = this.allWebtoon.filter((webtoon) => {
-      const str4search = (
-        webtoon.title.toLowerCase() + webtoon.author.toLowerCase()
-      ).replace(/\s/g, '');
-      return str4search.includes(search);
-    });
-
-    if (filteredWebtoon.length === 0)
-      return {
-        statusCode: 404,
-        message: 'No webtoon found',
-        error: 'Not Found',
-      };
-
-    return uniqBy(filteredWebtoon, (e) => e.title + e.author).map((webtoon) => {
-      delete webtoon.week;
-      return webtoon;
-    });
+    return this.appService.all(webtoonData[this.platform]);
   }
 }
 
 @Controller('naver')
 export class NaverController extends WebtoonController {
-  constructor(private readonly appService: AppService) {
-    super(appService.webtoon.naver);
+  constructor(private readonly _appService: AppService) {
+    super(_appService, 'naver');
   }
 }
 
 @Controller('kakao')
 export class KakaoController extends WebtoonController {
-  constructor(private readonly appService: AppService) {
-    super(appService.webtoon.kakao);
+  constructor(private readonly _appService: AppService) {
+    super(_appService, 'kakao');
   }
 }
 
 @Controller('kakao-page')
 export class KakaoPageController extends WebtoonController {
-  constructor(private readonly appService: AppService) {
-    super(appService.webtoon.kakaoPage);
+  constructor(private readonly _appService: AppService) {
+    super(_appService, 'kakaoPage');
   }
 }
 
 @Controller('all')
 export class AllPlatformController extends WebtoonController {
-  constructor(private readonly appService: AppService) {
-    super(appService.getAllWebtoon());
+  constructor(private readonly _appService: AppService) {
+    super(_appService, 'all');
   }
+}
+
+function get_localData() {
+  const readJSON = (platform: string): PlatformObject =>
+    JSON.parse(fs.readFileSync(`data/${platform}.json`, 'utf8'));
+  return {
+    naver: readJSON('naver'),
+    kakao: readJSON('kakao'),
+    kakaoPage: readJSON('kakaoPage'),
+  };
+}
+
+async function update() {
+  const externalData = await get_externalData();
+  const platformList = Object.keys(externalData);
+  platformList.forEach((key) => {
+    fs.writeFileSync(`data/${key}.json`, JSON.stringify(externalData[key]));
+    console.log(`${key}.json save`);
+  });
+  webtoonData = add_combinedData(externalData);
+  console.log(`update end (${new Date()})`);
+}
+
+async function get_externalData() {
+  return {
+    naver: await naver_crawler(),
+    kakao: await kakao_crawler(),
+    kakaoPage: await kakaoPage_crawler(),
+  };
+}
+
+function add_combinedData(platformObj: {
+  naver: PlatformObject;
+  kakao: PlatformObject;
+  kakaoPage: PlatformObject;
+  all?: PlatformObject;
+}) {
+  const platformList = Object.keys(platformObj);
+  let weekWebtoonArr: Webtoon[][] = [[], [], [], [], [], [], []];
+  platformList.forEach((platform) => {
+    platformObj[platform].weekWebtoon.forEach(
+      (_weekWebtoon: Webtoon[], weekNum: number) => {
+        weekWebtoonArr[weekNum].push(..._weekWebtoon);
+      },
+    );
+  });
+  let finishedWebtoon: Webtoon[] = [];
+  platformList.forEach((platform) => {
+    finishedWebtoon.push(...platformObj[platform].finishedWebtoon);
+  });
+  const all: PlatformObject = {
+    weekWebtoon: weekWebtoonArr,
+    finishedWebtoon,
+  };
+  platformObj.all = all;
+  return platformObj as {
+    naver: PlatformObject;
+    kakao: PlatformObject;
+    kakaoPage: PlatformObject;
+    all: PlatformObject;
+  };
 }
