@@ -4,6 +4,7 @@ import naver_crawler from 'function/naver-crawler';
 import kakao_crawler from 'function/kakao-crawler';
 import kakaoPage_crawler from 'function/kakaoPage-crawler';
 import * as fs from 'fs';
+import { sortBy } from 'lodash';
 
 let webtoonData = add_combinedData(get_localData());
 
@@ -115,10 +116,14 @@ function add_combinedData(platformObj: {
       },
     );
   });
+  weekWebtoonArr = weekWebtoonArr.map((weekWebtoon) =>
+    sortBy(weekWebtoon, 'title'),
+  );
   let finishedWebtoon: Webtoon[] = [];
   platformList.forEach((platform) => {
     finishedWebtoon.push(...platformObj[platform].finishedWebtoon);
   });
+  finishedWebtoon = sortBy(finishedWebtoon, 'title');
   const all: PlatformObject = {
     weekWebtoon: weekWebtoonArr,
     finishedWebtoon,

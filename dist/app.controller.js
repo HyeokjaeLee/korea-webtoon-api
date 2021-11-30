@@ -19,6 +19,7 @@ const naver_crawler_1 = require("./function/naver-crawler");
 const kakao_crawler_1 = require("./function/kakao-crawler");
 const kakaoPage_crawler_1 = require("./function/kakaoPage-crawler");
 const fs = require("fs");
+const lodash_1 = require("lodash");
 let webtoonData = add_combinedData(get_localData());
 const ONE_HOUR = 1000 * 60 * 60;
 update();
@@ -156,10 +157,12 @@ function add_combinedData(platformObj) {
             weekWebtoonArr[weekNum].push(..._weekWebtoon);
         });
     });
+    weekWebtoonArr = weekWebtoonArr.map((weekWebtoon) => (0, lodash_1.sortBy)(weekWebtoon, 'title'));
     let finishedWebtoon = [];
     platformList.forEach((platform) => {
         finishedWebtoon.push(...platformObj[platform].finishedWebtoon);
     });
+    finishedWebtoon = (0, lodash_1.sortBy)(finishedWebtoon, 'title');
     const all = {
         weekWebtoon: weekWebtoonArr,
         finishedWebtoon,
