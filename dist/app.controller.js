@@ -19,8 +19,36 @@ const naver_crawler_1 = require("./function/naver-crawler");
 const kakao_crawler_1 = require("./function/kakao-crawler");
 const kakaoPage_crawler_1 = require("./function/kakaoPage-crawler");
 const fs = require("fs");
+const _ = require("lodash");
 const lodash_1 = require("lodash");
 let webtoonData = add_combinedData(get_localData());
+const webtoonjson = JSON.parse(fs.readFileSync('data/webtoon.json', 'utf8'));
+const test = webtoonjson.map((webtoon) => {
+    return {
+        id: webtoon.title + webtoon.author + webtoon.service,
+        title: webtoon.title,
+        author: webtoon.author,
+        url: webtoon.url,
+        img: webtoon.img,
+        week: webtoon.week,
+        service: webtoon.service,
+        additional: webtoon.additional,
+    };
+});
+const utest = _.uniqBy(test, 'id');
+const json = utest.map((webtoon, index) => {
+    return {
+        id: index,
+        title: webtoon.title,
+        author: webtoon.author,
+        url: webtoon.url,
+        img: webtoon.img,
+        week: webtoon.week,
+        service: webtoon.service,
+        additional: webtoon.additional,
+    };
+});
+fs.writeFileSync('data/webtoon.json', JSON.stringify(json));
 const ONE_HOUR = 1000 * 60 * 60;
 update();
 setInterval(() => {
@@ -135,11 +163,6 @@ function get_localData() {
 async function update() {
     const externalData = await get_externalData();
     const platformList = Object.keys(externalData);
-    platformList.forEach((key) => {
-        fs.writeFileSync(`data/${key}.json`, JSON.stringify(externalData[key]));
-        console.log(`${key}.json save`);
-    });
-    webtoonData = add_combinedData(externalData);
     console.log(`update end (${new Date()})`);
 }
 async function get_externalData() {

@@ -10,6 +10,3 @@ async function bootstrap() {
   console.log(`server start (${port})`);
 }
 bootstrap();
-
-const webtoonData = fs.readFileSync('data/webtoon.json', 'utf8');
-console.log(webtoonData);

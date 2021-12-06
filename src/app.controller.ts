@@ -4,9 +4,11 @@ import naver_crawler from 'function/naver-crawler';
 import kakao_crawler from 'function/kakao-crawler';
 import kakaoPage_crawler from 'function/kakaoPage-crawler';
 import * as fs from 'fs';
+import * as _ from 'lodash';
 import { sortBy } from 'lodash';
 
 let webtoonData = add_combinedData(get_localData());
+
 
 const ONE_HOUR = 1000 * 60 * 60;
 update();
@@ -85,11 +87,7 @@ function get_localData() {
 async function update() {
   const externalData = await get_externalData();
   const platformList = Object.keys(externalData);
-  platformList.forEach((key) => {
-    fs.writeFileSync(`data/${key}.json`, JSON.stringify(externalData[key]));
-    console.log(`${key}.json save`);
-  });
-  webtoonData = add_combinedData(externalData);
+
   console.log(`update end (${new Date()})`);
 }
 
