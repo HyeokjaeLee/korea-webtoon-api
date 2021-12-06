@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as fs from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,3 +10,6 @@ async function bootstrap() {
   console.log(`server start (${port})`);
 }
 bootstrap();
+
+const webtoonData = fs.readFileSync('data/webtoon.json', 'utf8');
+console.log(webtoonData);
