@@ -9,7 +9,6 @@ import { sortBy } from 'lodash';
 
 let webtoonData = add_combinedData(get_localData());
 
-
 const ONE_HOUR = 1000 * 60 * 60;
 update();
 setInterval(() => {
@@ -84,12 +83,7 @@ function get_localData() {
   };
 }
 
-async function update() {
-  const externalData = await get_externalData();
-  const platformList = Object.keys(externalData);
-
-  console.log(`update end (${new Date()})`);
-}
+async function update() {}
 
 async function get_externalData() {
   return {
