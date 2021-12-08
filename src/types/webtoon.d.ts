@@ -33,3 +33,13 @@ interface PlatformObject {
   weekWebtoon: Webtoon[][];
   finishedWebtoon: Webtoon[];
 }
+
+interface Webtoontmp {
+  title: string;
+  author: string;
+  url: string;
+  img: string;
+  service: string;
+  week: Array;
+  additional: Additional;
+}
