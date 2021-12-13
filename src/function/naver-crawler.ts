@@ -1,11 +1,45 @@
 import axios from 'axios';
 import { load } from 'cheerio';
-const load_$ = async (url: string) => {
+
+export default async function naver_crawler() {
+  console.log('naver crawler start');
+  const weekWebtoon = await get_weekWebtoon();
+  const finishedWebtoon = await get_finishedWebtoon();
+  console.log('naver crawler end');
+  return weekWebtoon.concat(finishedWebtoon);
+}
+
+const NAVER_WEBTOON_URL = 'https://m.comic.naver.com';
+
+async function get_finishedWebtoon() {
+  const result: Webtoon[] = [];
+  const $ = await load_$(NAVER_WEBTOON_URL + '/webtoon/finish.nhn?page=1');
+  const PAGE_COUNT_SELECTOR =
+    '#ct > div.section_list_toon > div.paging_type2 > em > span';
+  const pageCount = Number($(PAGE_COUNT_SELECTOR).text());
+  for (let page = 1; page < pageCount; page++)
+    result.push(...(await get_webtoonData('finish', `page=${page}`, 7)));
+  return result;
+}
+
+async function load_$(url: string) {
   const html: { data: string } = await axios.get(url);
   return load(html.data);
-};
+}
 
-const naver_webtoon_url = 'https://m.comic.naver.com';
+async function get_weekWebtoon() {
+  const result: Webtoon[] = [];
+  const weekArr = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+  await Promise.all(
+    weekArr.map(async (week, weekNum) => {
+      result.push(
+        ...(await get_webtoonData('weekday', `week=${week}`, weekNum)),
+      );
+    }),
+  );
+  return result;
+}
+
 /**한 url에 표시되는 모든 웹툰 정보를 가지고오는 함수
  * @param type 웹툰의 종류(weekday, finish)
  * @param query 웹툰의 페이지 정보(week=mon, page=1)
@@ -17,21 +51,23 @@ async function get_webtoonData(
   query: string,
   weeknum: number,
 ): Promise<Webtoon[]> {
-  const $ = await load_$(`${naver_webtoon_url}/webtoon/${type}.nhn?${query}`);
-  const baseSelector = $('#ct > div.section_list_toon > ul > li > a');
-  return baseSelector
+  const $ = await load_$(`${NAVER_WEBTOON_URL}/webtoon/${type}.nhn?${query}`);
+  const BASE_SELECTOR = '#ct > div.section_list_toon > ul > li > a';
+  const base$ = $(BASE_SELECTOR);
+  return base$
     .map((index, element) => {
+      let isNew = false,
+        isRest = false,
+        isUp = false;
       const isAdult =
         $(element).find('div.thumbnail > span > span').attr('class') ===
         'badge adult'
           ? true
           : false;
-      let isNew = false;
-      let isRest = false;
-      let isUp = false;
+
       if (type === 'weekday') {
-        const detailSelector = $(element).find('div.info > span.detail > span');
-        const detailInfo = detailSelector
+        const detail$ = $(element).find('div.info > span.detail > span');
+        const detailInfo = detail$
           .map((index, element) =>
             $(element).attr('class').replace('bullet ', ''),
           )
@@ -47,7 +83,7 @@ async function get_webtoonData(
       return {
         title: $(element).find('.title').text(),
         author: author,
-        url: naver_webtoon_url + $(element).attr('href'),
+        url: NAVER_WEBTOON_URL + $(element).attr('href'),
         img: $(element).find('div.thumbnail > img').attr('src'),
         service: 'naver',
         week: weeknum,
@@ -60,36 +96,4 @@ async function get_webtoonData(
       };
     })
     .get();
-}
-
-async function get_weekWebtoon() {
-  const weekArr = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-  return await Promise.all(
-    weekArr.map(
-      async (week, weeknum) =>
-        await get_webtoonData('weekday', `week=${week}`, weeknum),
-    ),
-  );
-}
-
-async function get_finishedWebtoon() {
-  let finishedWebtoon: Webtoon[] = [];
-  const $ = await load_$(naver_webtoon_url + '/webtoon/finish.nhn?page=1');
-  const pageCount = Number(
-    $('#ct > div.section_list_toon > div.paging_type2 > em > span').text(),
-  );
-  for (let page = 1; page < pageCount; page++) {
-    finishedWebtoon.push(
-      ...(await get_webtoonData('finish', `page=${page}`, 7)),
-    );
-  }
-  return finishedWebtoon;
-}
-
-export default async function naver_crawler() {
-  console.log('naver crawler start');
-  const weekWebtoon = await get_weekWebtoon();
-  const finishedWebtoon = await get_finishedWebtoon();
-  console.log('naver crawler end');
-  return { weekWebtoon, finishedWebtoon };
 }
