@@ -59,12 +59,9 @@ async function get_one_DayWebtoonData(weeknum: number) {
 //수정 필요
 export default async function kakaoPage_crawler() {
   console.log('kakao-page crawler start');
-  const weekWebtoon = [];
-  for (let i = 0; i < 7; i++) {
-    weekWebtoon.push(await get_one_DayWebtoonData(i));
-  }
-  const finishedWebtoon = await get_one_DayWebtoonData(7);
-
+  const result: Webtoon[] = [];
+  for (let i = 0; i < 7; i++) result.push(...(await get_one_DayWebtoonData(i)));
+  result.push(...(await get_one_DayWebtoonData(7)));
   console.log('kakao-page crawler end');
-  return { weekWebtoon, finishedWebtoon };
+  return result;
 }
