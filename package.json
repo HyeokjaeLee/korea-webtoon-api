@@ -26,10 +26,12 @@
   "dependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/mongoose": "^9.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "axios": "^0.23.0",
     "cheerio": "^1.0.0-rc.10",
     "lodash": "^4.17.21",
+    "mongoose": "^6.1.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
