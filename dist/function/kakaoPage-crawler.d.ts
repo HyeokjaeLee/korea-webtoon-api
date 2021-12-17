@@ -1,4 +1,1 @@
-export default function kakaoPage_crawler(): Promise<{
-    weekWebtoon: any[];
-    finishedWebtoon: Webtoon[];
-}>;
+export default function kakaoPage_crawler(): Promise<Webtoon[]>;

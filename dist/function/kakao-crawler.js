@@ -36,14 +36,21 @@ async function get_finishedWebtoon(placement) {
 }
 async function kakao_crawler() {
     console.log('kakao crawler start');
+    const result = [];
     const generalWeekWebtoon = await get_weekWebtoon('general');
     const novelWeekWebtoon = await get_weekWebtoon('novel');
     const generalFinishedWebtoon = await get_finishedWebtoon('channel');
     const novelFinishedWebtoon = await get_finishedWebtoon('novel');
-    const weekWebtoon = generalWeekWebtoon.map((generalWebtoon, weeknum) => generalWebtoon.concat(novelWeekWebtoon[weeknum]));
-    const finishedWebtoon = generalFinishedWebtoon.concat(novelFinishedWebtoon);
+    generalWeekWebtoon.forEach((weekWebtoon) => {
+        result.push(...weekWebtoon);
+    });
+    novelWeekWebtoon.forEach((weekWebtoon) => {
+        result.push(...weekWebtoon);
+    });
+    result.push(...generalFinishedWebtoon);
+    result.push(...novelFinishedWebtoon);
     console.log('kakao crawler end');
-    return { weekWebtoon, finishedWebtoon };
+    return result;
 }
 exports.default = kakao_crawler;
 //# sourceMappingURL=kakao-crawler.js.map

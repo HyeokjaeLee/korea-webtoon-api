@@ -8,13 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const mongoose_1 = require("@nestjs/mongoose");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const MONGO_DB_URL = 'mongodb+srv://hyeokjaelee:44nud95974@webtoon.xvqi5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
+        imports: [mongoose_1.MongooseModule.forRoot(MONGO_DB_URL)],
         controllers: [
             app_controller_1.SearchController,
             app_controller_1.AllPlatformController,

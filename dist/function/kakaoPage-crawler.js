@@ -45,13 +45,12 @@ async function get_one_DayWebtoonData(weeknum) {
 }
 async function kakaoPage_crawler() {
     console.log('kakao-page crawler start');
-    const weekWebtoon = [];
-    for (let i = 0; i < 7; i++) {
-        weekWebtoon.push(await get_one_DayWebtoonData(i));
-    }
-    const finishedWebtoon = await get_one_DayWebtoonData(7);
+    const result = [];
+    for (let i = 0; i < 7; i++)
+        result.push(...(await get_one_DayWebtoonData(i)));
+    result.push(...(await get_one_DayWebtoonData(7)));
     console.log('kakao-page crawler end');
-    return { weekWebtoon, finishedWebtoon };
+    return result;
 }
 exports.default = kakaoPage_crawler;
 //# sourceMappingURL=kakaoPage-crawler.js.map
