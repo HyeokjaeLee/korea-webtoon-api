@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CatsService } from './webtoon.service';
+import { WebtoonsService } from './webtoons.service';
 import { CreateCatDto } from './dto/create-webtoon.dto';
-import { Cat } from './schemas/webtoon.schema';
+import { Webtoon } from './schemas/webtoon.schema';
 
 @Controller('cats')
-export class CatsController {
-  constructor(private readonly catsService: CatsService) {}
+export class WebtoonsController {
+  constructor(private readonly catsService: WebtoonsService) {}
 
   @Post()
   async create(@Body() createCatDto: CreateCatDto) {
@@ -13,7 +13,7 @@ export class CatsController {
   }
 
   @Get()
-  async findAll(): Promise<Cat[]> {
+  async findAll(): Promise<Webtoon[]> {
     await this.catsService.create({ name: 'test', age: 1, breed: 'test' });
     return this.catsService.findAll();
   }

@@ -1,4 +1,4 @@
-namespace Webtoon {
+namespace WebtoonObject {
   /**플랫폼 표준 웹툰 정보
    * @title 제목
    * @author 작가명
