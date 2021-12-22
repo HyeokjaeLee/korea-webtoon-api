@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type WebtoonDocument = Webtoon & Document;
 
-@Schema()
+@Schema({ versionKey: false })
 export class Webtoon {
   @Prop({ required: true })
   title: string;
@@ -15,6 +15,12 @@ export class Webtoon {
   img: string;
   @Prop({ required: true })
   service: string;
+  @Prop({ required: true })
+  week: number[];
+  @Prop({ required: true })
+  id: number;
+  @Prop({ required: true, type: Object })
+  additional: WebtoonObject.Additional;
 }
 
 export const WebtoonSchema = SchemaFactory.createForClass(Webtoon);

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateCatDto } from './dto/create-webtoon.dto';
 import { Webtoon, WebtoonDocument } from './schemas/webtoon.schema';
 
 @Injectable()
@@ -11,9 +10,9 @@ export class WebtoonsService {
     private readonly webtoonModel: Model<WebtoonDocument>,
   ) {}
 
-  async create(createCatDto: CreateCatDto): Promise<Webtoon> {
-    const createdCat = await this.webtoonModel.create(createCatDto);
-    return createdCat;
+  async create(createWebtoonDto: WebtoonObject.CreateDto): Promise<Webtoon> {
+    const createdWebtoon = await this.webtoonModel.create(createWebtoonDto);
+    return createdWebtoon;
   }
 
   async findAll(): Promise<Webtoon[]> {

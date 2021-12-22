@@ -1,20 +1,42 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { WebtoonsService } from './webtoons.service';
-import { CreateCatDto } from './dto/create-webtoon.dto';
 import { Webtoon } from './schemas/webtoon.schema';
 
 @Controller('cats')
 export class WebtoonsController {
-  constructor(private readonly catsService: WebtoonsService) {}
+  constructor(private readonly webtoonsService: WebtoonsService) {
+    this.updater();
+    const ONE_HOUR = 1000 * 60 * 60;
+    setInterval(() => {
+      this.updater();
+    }, ONE_HOUR);
+  }
 
   @Post()
-  async create(@Body() createCatDto: CreateCatDto) {
-    await this.catsService.create(createCatDto);
+  async create(@Body() createWebtoonDto: WebtoonObject.CreateDto) {
+    await this.webtoonsService.create(createWebtoonDto);
   }
 
   @Get()
   async findAll(): Promise<Webtoon[]> {
-    await this.catsService.create({ name: 'test', age: 1, breed: 'test' });
-    return this.catsService.findAll();
+    return this.webtoonsService.findAll();
+  }
+
+  async updater() {
+    await this.webtoonsService.create({
+      id: 1,
+      title: 'test',
+      author: 'test',
+      url: 'test',
+      img: 'test',
+      service: 'test',
+      week: [1, 2, 3, 4, 5, 6, 7],
+      additional: {
+        new: true,
+        rest: true,
+        up: true,
+        adult: true,
+      },
+    });
   }
 }
