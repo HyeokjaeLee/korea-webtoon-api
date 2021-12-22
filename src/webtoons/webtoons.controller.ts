@@ -10,9 +10,7 @@ export class WebtoonsController {
   constructor(private readonly webtoonsService: WebtoonsService) {
     this.updater();
     const ONE_HOUR = 1000 * 60 * 60;
-    let number = 1;
     setInterval(() => {
-      number++;
       this.updater();
     }, ONE_HOUR);
   }
@@ -83,40 +81,10 @@ export class WebtoonsController {
     );
     const removedIDs = ID_list_DB.filter((id) => !ID_list_cralwer.includes(id));
     removedIDs.forEach(async (id) => await this.webtoonsService.delete(id));
-    console.log('새로운 웹툰', newWebtoons.length);
-    console.log('변경된 웹툰', changedWebtoons.length);
+    console.log(
+      `updated:${changedWebtoons.length}, new:${newWebtoons.length}, removed:${
+        removedIDs.length
+      } (${new Date()})`,
+    );
   }
 }
-
-/**
- *     await this.webtoonsService.create({
-      _id: 'ssss',
-      title: 'test',
-      author: 'test',
-      url: 'test',
-      img: 'test',
-      service: 'test',
-      week: [1, 2, 3, 4, 5, 6, 7],
-      additional: {
-        new: true,
-        rest: true,
-        up: true,
-        adult: true,
-      },
-    });
- *     await this.webtoonsService.update('61c1d359ab5ac85a817bdee7', {
-      _id: 'ss',
-      title: 'test2',
-      author: 'test',
-      url: 'test',
-      img: 'test',
-      service: 'test',
-      week: [1, 2, 3, 4, 5, 6, 7],
-      additional: {
-        new: true,
-        rest: true,
-        up: true,
-        adult: true,
-      },
-    });
- */
