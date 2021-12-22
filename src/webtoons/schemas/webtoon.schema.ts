@@ -5,7 +5,7 @@ export type WebtoonDocument = Webtoon & Document;
 
 @Schema({ versionKey: false })
 export class Webtoon {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   _id: string;
   @Prop({ required: true })
   title: string;
