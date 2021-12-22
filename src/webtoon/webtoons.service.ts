@@ -10,12 +10,20 @@ export class WebtoonsService {
     private readonly webtoonModel: Model<WebtoonDocument>,
   ) {}
 
-  async create(createWebtoonDto: WebtoonObject.CreateDto): Promise<Webtoon> {
-    const createdWebtoon = await this.webtoonModel.create(createWebtoonDto);
+  async create(webtoonDto: WebtoonObject.Dto): Promise<Webtoon> {
+    const createdWebtoon = await this.webtoonModel.create(webtoonDto);
     return createdWebtoon;
   }
-
+  async update(id: string, webtoonDto: Webtoon) {
+    return await this.webtoonModel.findByIdAndUpdate(id, webtoonDto, {
+      new: true,
+    });
+  }
   async findAll(): Promise<Webtoon[]> {
     return this.webtoonModel.find().exec();
+  }
+
+  async delete(id: string) {
+    return await this.webtoonModel.findByIdAndRemove(id);
   }
 }

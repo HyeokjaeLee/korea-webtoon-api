@@ -31,8 +31,8 @@ namespace WebtoonObject {
     additional: Additional;
   }
 
-  interface CreateDto extends Basic {
-    id: number;
+  interface Dto extends Basic {
+    _id: string;
     week: number[];
     additional: Additional;
   }

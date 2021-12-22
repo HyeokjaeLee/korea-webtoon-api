@@ -6,6 +6,8 @@ export type WebtoonDocument = Webtoon & Document;
 @Schema({ versionKey: false })
 export class Webtoon {
   @Prop({ required: true })
+  _id: string;
+  @Prop({ required: true })
   title: string;
   @Prop({ required: true })
   author: string;
@@ -17,8 +19,6 @@ export class Webtoon {
   service: string;
   @Prop({ required: true })
   week: number[];
-  @Prop({ required: true })
-  id: number;
   @Prop({ required: true, type: Object })
   additional: WebtoonObject.Additional;
 }
