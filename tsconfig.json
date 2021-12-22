@@ -11,7 +11,7 @@
     "outDir": "./dist",
     "baseUrl": "./src" /* Base directory to resolve non-absolute module names. */,
     "paths": {
-      "function/*": ["./function/*"]
+      "functions/*": ["./functions/*"]
     },
     "typeRoots": ["./src/types"],
     "incremental": true,
