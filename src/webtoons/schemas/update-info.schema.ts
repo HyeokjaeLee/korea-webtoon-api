@@ -6,7 +6,6 @@ export type UpdateInfoDocument = UpdateInfo & Document;
 @Schema({
   versionKey: false,
   id: false,
-  collection: 'UpdatedInfo',
 })
 export class UpdateInfo {
   @Prop({ required: true })
