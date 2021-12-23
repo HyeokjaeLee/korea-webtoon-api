@@ -3,9 +3,9 @@ import { Document } from 'mongoose';
 
 export type WebtoonDocument = Webtoon & Document;
 
-@Schema({ versionKey: false })
+@Schema({ versionKey: false, id: false, collection: 'webtoons' })
 export class Webtoon {
-  @Prop({ required: true, unique: true })
+  @Prop()
   _id: string;
   @Prop({ required: true })
   title: string;
