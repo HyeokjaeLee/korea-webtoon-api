@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type WebtoonDocument = Webtoon & Document;
 
-@Schema({ versionKey: false, id: false, collection: 'webtoons' })
+@Schema({ versionKey: false, id: false })
 export class Webtoon {
   @Prop()
   _id: string;

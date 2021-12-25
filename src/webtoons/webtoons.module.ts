@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { WebtoonsController } from './webtoons.controller';
+import { SearchController } from './webtoons.controller';
 import { UpdateInfoController } from './update-info.controller';
 import { WebtoonsService } from './webtoons.service';
 import { UpdateInfoService } from './update-info.service';
@@ -14,7 +14,7 @@ import { UpdateInfo, UpdateInfoSchema } from './schemas/update-info.schema';
       { name: UpdateInfo.name, schema: UpdateInfoSchema },
     ]),
   ],
-  controllers: [WebtoonsController, UpdateInfoController],
+  controllers: [UpdateInfoController, SearchController],
   providers: [WebtoonsService, UpdateInfoService],
 })
 export class WebtoonsModule {

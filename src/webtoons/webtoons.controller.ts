@@ -46,3 +46,30 @@ class WebtoonsController {
     };
   }
 }
+
+@Controller('search')
+export class SearchController {
+  constructor(private readonly webtoonsService: WebtoonsService) {}
+  @Get()
+  async search(@Query(`keyword`) keyword: string) {
+    if (!!keyword) {
+      keyword = keyword.replace(/%20| /g, '');
+      const result = this.webtoonsService.find({
+        _id: { $regex: `${keyword}[^naver|kakao|kakao-page]+`, $options: 'i' },
+      });
+      return (await result).length !== 0
+        ? result
+        : {
+            statusCode: 404,
+            message: 'There is no webtoon that matches.',
+            error: 'Not Found',
+          };
+    } else
+      return {
+        statusCode: 400,
+        message:
+          'Required request variable does not exist or request variable name is invalid	',
+        error: 'Error',
+      };
+  }
+}
