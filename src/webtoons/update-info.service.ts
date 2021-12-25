@@ -41,7 +41,7 @@ export class UpdateInfoService {
     WebtoonsArr.forEach((webtoons) => {
       webtoons.forEach((webtoon) => {
         const { title, author, service } = webtoon;
-        const _id = `${title}__${author}__${service}`;
+        const _id = `${title}__${author}__${service}`.replace(/(\s*)/g, '');
         cralwer_IDs.push(_id);
         const webtoonIndex = work_on_webtoon.IDs.indexOf(_id);
         const isExist = webtoonIndex !== -1;
