@@ -6,6 +6,7 @@ import { Webtoon, WebtoonDocument } from './schemas/webtoon.schema';
 import kakao_crawler from 'functions/kakao-crawler';
 import naver_crawler from 'functions/naver-crawler';
 import kakaoPage_crawler from 'functions/kakaoPage-crawler';
+import { removeSpecialChars } from 'functions/common-function';
 import { uniq } from 'lodash';
 
 @Injectable()
@@ -41,8 +42,10 @@ export class UpdateInfoService {
     let cralwer_IDs: string[] = [];
     WebtoonsArr.forEach((webtoons) => {
       webtoons.forEach((webtoon) => {
-        const { title, author, service } = webtoon;
-        const _id = `${title}__${author}__${service}`.replace(/(\s*)/g, '');
+        let { title, author, service } = webtoon;
+        title = removeSpecialChars(title);
+        author = removeSpecialChars(author);
+        const _id = `${title}_${author}_${service}`;
         cralwer_IDs.push(_id);
         const webtoonIndex = work_on_webtoon.IDs.indexOf(_id);
         const isExist = webtoonIndex !== -1;
