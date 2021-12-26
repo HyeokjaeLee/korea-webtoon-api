@@ -1,6 +1,7 @@
 # compiled output
+/dist
 /node_modules
-
+temp-password.ts
 # Logs
 logs
 *.log
@@ -32,3 +33,5 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+.env
