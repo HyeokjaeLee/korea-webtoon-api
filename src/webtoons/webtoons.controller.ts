@@ -65,9 +65,9 @@ export class SearchController {
           };
     } else
       return {
-        statusCode: 400,
+        statusCode: 500,
         message:
-          'Required request variable does not exist or request variable name is invalid	',
+          'Required request variable does not exist or request variable name is invalid.',
         error: 'Error',
       };
   }
