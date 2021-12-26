@@ -1,5 +1,5 @@
-import { PASSWORD } from '../temp-password';
-const MONGO_DB_URI = `mongodb+srv://nagle:${PASSWORD}@cluster0.uko3q.mongodb.net/test?retryWrites=true&w=majority`;
+require('dotenv').config();
+const { MONGO_DB_URI } = process.env;
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { WebtoonsModule } from './webtoons/webtoons.module';
