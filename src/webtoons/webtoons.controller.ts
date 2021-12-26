@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { WebtoonsService } from './webtoons.service';
-
+import { removeSpecialChars } from 'functions/common-function';
 class WebtoonsController {
   constructor(
     private readonly webtoonsService: WebtoonsService,
@@ -52,7 +52,8 @@ export class SearchController {
   @Get()
   async search(@Query(`keyword`) keyword: string) {
     if (!!keyword) {
-      keyword = keyword.replace(/%20| /g, '');
+      keyword = keyword.replace(/%20/g, '');
+      keyword = removeSpecialChars(keyword);
       const result = this.webtoonsService.find({
         _id: { $regex: `${keyword}[^naver|kakao|kakao-page]+`, $options: 'i' },
       });
