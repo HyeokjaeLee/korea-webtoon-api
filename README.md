@@ -99,7 +99,7 @@ const juhominWebtoon = get_webtoonData('search?keyword=주호민');
 |    img     | string  | Thumbnail img URL |
 |    url     | string  | 웹툰 페이지 URL |
 |  service   | string  | 서비스 플랫폼 |
-|    week    | array | 0~7의 수를 가지는 요일 정보 배열<br/>`0~6` 월~일<br/>`7` 완결 |
+|    week    | array | `0 - 7` 값을 가지는 요일 정보 배열<br/>`0 - 6` 월요일부터 일요일 순서<br/>`7` 완결 |
 | additional | object  | 추가적인 정보 |
 |    new     | boolean | 신규 |
 |    rest    | boolean | 휴재 |
