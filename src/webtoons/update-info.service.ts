@@ -6,6 +6,7 @@ import { Webtoon, WebtoonDocument } from './schemas/webtoon.schema';
 import kakao_crawler from 'functions/kakao-crawler';
 import naver_crawler from 'functions/naver-crawler';
 import kakaoPage_crawler from 'functions/kakaoPage-crawler';
+import { uniq } from 'lodash';
 
 @Injectable()
 export class UpdateInfoService {
@@ -37,7 +38,7 @@ export class UpdateInfoService {
       kakaoPage_crawler(),
     ]);
 
-    const cralwer_IDs = [];
+    let cralwer_IDs: string[] = [];
     WebtoonsArr.forEach((webtoons) => {
       webtoons.forEach((webtoon) => {
         const { title, author, service } = webtoon;
@@ -56,6 +57,7 @@ export class UpdateInfoService {
         }
       });
     });
+    cralwer_IDs = uniq(cralwer_IDs);
 
     {
       const webtoon_change = await (async () => {

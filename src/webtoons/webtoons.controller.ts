@@ -1,15 +1,14 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { WebtoonsService } from './webtoons.service';
-import { Webtoon } from './schemas/webtoon.schema';
 
 class WebtoonsController {
   constructor(
     private readonly webtoonsService: WebtoonsService,
     platform: string,
   ) {
-    this.serviceOption.service = platform;
+    platform !== 'all' && (this.serviceOption.service = platform);
   }
-  private serviceOption;
+  private serviceOption: { service?: string } = {};
   platform: string;
   @Get()
   async all() {
@@ -71,5 +70,33 @@ export class SearchController {
           'Required request variable does not exist or request variable name is invalid	',
         error: 'Error',
       };
+  }
+}
+
+@Controller('all')
+export class AllPlatformController extends WebtoonsController {
+  constructor(_super: WebtoonsService) {
+    super(_super, 'all');
+  }
+}
+
+@Controller('naver')
+export class NaverController extends WebtoonsController {
+  constructor(_super: WebtoonsService) {
+    super(_super, 'naver');
+  }
+}
+
+@Controller('kakao')
+export class KakaoController extends WebtoonsController {
+  constructor(_super: WebtoonsService) {
+    super(_super, 'kakao');
+  }
+}
+
+@Controller('kakao-page')
+export class KakaoPageController extends WebtoonsController {
+  constructor(_super: WebtoonsService) {
+    super(_super, 'kakao-page');
   }
 }
