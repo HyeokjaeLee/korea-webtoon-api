@@ -26,6 +26,7 @@
     "@nestjs/mongoose": "^9.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "cheerio": "^1.0.0-rc.10",
+    "dotenv": "^10.0.0",
     "loadash": "^1.0.0",
     "mongoose": "^6.1.2",
     "reflect-metadata": "^0.1.13",
