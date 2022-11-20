@@ -34,7 +34,7 @@ export const standardizeKakaoPageWebtoons = (
       new: false,
       rest: false,
       up: kakaoPageWebtoon.statusBadge === 'BadgeUpStatic',
-      adult: false,
+      adult: kakaoPageWebtoon.ageGrade === 'Nineteen',
       singularity,
     },
   };
