@@ -16,7 +16,7 @@ export interface Webtoon {
   img: string;
   service: 'kakao' | 'naver' | 'kakao-page';
   week: Week;
-  popular: number;
+  popular: number | null;
   additional: {
     new: boolean;
     rest: boolean;
