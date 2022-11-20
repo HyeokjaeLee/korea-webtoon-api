@@ -1,6 +1,4 @@
-import axios from 'axios';
-import { load } from 'cheerio';
-
+import { getHtmlData } from './getHtmlData';
 export default async function naver_crawler() {
   console.log('naver crawler start');
   const weekWebtoon = await get_weekWebtoon();
@@ -9,22 +7,17 @@ export default async function naver_crawler() {
   return weekWebtoon.concat(finishedWebtoon);
 }
 
-const NAVER_WEBTOON_URL = 'https://m.comic.naver.com';
+export const NAVER_WEBTOON_URL = 'https://m.comic.naver.com';
 
 async function get_finishedWebtoon() {
   const result: WebtoonObject.CrawlerOutput[] = [];
-  const $ = await load_$(NAVER_WEBTOON_URL + '/webtoon/finish.nhn?page=1');
+  const $ = await getHtmlData(NAVER_WEBTOON_URL + '/webtoon/finish.nhn?page=1');
   const PAGE_COUNT_SELECTOR =
     '#ct > div.section_list_toon > div.paging_type2 > em > span';
   const pageCount = Number($(PAGE_COUNT_SELECTOR).text());
   for (let page = 1; page < pageCount; page++)
     result.push(...(await get_webtoonData('finish', `page=${page}`, 7)));
   return result;
-}
-
-async function load_$(url: string) {
-  const html: { data: string } = await axios.get(url);
-  return load(html.data);
 }
 
 async function get_weekWebtoon() {
@@ -51,11 +44,13 @@ async function get_webtoonData(
   query: string,
   weeknum: number,
 ): Promise<WebtoonObject.CrawlerOutput[]> {
-  const $ = await load_$(`${NAVER_WEBTOON_URL}/webtoon/${type}.nhn?${query}`);
+  const $ = await getHtmlData(
+    `${NAVER_WEBTOON_URL}/webtoon/${type}.nhn?${query}`,
+  );
   const BASE_SELECTOR = '#ct > div.section_list_toon > ul > li > a';
   const base$ = $(BASE_SELECTOR);
   const test = base$
-    .map((index, element) => {
+    .map((_, element) => {
       let isNew = false,
         isRest = false,
         isUp = false;

@@ -9,6 +9,8 @@ export enum Week {
   FINISH = 7,
 }
 
+type Singularity = 'over-15' | 'free' | 'wait-free';
+
 export interface Webtoon {
   title: string;
   author: string;
@@ -22,6 +24,6 @@ export interface Webtoon {
     rest: boolean;
     up: boolean;
     adult: boolean;
-    singularity: string[];
+    singularity: Singularity[];
   };
 }

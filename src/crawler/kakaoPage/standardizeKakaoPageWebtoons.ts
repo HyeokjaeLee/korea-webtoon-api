@@ -1,5 +1,5 @@
 import type { KakaoPageWebtoon } from './requestKakaoPageWebtoons';
-import type { Week, Webtoon } from '../../types';
+import type { Week, Webtoon, Singularity } from '../../types';
 
 export const standardizeKakaoPageWebtoons = (
   kakaoPageWebtoon: KakaoPageWebtoon,
@@ -8,7 +8,7 @@ export const standardizeKakaoPageWebtoons = (
 ): Webtoon => {
   const { badgeList, eventLog, ageGrade, subtitleList } = kakaoPageWebtoon;
   const { eventMeta } = eventLog;
-  const singularity: string[] = [];
+  const singularity: Singularity[] = [];
   if (badgeList.includes('BadgeRealFreeStatic')) singularity.push('free');
   if (badgeList.includes('BadgeWaitFreeStatic')) singularity.push('wait-free');
   if (ageGrade === 'Fifteen') singularity.push('over-15');
