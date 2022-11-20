@@ -6,14 +6,13 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
+    "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src" /* Base directory to resolve non-absolute module names. */,
+    "baseUrl": "./src",
     "paths": {
       "functions/*": ["./functions/*"]
     },
-    "typeRoots": ["./src/types"],
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
