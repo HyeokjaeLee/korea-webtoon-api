@@ -54,7 +54,7 @@ async function get_webtoonData(
   const $ = await load_$(`${NAVER_WEBTOON_URL}/webtoon/${type}.nhn?${query}`);
   const BASE_SELECTOR = '#ct > div.section_list_toon > ul > li > a';
   const base$ = $(BASE_SELECTOR);
-  return base$
+  const test = base$
     .map((index, element) => {
       let isNew = false,
         isRest = false,
@@ -96,4 +96,6 @@ async function get_webtoonData(
       };
     })
     .get();
+  console.log(test);
+  return test;
 }
