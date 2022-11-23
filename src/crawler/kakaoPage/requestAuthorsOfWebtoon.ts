@@ -21,20 +21,31 @@ interface RequestResult {
   };
 }
 
-export const requestAuthorsOfWebtoon = async (seriesId: string) => {
-  const { data } = await axios<RequestResult>({
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    url: KAKAO_PAGE_API_URL,
-    data: {
-      QUERY,
-      variables: {
-        seriesId,
+export const requestAuthorsOfWebtoon = async (
+  seriesId: string,
+  errorCount = 0,
+) => {
+  try {
+    const { data } = await axios<RequestResult>({
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    },
-  });
-
-  return data.data.contentHomeOverview.content.authors;
+      url: KAKAO_PAGE_API_URL,
+      data: {
+        query: QUERY,
+        variables: {
+          seriesId: Number(seriesId),
+        },
+      },
+    });
+    return data.data.contentHomeOverview.content.authors;
+  } catch {
+    errorCount++;
+    console.log('try again requestAuthorsOfWebtoon', errorCount);
+    if (errorCount > 10) {
+      throw new Error('can not request kakao page authors');
+    }
+    return requestAuthorsOfWebtoon(seriesId, errorCount);
+  }
 };

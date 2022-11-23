@@ -1,10 +1,10 @@
 import type { KakaoPageWebtoon } from './requestWebtoonsByDayTabUid';
-import type { Webtoon, Singularity } from '../../types';
+import { Webtoon, Singularity } from '../../types';
 
 export const standardizeKakaoPageWebtoons = (
   kakaoPageWebtoon: KakaoPageWebtoon,
   author: string,
-  week: number,
+  updateDays: Webtoon['updateDays'],
 ): Webtoon => {
   const { badgeList, eventLog, ageGrade, subtitleList, statusBadge } =
     kakaoPageWebtoon;
@@ -12,15 +12,15 @@ export const standardizeKakaoPageWebtoons = (
   const singularityList: Singularity[] = [];
 
   if (badgeList.includes('BadgeRealFreeStatic')) {
-    singularityList.push('free');
+    singularityList.push(Singularity.FREE);
   }
 
   if (badgeList.includes('BadgeWaitFreeStatic')) {
-    singularityList.push('wait-free');
+    singularityList.push(Singularity.WAIT_FREE);
   }
 
   if (ageGrade === 'Fifteen') {
-    singularityList.push('over-15');
+    singularityList.push(Singularity.OVER_15);
   }
 
   const fanCountText = subtitleList
@@ -41,7 +41,7 @@ export const standardizeKakaoPageWebtoons = (
     url: `https://page.kakao.com/content/${id}`,
     img: kakaoPageWebtoon.thumbnail,
     service: 'kakao-page',
-    week,
+    updateDays,
     fanCount,
     additional: {
       new: statusBadge === 'BadgeNewStatic',

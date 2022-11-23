@@ -168,14 +168,14 @@ query staticLandingDayOfWeekSection(
 `;
 
 export enum DayTabUid {
-  MON = '1',
-  TUE = '2',
-  WED = '3',
-  THU = '4',
-  FRI = '5',
-  SAT = '6',
-  SUN = '7',
-  FINISH = '12',
+  MON = 1,
+  TUE = 2,
+  WED = 3,
+  THU = 4,
+  FRI = 5,
+  SAT = 6,
+  SUN = 7,
+  FINISH = 12,
 }
 
 export interface KakaoPageWebtoon {
@@ -204,46 +204,54 @@ interface RequestResult {
   };
 }
 
-const requestKakaoPageWebtoons = async (dayTabUid: DayTabUid, page: number) => {
-  const { data } = await axios<RequestResult>({
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    url: KAKAO_PAGE_API_URL,
-    data: {
-      query: QUERY,
-      variables: {
-        sectionId: `static-landing-DayOfWeek-section-Layout-10-0-A-${dayTabUid}`,
-        param: {
-          categoryUid: 10,
-          bmType: 'A',
-          subcategoryUid: '0',
-          dayTabUid,
-          page,
+const requestKakaoPageWebtoons = async (
+  dayTabUid: DayTabUid,
+  page: number,
+  errorCount = 0,
+) => {
+  try {
+    const { data } = await axios<RequestResult>({
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      url: KAKAO_PAGE_API_URL,
+      data: {
+        query: QUERY,
+        variables: {
+          sectionId: `static-landing-DayOfWeek-section-Layout-10-0-A-${dayTabUid}`,
+          param: {
+            categoryUid: 10,
+            bmType: 'A',
+            subcategoryUid: '0',
+            dayTabUid: String(dayTabUid),
+            page,
+          },
         },
       },
-    },
-  });
+    });
 
-  return data.data.staticLandingDayOfWeekSection;
+    return data.data.staticLandingDayOfWeekSection;
+  } catch {
+    errorCount++;
+    console.log('try again requestKakaoPageWebtoons', errorCount);
+    if (errorCount > 10) {
+      throw new Error('can not request kakao page webtoons');
+    }
+    return requestKakaoPageWebtoons(dayTabUid, page, errorCount + 1);
+  }
 };
 
 export const requestWebtoonsByDayTabUid = async (dayTabUid: DayTabUid) => {
   const webtoons: KakaoPageWebtoon[] = [];
 
   for (let page = 0, isEndPage = false; !isEndPage; page++) {
-    try {
-      const { isEnd, groups } = await requestKakaoPageWebtoons(dayTabUid, page),
-        { items } = groups[0];
+    const { isEnd, groups } = await requestKakaoPageWebtoons(dayTabUid, page),
+      { items } = groups[0];
 
-      webtoons.push(...items);
+    webtoons.push(...items);
 
-      isEndPage = isEnd;
-    } catch (e) {
-      console.log(e);
-      break;
-    }
+    isEndPage = isEnd;
   }
 
   return webtoons;
