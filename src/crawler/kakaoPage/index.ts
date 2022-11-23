@@ -1,19 +1,20 @@
 import { requestWebtoonsByDayTabUid } from './requestWebtoonsByDayTabUid';
-import { DayTabUid } from './requestKakaoPageWebtoons';
+import { DayTabUid } from './requestWebtoonsByDayTabUid';
 import { requestAuthorsOfWebtoon } from './requestAuthorsOfWebtoon';
 import { standardizeKakaoPageWebtoons } from './standardizeKakaoPageWebtoons';
-import { Week, Webtoon } from '../../types';
+import { WebtoonWeek, Webtoon } from '../../types';
 
-const getKakaoPageWebtoons = async () => {
+export const KAKAO_PAGE_API_URL = 'https://page.kakao.com/graphql';
+
+export const getKakaoPageWebtoons = async () => {
   const webtoons: Webtoon[] = [];
-
-  const dayTabLabels = Object.values(DayTabUid).filter(
+  const DayTabNames = Object.values(DayTabUid).filter(
     (value) => typeof value === 'string',
-  );
+  ) as string[];
 
-  for (const dayTabLabel of dayTabLabels) {
+  for (const DayTabName of DayTabNames) {
     const kakaoPageWebtoonsOfDay = await requestWebtoonsByDayTabUid(
-      DayTabUid[dayTabLabel],
+      DayTabUid[DayTabName],
     );
 
     for (const kakaoPageWebtoon of kakaoPageWebtoonsOfDay) {
@@ -24,7 +25,7 @@ const getKakaoPageWebtoons = async () => {
       const webtoon = standardizeKakaoPageWebtoons(
         kakaoPageWebtoon,
         author,
-        Week[dayTabLabel],
+        WebtoonWeek[DayTabName],
       );
 
       webtoons.push(webtoon);
@@ -32,5 +33,3 @@ const getKakaoPageWebtoons = async () => {
   }
   return webtoons;
 };
-
-getKakaoPageWebtoons();

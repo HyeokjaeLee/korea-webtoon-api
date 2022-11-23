@@ -1,4 +1,4 @@
-export enum Week {
+export enum WebtoonWeek {
   SUN = 0,
   MON = 1,
   TUE = 2,
@@ -9,7 +9,7 @@ export enum Week {
   FINISH = 7,
 }
 
-type Singularity = 'over-15' | 'free' | 'wait-free';
+export type Singularity = 'over-15' | 'free' | 'wait-free';
 
 export interface Webtoon {
   title: string;
@@ -17,13 +17,13 @@ export interface Webtoon {
   url: string;
   img: string;
   service: 'kakao' | 'naver' | 'kakao-page';
-  week: Week;
-  popular: number | null;
+  week: number;
+  fanCount: number | null;
   additional: {
     new: boolean;
     rest: boolean;
     up: boolean;
     adult: boolean;
-    singularity: Singularity[];
+    singularityList: Singularity[];
   };
 }

@@ -1,48 +1,54 @@
-import type { KakaoPageWebtoon } from './requestKakaoPageWebtoons';
-import type { Week, Webtoon, Singularity } from '../../types';
+import type { KakaoPageWebtoon } from './requestWebtoonsByDayTabUid';
+import type { Webtoon, Singularity } from '../../types';
 
 export const standardizeKakaoPageWebtoons = (
   kakaoPageWebtoon: KakaoPageWebtoon,
   author: string,
-  week: Week,
+  week: number,
 ): Webtoon => {
-  const { badgeList, eventLog, ageGrade, subtitleList } = kakaoPageWebtoon;
-  const { eventMeta } = eventLog;
-  const singularity: Singularity[] = [];
-  if (badgeList.includes('BadgeRealFreeStatic')) singularity.push('free');
-  if (badgeList.includes('BadgeWaitFreeStatic')) singularity.push('wait-free');
-  if (ageGrade === 'Fifteen') singularity.push('over-15');
+  const { badgeList, eventLog, ageGrade, subtitleList, statusBadge } =
+    kakaoPageWebtoon;
+  const { name, id } = eventLog.eventMeta;
+  const singularityList: Singularity[] = [];
 
-  const calcPopular = (): number | null => {
-    try {
-      const popularStr = subtitleList
-        .find((subtitle) => subtitle.includes('만') || subtitle.includes('억'))
-        .replace(',', '');
+  if (badgeList.includes('BadgeRealFreeStatic')) {
+    singularityList.push('free');
+  }
 
-      return Math.floor(
-        popularStr.includes('만')
-          ? Number(popularStr.replace('만', ''))
-          : Number(popularStr.replace('억', '')) * 10000,
-      );
-    } catch {
-      return null;
-    }
-  };
+  if (badgeList.includes('BadgeWaitFreeStatic')) {
+    singularityList.push('wait-free');
+  }
+
+  if (ageGrade === 'Fifteen') {
+    singularityList.push('over-15');
+  }
+
+  const fanCountText = subtitleList
+    .find((subtitle) => subtitle.includes('만') || subtitle.includes('억'))
+    ?.replace(',', '');
+
+  const fanCount = fanCountText
+    ? Math.floor(
+        fanCountText?.includes('만')
+          ? Number(fanCountText?.replace('만', ''))
+          : Number(fanCountText?.replace('억', '')) * 10000,
+      )
+    : null;
 
   return {
-    title: eventMeta.name,
+    title: name,
     author,
-    url: `https://page.kakao.com/content/${eventMeta.id}`,
+    url: `https://page.kakao.com/content/${id}`,
     img: kakaoPageWebtoon.thumbnail,
     service: 'kakao-page',
     week,
-    popular: calcPopular(),
+    fanCount,
     additional: {
-      new: false,
+      new: statusBadge === 'BadgeNewStatic',
       rest: false,
-      up: kakaoPageWebtoon.statusBadge === 'BadgeUpStatic',
+      up: statusBadge === 'BadgeUpStatic',
       adult: kakaoPageWebtoon.ageGrade === 'Nineteen',
-      singularity,
+      singularityList,
     },
   };
 };
