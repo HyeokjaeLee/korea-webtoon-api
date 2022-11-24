@@ -1,7 +1,7 @@
 import { requestWebtoonsByDayTabUid } from './requestWebtoonsByDayTabUid';
 import { DayTabUid } from './requestWebtoonsByDayTabUid';
 import { requestAuthorsOfWebtoon } from './requestAuthorsOfWebtoon';
-import { standardizeKakaoPageWebtoons } from './standardizeKakaoPageWebtoons';
+import { standardizeKakaoPageWebtoon } from './standardizeKakaoPageWebtoon';
 import { Webtoon, UpdateDay } from '../../types';
 
 export const KAKAO_PAGE_API_URL = 'https://page.kakao.com/graphql';
@@ -23,7 +23,7 @@ export const getKakaoPageWebtoons = async () => {
         await requestAuthorsOfWebtoon(
           kakaoPageWebtoon.eventLog.eventMeta.id,
         ).then((author: string) => {
-          const webtoon = standardizeKakaoPageWebtoons(
+          const webtoon = standardizeKakaoPageWebtoon(
             kakaoPageWebtoon,
             author,
             [UpdateDay[dayTabName]],

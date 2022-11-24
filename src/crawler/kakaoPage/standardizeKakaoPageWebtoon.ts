@@ -1,7 +1,7 @@
 import type { KakaoPageWebtoon } from './requestWebtoonsByDayTabUid';
 import { Webtoon, Singularity } from '../../types';
 
-export const standardizeKakaoPageWebtoons = (
+export const standardizeKakaoPageWebtoon = (
   kakaoPageWebtoon: KakaoPageWebtoon,
   author: string,
   updateDays: Webtoon['updateDays'],
