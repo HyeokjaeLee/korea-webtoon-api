@@ -1,67 +1,69 @@
 import { NAVER_WEBTOON_URL } from '.';
 import { getHtmlData } from './getHtmlData';
-import { Week, Webtoon } from '../../types';
+import { Webtoon, Singularity } from '../../types';
 
-/**한 url에 표시되는 모든 웹툰 정보를 가지고오는 함수
- * @param type 웹툰의 종류(weekday, finish)
- * @param query 웹툰의 페이지 정보(week=mon, page=1)
- * @param weeknum 웹툰의 요일(0~6) / 완결(7)
- * @returns 표준 웹툰 정보 배열
- */
 export async function crawlNaverWebtoons(
   type: 'weekday' | 'finish',
   query: string,
-  week: Week,
+  updateDays: Webtoon['updateDays'],
+  commonSingularityList: Singularity[] = [],
 ) {
   const $ = await getHtmlData(
     `${NAVER_WEBTOON_URL}/webtoon/${type}.nhn?${query}`,
   );
 
-  const BASE_SELECTOR = '#ct > div.section_list_toon > ul > li > a';
-  const base$ = $(BASE_SELECTOR);
+  const rootElement = $('#ct > div.section_list_toon > ul > li > a');
 
-  return base$
+  return rootElement
     .map((_, element) => {
-      let isNew = false,
-        isRest = false,
-        isUp = false;
-      const isAdult =
-        $(element).find('div.thumbnail > span > span').attr('class') ===
-        'badge adult'
-          ? true
-          : false;
+      const badgeAreaText = $(element).find('span.area_badge').text();
 
-      if (type === 'weekday') {
-        const detail$ = $(element).find('div.info > span.detail > span');
-        const detailInfo = detail$
-          .map((_, element) => $(element).attr('class').replace('bullet ', ''))
-          .get();
-        isNew = detailInfo.includes('new');
-        isRest = detailInfo.includes('break');
-        isUp = detailInfo.includes('up');
+      const isNewWebtoon = badgeAreaText.includes('신작');
+      const isAdultWebtoon = badgeAreaText.includes('청유물');
+
+      const singularityList = [...commonSingularityList];
+      const isWaitFreeWebtoon = badgeAreaText.includes('유료작품');
+      if (isWaitFreeWebtoon) {
+        singularityList.push(Singularity.WAIT_FREE);
       }
 
-      const author = $(element)
-        .find('.author')
-        .text()
-        .replaceAll(' / ', ',')
-        .replaceAll('\n', '')
-        .replaceAll('\t', '');
+      const titleBoxText = $(element).find('div.title_box').text();
+      const isPausedWebtoon = titleBoxText.includes('휴재');
+      const isUpdatedWebtoon = titleBoxText.includes('업데이트');
+
+      const fanCountText = $(element)
+        .find('div.info > span.favcount > span.count_num')
+        .text();
+
+      const fanCount = fanCountText.includes('만')
+        ? Number(fanCountText.replace('만', ''))
+        : fanCountText.includes('억')
+        ? Number(fanCountText.replace('억', '')) * 10000
+        : null;
 
       const webtoon: Webtoon = {
         title: $(element).find('.title').text(),
-        author: author,
+
+        author: $(element)
+          .find('.author')
+          .text()
+          .replaceAll(' / ', ',')
+          .replaceAll('\n', '')
+          .replaceAll('\t', ''),
+
         url: NAVER_WEBTOON_URL + $(element).attr('href'),
-        img: $(element).find('div.thumbnail > img').attr('src'),
+
+        img: $(element).find('div.thumbnail > img').attr('src') || '',
+
         service: 'naver',
-        popular: 0,
-        week,
+        fanCount,
+        updateDays,
         additional: {
-          new: isNew,
-          adult: isAdult,
-          rest: isRest,
-          up: isUp,
-          singularity: [],
+          new: isNewWebtoon,
+          adult: isAdultWebtoon,
+          rest: isPausedWebtoon,
+          up: isUpdatedWebtoon,
+          singularityList,
         },
       };
 
@@ -69,8 +71,3 @@ export async function crawlNaverWebtoons(
     })
     .get();
 }
-
-(async () => {
-  const result = await crawlNaverWebtoons('weekday', 'week=mon', 1);
-  console.log(result);
-})();
