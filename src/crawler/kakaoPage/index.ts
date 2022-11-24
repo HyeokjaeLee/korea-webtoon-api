@@ -17,45 +17,40 @@ export const getKakaoPageWebtoons = async () => {
       DayTabUid[dayTabName],
     );
 
-    for (const kakaoPageWebtoon of kakaoPageWebtoonsOfDay) {
-      const author = await requestAuthorsOfWebtoon(
-        kakaoPageWebtoon.eventLog.eventMeta.id,
-      );
+    //* 비동기적으로 처리
+    await Promise.all(
+      kakaoPageWebtoonsOfDay.map(async (kakaoPageWebtoon) => {
+        await requestAuthorsOfWebtoon(
+          kakaoPageWebtoon.eventLog.eventMeta.id,
+        ).then((author: string) => {
+          const webtoon = standardizeKakaoPageWebtoons(
+            kakaoPageWebtoon,
+            author,
+            [UpdateDay[dayTabName]],
+          );
 
-      const webtoon = standardizeKakaoPageWebtoons(kakaoPageWebtoon, author, [
-        UpdateDay[dayTabName],
-      ]);
+          const savedWebtoon = webtoons.find(
+            (savedWebtoon) =>
+              savedWebtoon.title === webtoon.title &&
+              savedWebtoon.author === author,
+          );
 
-      const savedWebtoon = webtoons.find(
-        (savedWebtoon) =>
-          savedWebtoon.title === webtoon.title &&
-          savedWebtoon.author === author,
-      );
+          //* 중복 저장 방지
+          if (savedWebtoon) {
+            const { updateDays } = savedWebtoon;
+            const [updateDay] = webtoon.updateDays;
 
-      /** 중복 저장 방지**/
-      if (savedWebtoon) {
-        const savedAdditional = savedWebtoon.additional;
-        const {
-          additional,
-          updateDays: [updateDay],
-        } = webtoon;
-        savedAdditional.rest = savedAdditional.rest || additional.rest;
-        savedAdditional.up = savedAdditional.up || additional.up;
-        savedAdditional.new = savedAdditional.new || additional.new;
+            updateDays.includes(updateDay) || updateDays.push(updateDay);
 
-        const savedWebtoonUpdateDay = savedWebtoon.updateDays;
-
-        if (!savedWebtoonUpdateDay.includes(updateDay)) {
-          savedWebtoonUpdateDay.push(updateDay);
-        }
-
-        if (savedWebtoonUpdateDay.includes(UpdateDay.FINISHED)) {
-          savedWebtoon.updateDays = [UpdateDay.FINISHED];
-        }
-      } else {
-        webtoons.push(webtoon);
-      }
-    }
+            if (updateDays.includes(UpdateDay.FINISHED)) {
+              savedWebtoon.updateDays = [UpdateDay.FINISHED];
+            }
+          } else {
+            webtoons.push(webtoon);
+          }
+        });
+      }),
+    );
   }
 
   return webtoons;
