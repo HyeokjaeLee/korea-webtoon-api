@@ -37,3 +37,18 @@ namespace WebtoonObject {
     additional: Additional;
   }
 }
+
+interface Webtoon {
+  title: string;
+  author: string;
+  url: string;
+  img: string;
+  service: 'kakao' | 'naver' | 'kakao-page';
+  week: Week;
+  additional: {
+    new: boolean;
+    rest: boolean;
+    up: boolean;
+    adult: boolean;
+  };
+}

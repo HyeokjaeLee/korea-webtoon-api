@@ -50,10 +50,19 @@ const API_URL = 'https://gateway-kw.kakao.com/section/v1/';
 async function getWeekWebtoon(
   original: 'general' | 'novel',
 ): Promise<WebtoonObject.CrawlerOutput[][]> {
-  const { data }: any = await axios.get(`${API_URL}pages/${original}-weekdays`);
-  return data.data.sections.map((sections, weeknum: number) =>
-    classifyWebtoon(sections.cardGroups[0].cards, weeknum),
-  );
+  try {
+    const { data }: any = await axios({
+      method: 'get',
+      url: `${API_URL}pages/${original}-weekdays`,
+    });
+
+    return data.data.sections.map((sections, weeknum: number) =>
+      classifyWebtoon(sections.cardGroups[0].cards, weeknum),
+    );
+  } catch (e) {
+    console.log('kakao', String(e));
+    return [];
+  }
 }
 
 async function getFinishedWebtoon(
