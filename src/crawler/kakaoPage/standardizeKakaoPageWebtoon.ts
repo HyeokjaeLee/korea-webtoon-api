@@ -1,5 +1,5 @@
 import type { KakaoPageWebtoon } from './requestWebtoonsByDayTabUid';
-import { Webtoon, Singularity } from '../../types';
+import { Webtoon, Singularity, ServiceCode } from '../../types';
 
 export const standardizeKakaoPageWebtoon = (
   kakaoPageWebtoon: KakaoPageWebtoon,
@@ -36,6 +36,7 @@ export const standardizeKakaoPageWebtoon = (
     : null;
 
   return {
+    webtoonId: ServiceCode.KAKAO_PAGE + Number(id),
     title: name,
     author,
     url: `https://page.kakao.com/content/${id}`,

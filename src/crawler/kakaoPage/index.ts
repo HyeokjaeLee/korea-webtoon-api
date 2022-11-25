@@ -27,13 +27,11 @@ export const getKakaoPageWebtoons = async () => {
         UpdateDay[dayTabName],
       ]);
 
+      //* 중복 저장 방지
       const savedWebtoon = webtoons.find(
-        (savedWebtoon) =>
-          savedWebtoon.title === webtoon.title &&
-          savedWebtoon.author === author,
+        ({ webtoonId }) => webtoonId === webtoon.webtoonId,
       );
 
-      //* 중복 저장 방지
       if (savedWebtoon) {
         const { updateDays } = savedWebtoon;
         const [updateDay] = webtoon.updateDays;

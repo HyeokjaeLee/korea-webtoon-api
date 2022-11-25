@@ -44,9 +44,7 @@ export const getWeeklyKakaoWebtoons = async (
         );
 
         const savedWebtoon = webtoons.find(
-          (savedWebtoon) =>
-            savedWebtoon.title === webtoon.title &&
-            savedWebtoon.author === webtoon.author,
+          ({ webtoonId }) => webtoonId === webtoon.webtoonId,
         );
 
         if (savedWebtoon) {

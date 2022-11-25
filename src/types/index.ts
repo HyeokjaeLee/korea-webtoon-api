@@ -16,7 +16,14 @@ export enum Singularity {
   WAIT_FREE = 'waitFree',
 }
 
+export enum ServiceCode {
+  NAVER = 1_000_000_000_000,
+  KAKAO = 2_000_000_000_000,
+  KAKAO_PAGE = 3_000_000_000_000,
+}
+
 export interface Webtoon {
+  webtoonId: number;
   title: string;
   author: string;
   url: string;

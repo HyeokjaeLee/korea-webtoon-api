@@ -15,9 +15,7 @@ export const crawlWeeklyNaverWebtoons = async () => {
 
     for (const webtoon of webtoons) {
       const savedWebtoon = webtoonList.find(
-        (savedWebtoon) =>
-          savedWebtoon.title === webtoon.title &&
-          savedWebtoon.author === webtoon.author,
+        ({ webtoonId }) => webtoonId === webtoon.webtoonId,
       );
 
       if (savedWebtoon) {

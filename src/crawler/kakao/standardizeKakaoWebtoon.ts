@@ -1,5 +1,5 @@
 import type { KakaoWebtoon } from './requestKakaoWebtoons';
-import { Webtoon, Singularity } from '../../types';
+import { Webtoon, Singularity, ServiceCode } from '../../types';
 
 const KAKAO_WEBTOON_URL = 'https://webtoon.kakao.com/content';
 
@@ -10,7 +10,7 @@ export const standardizeKakaoWebtoon = (
   singularityList: Singularity[] = [],
 ): Webtoon => {
   const { content, additional } = KakaoWebtoon,
-    { authors } = content;
+    { authors, id } = content;
 
   let author = authors.find((author) => author.type === 'AUTHOR')?.name ?? '';
 
@@ -25,9 +25,10 @@ export const standardizeKakaoWebtoon = (
   if (content.ageLimit === 15) singularityList.push(Singularity.OVER_15);
 
   return {
+    webtoonId: ServiceCode.KAKAO + Number(id),
     title: content.title,
     author,
-    url: `${KAKAO_WEBTOON_URL}/${content.seoId}/${content.id}`,
+    url: `${KAKAO_WEBTOON_URL}/${content.seoId}/${id}`,
     img: `${content.featuredCharacterImageA}.png`,
     service: 'kakao',
     updateDays,
