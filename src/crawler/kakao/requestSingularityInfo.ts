@@ -22,23 +22,35 @@ interface SingularityInfoResponse {
   };
 }
 
-export const requestSingularityInfo = async (webtoonId: number) => {
-  const res: SingularityInfoResponse = await axios.get(
-    AVAILABLE_TICKETS_API_URL + webtoonId,
-    {
-      headers: {
-        'accept-language': 'ko',
+export const requestSingularityInfo = async (
+  webtoonId: number,
+  errorCount = 0,
+) => {
+  try {
+    const res: SingularityInfoResponse = await axios.get(
+      AVAILABLE_TICKETS_API_URL + webtoonId,
+      {
+        headers: {
+          'accept-language': 'ko',
+        },
       },
-    },
-  );
+    );
 
-  const { data } = res.data;
+    const { data } = res.data;
 
-  if (data.allFree) {
-    return [Singularity.FREE];
-  }
+    if (data.allFree) {
+      return [Singularity.FREE];
+    }
 
-  if (data.waitForFree) {
-    return [Singularity.WAIT_FREE];
+    if (data.waitForFree) {
+      return [Singularity.WAIT_FREE];
+    }
+  } catch {
+    errorCount++;
+    console.log('try again request Kakao singularity info', errorCount);
+    if (errorCount > 10) {
+      throw new Error('can not request kakao singularity info');
+    }
+    return requestSingularityInfo(webtoonId, errorCount);
   }
 };

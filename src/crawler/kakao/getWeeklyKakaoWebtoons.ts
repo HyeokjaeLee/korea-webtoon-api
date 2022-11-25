@@ -27,36 +27,35 @@ export const getWeeklyKakaoWebtoons = async (
 
     const kakaoWebtoons = weeklyWebtoons.cardGroups[0].cards;
 
-    await Promise.all(
-      kakaoWebtoons.map(async (kakaoWebtoon) => {
-        const { id } = kakaoWebtoon.content;
-        const [fanCount, singularityInfo] = await Promise.all([
-          requestFanCount(id),
-          requestSingularityInfo(id),
-        ]);
+    //! 비동기적으로 요청시 카카오측 서버에서 요청을 막음
+    for (const kakaoWebtoon of kakaoWebtoons) {
+      const { id } = kakaoWebtoon.content;
+      const [fanCount, singularityInfo] = await Promise.all([
+        requestFanCount(id),
+        requestSingularityInfo(id),
+      ]);
 
-        if (updateDay) {
-          const webtoon = standardizeKakaoWebtoon(
-            kakaoWebtoon,
-            [updateDay],
-            fanCount,
-            singularityInfo,
-          );
+      if (updateDay) {
+        const webtoon = standardizeKakaoWebtoon(
+          kakaoWebtoon,
+          [updateDay],
+          fanCount,
+          singularityInfo,
+        );
 
-          const savedWebtoon = webtoons.find(
-            (savedWebtoon) =>
-              savedWebtoon.title === webtoon.title &&
-              savedWebtoon.author === webtoon.author,
-          );
+        const savedWebtoon = webtoons.find(
+          (savedWebtoon) =>
+            savedWebtoon.title === webtoon.title &&
+            savedWebtoon.author === webtoon.author,
+        );
 
-          if (savedWebtoon) {
-            savedWebtoon.updateDays.push(...webtoon.updateDays);
-          } else {
-            webtoons.push(webtoon);
-          }
+        if (savedWebtoon) {
+          savedWebtoon.updateDays.push(...webtoon.updateDays);
+        } else {
+          webtoons.push(webtoon);
         }
-      }),
-    );
+      }
+    }
   }
 
   return webtoons;

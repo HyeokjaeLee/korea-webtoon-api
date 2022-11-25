@@ -50,10 +50,20 @@ interface KakaoWebtoonResponse {
 export const requestKakaoWebtoons = async (
   path: string,
   hasSections?: boolean,
+  errorCount = 0,
 ): Promise<KakaoWebtoonResponse[]> => {
-  const res = await axios.get(KAKAO_API_URL + path);
+  try {
+    const res = await axios.get(KAKAO_API_URL + path);
 
-  const { data } = res.data;
+    const { data } = res.data;
 
-  return hasSections ? data.sections : data;
+    return hasSections ? data.sections : data;
+  } catch {
+    errorCount++;
+    console.log('try again request Kakao webtoons', errorCount);
+    if (errorCount > 10) {
+      throw new Error('can not request kakao webtoons');
+    }
+    return requestKakaoWebtoons(path, hasSections, errorCount);
+  }
 };

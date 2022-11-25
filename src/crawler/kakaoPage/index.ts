@@ -17,40 +17,36 @@ export const getKakaoPageWebtoons = async () => {
       DayTabUid[dayTabName],
     );
 
-    //* 비동기적으로 처리
-    await Promise.all(
-      kakaoPageWebtoonsOfDay.map(async (kakaoPageWebtoon) => {
-        await requestAuthorsOfWebtoon(
-          kakaoPageWebtoon.eventLog.eventMeta.id,
-        ).then((author: string) => {
-          const webtoon = standardizeKakaoPageWebtoon(
-            kakaoPageWebtoon,
-            author,
-            [UpdateDay[dayTabName]],
-          );
+    //! 비동기적으로 처리하면 카카오 페이지 서버에서 막는 횟수가 많아짐
+    for (const kakaoPageWebtoon of kakaoPageWebtoonsOfDay) {
+      const author = await requestAuthorsOfWebtoon(
+        kakaoPageWebtoon.eventLog.eventMeta.id,
+      );
 
-          const savedWebtoon = webtoons.find(
-            (savedWebtoon) =>
-              savedWebtoon.title === webtoon.title &&
-              savedWebtoon.author === author,
-          );
+      const webtoon = standardizeKakaoPageWebtoon(kakaoPageWebtoon, author, [
+        UpdateDay[dayTabName],
+      ]);
 
-          //* 중복 저장 방지
-          if (savedWebtoon) {
-            const { updateDays } = savedWebtoon;
-            const [updateDay] = webtoon.updateDays;
+      const savedWebtoon = webtoons.find(
+        (savedWebtoon) =>
+          savedWebtoon.title === webtoon.title &&
+          savedWebtoon.author === author,
+      );
 
-            updateDays.includes(updateDay) || updateDays.push(updateDay);
+      //* 중복 저장 방지
+      if (savedWebtoon) {
+        const { updateDays } = savedWebtoon;
+        const [updateDay] = webtoon.updateDays;
 
-            if (updateDays.includes(UpdateDay.FINISHED)) {
-              savedWebtoon.updateDays = [UpdateDay.FINISHED];
-            }
-          } else {
-            webtoons.push(webtoon);
-          }
-        });
-      }),
-    );
+        updateDays.includes(updateDay) || updateDays.push(updateDay);
+
+        if (updateDays.includes(UpdateDay.FINISHED)) {
+          savedWebtoon.updateDays = [UpdateDay.FINISHED];
+        }
+      } else {
+        webtoons.push(webtoon);
+      }
+    }
   }
 
   return webtoons;
