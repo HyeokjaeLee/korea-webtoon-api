@@ -1,6 +1,7 @@
 import { NAVER_WEBTOON_URL } from '.';
 import { getHtmlData } from './getHtmlData';
-import { Webtoon, Singularity, ServiceCode } from '../../types';
+import { Webtoon, Singularity, ServiceCode, Service } from '../../types';
+import { standardizeChars } from 'utils';
 
 export async function crawlNaverWebtoons(
   type: 'weekday' | 'finish',
@@ -43,25 +44,31 @@ export async function crawlNaverWebtoons(
 
       const path = $(element).attr('href');
 
+      const title = $(element).find('.title').text();
+
+      const author = $(element)
+        .find('.author')
+        .text()
+        .replaceAll(' / ', ',')
+        .replaceAll('\n', '')
+        .replaceAll('\t', '');
+
       const titleId = path ? Number(path.split('?titleId=')[1]) : 0;
 
       const webtoon: Webtoon = {
         webtoonId: ServiceCode.NAVER + titleId,
 
-        title: $(element).find('.title').text(),
+        title,
 
-        author: $(element)
-          .find('.author')
-          .text()
-          .replaceAll(' / ', ',')
-          .replaceAll('\n', '')
-          .replaceAll('\t', ''),
+        author,
+
+        searchKeyword: standardizeChars(title + author),
 
         url: NAVER_WEBTOON_URL + path,
 
         img: $(element).find('div.thumbnail > img').attr('src') || '',
 
-        service: 'naver',
+        service: Service.NAVER,
         fanCount,
         updateDays,
         additional: {

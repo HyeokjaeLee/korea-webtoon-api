@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { consoleWithTime } from 'utils';
 
 const KAKAO_API_URL = 'https://gateway-kw.kakao.com/section/v1';
 
@@ -60,9 +61,10 @@ export const requestKakaoWebtoons = async (
     return hasSections ? data.sections : data;
   } catch {
     errorCount++;
-    console.log('try again request Kakao webtoons', errorCount);
+    const errorMessage = `카카오 웹툰 path:${path} 요청 실패`;
+    consoleWithTime(`${errorMessage}, ${errorCount}번째 재시도`);
     if (errorCount > 10) {
-      throw new Error('can not request kakao webtoons');
+      throw new Error(errorMessage);
     }
     return requestKakaoWebtoons(path, hasSections, errorCount);
   }

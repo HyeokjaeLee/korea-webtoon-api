@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { consoleWithTime } from 'utils';
 import { Singularity } from '../../types';
 
 const AVAILABLE_TICKETS_API_URL =
@@ -22,13 +23,10 @@ interface SingularityInfoResponse {
   };
 }
 
-export const requestSingularityInfo = async (
-  webtoonId: number,
-  errorCount = 0,
-) => {
+export const requestSingularityInfo = async (id: number, errorCount = 0) => {
   try {
     const res: SingularityInfoResponse = await axios.get(
-      AVAILABLE_TICKETS_API_URL + webtoonId,
+      AVAILABLE_TICKETS_API_URL + id,
       {
         headers: {
           'accept-language': 'ko',
@@ -47,10 +45,11 @@ export const requestSingularityInfo = async (
     }
   } catch {
     errorCount++;
-    console.log('try again request Kakao singularity info', errorCount);
+    const errorMessage = `카카오 웹툰 id:${id} singularity 요청 실패`;
+    consoleWithTime(`${errorMessage}, ${errorCount}번째 재시도`);
     if (errorCount > 10) {
-      throw new Error('can not request kakao singularity info');
+      throw new Error(errorMessage);
     }
-    return requestSingularityInfo(webtoonId, errorCount);
+    return requestSingularityInfo(id, errorCount);
   }
 };

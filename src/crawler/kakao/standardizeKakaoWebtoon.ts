@@ -1,5 +1,6 @@
 import type { KakaoWebtoon } from './requestKakaoWebtoons';
-import { Webtoon, Singularity, ServiceCode } from '../../types';
+import { Webtoon, Singularity, ServiceCode, Service } from '../../types';
+import { standardizeChars } from 'utils';
 
 const KAKAO_WEBTOON_URL = 'https://webtoon.kakao.com/content';
 
@@ -10,7 +11,7 @@ export const standardizeKakaoWebtoon = (
   singularityList: Singularity[] = [],
 ): Webtoon => {
   const { content, additional } = KakaoWebtoon,
-    { authors, id } = content;
+    { authors, id, title } = content;
 
   let author = authors.find((author) => author.type === 'AUTHOR')?.name ?? '';
 
@@ -26,13 +27,14 @@ export const standardizeKakaoWebtoon = (
 
   return {
     webtoonId: ServiceCode.KAKAO + Number(id),
-    title: content.title,
+    title: title,
     author,
     url: `${KAKAO_WEBTOON_URL}/${content.seoId}/${id}`,
     img: `${content.featuredCharacterImageA}.png`,
-    service: 'kakao',
+    service: Service.KAKAO,
     updateDays,
     fanCount,
+    searchKeyword: standardizeChars(title + author),
     additional: {
       new: additional.new,
       rest: additional.rest,
