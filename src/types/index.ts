@@ -16,14 +16,28 @@ export enum Singularity {
   WAIT_FREE = 'waitFree',
 }
 
+export enum ServiceCode {
+  NAVER = 1_000_000_000_000,
+  KAKAO = 2_000_000_000_000,
+  KAKAO_PAGE = 3_000_000_000_000,
+}
+
+export enum Service {
+  NAVER = 'naver',
+  KAKAO = 'kakao',
+  KAKAO_PAGE = 'kakaoPage',
+}
+
 export interface Webtoon {
+  webtoonId: number;
   title: string;
   author: string;
   url: string;
   img: string;
-  service: 'kakao' | 'naver' | 'kakao-page';
+  service: Service;
   updateDays: UpdateDay[];
   fanCount: number | null;
+  searchKeyword: string;
   additional: {
     new: boolean;
     rest: boolean;
@@ -31,4 +45,14 @@ export interface Webtoon {
     adult: boolean;
     singularityList: Singularity[];
   };
+}
+
+export interface LastUpdateInfo {
+  lastUpdate: null | string;
+  totalWebtoonCount: null | number;
+  naverWebtoonCount: null | number;
+  kakaoWebtoonCount: null | number;
+  kakaoPageWebtoonCount: null | number;
+  updatedWebtoonCount: number;
+  createdWebtoonCount: number;
 }

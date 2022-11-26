@@ -1,12 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-
-export type WebtoonDocument = Webtoon & Document;
+import { UpdateDay, Singularity, Service } from '../../../types';
 
 @Schema({ versionKey: false, id: false })
 export class Webtoon {
-  @Prop()
-  _id: string;
+  @Prop({ required: true, unique: true, index: true })
+  webtoonId: number;
   @Prop({ required: true })
   title: string;
   @Prop({ required: true })
@@ -16,11 +15,23 @@ export class Webtoon {
   @Prop({ required: true })
   img: string;
   @Prop({ required: true })
-  service: string;
+  service: Service;
+  @Prop({ required: true, type: [String] })
+  updateDays: UpdateDay[];
+  @Prop({ type: Number })
+  fanCount: number | null;
   @Prop({ required: true })
-  week: number[];
+  searchKeyword: string;
   @Prop({ required: true, type: Object })
-  additional: WebtoonObject.Additional;
+  additional: {
+    new: boolean;
+    rest: boolean;
+    up: boolean;
+    adult: boolean;
+    singularityList: Singularity[];
+  };
 }
+
+export type WebtoonDocument = Webtoon & Document;
 
 export const WebtoonSchema = SchemaFactory.createForClass(Webtoon);
