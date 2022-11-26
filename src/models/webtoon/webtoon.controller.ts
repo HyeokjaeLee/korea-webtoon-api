@@ -6,6 +6,22 @@ import { consoleWithTime } from 'utils';
 @Controller()
 export class WebtoonController {
   constructor(private readonly webtoonService: WebtoonService) {
+    this.webtoonService.getWebtoonsByDatabase().then((webtoonsOfDatabase) => {
+      for (const { service } of webtoonsOfDatabase) {
+        this.lastUpdateInfo.totalWebtoonCount++;
+        switch (service) {
+          case 'naver':
+            this.lastUpdateInfo.naverWebtoonCount++;
+            break;
+          case 'kakao':
+            this.lastUpdateInfo.kakaoWebtoonCount++;
+            break;
+          case 'kakaoPage':
+            this.lastUpdateInfo.kakaoPageWebtoonCount++;
+            break;
+        }
+      }
+    });
     const ONE_HOUR = 1000 * 60 * 60;
     const updateWebtoons = async () => {
       try {
@@ -20,10 +36,10 @@ export class WebtoonController {
   }
   private lastUpdateInfo: LastUpdateInfo = {
     lastUpdate: null,
-    totalWebtoonCount: null,
-    naverWebtoonCount: null,
-    kakaoWebtoonCount: null,
-    kakaoPageWebtoonCount: null,
+    totalWebtoonCount: 0,
+    naverWebtoonCount: 0,
+    kakaoWebtoonCount: 0,
+    kakaoPageWebtoonCount: 0,
     updatedWebtoonCount: 0,
     createdWebtoonCount: 0,
   };

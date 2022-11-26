@@ -49,10 +49,10 @@ export interface Webtoon {
 
 export interface LastUpdateInfo {
   lastUpdate: null | string;
-  totalWebtoonCount: null | number;
-  naverWebtoonCount: null | number;
-  kakaoWebtoonCount: null | number;
-  kakaoPageWebtoonCount: null | number;
+  totalWebtoonCount: number;
+  naverWebtoonCount: number;
+  kakaoWebtoonCount: number;
+  kakaoPageWebtoonCount: number;
   updatedWebtoonCount: number;
   createdWebtoonCount: number;
 }

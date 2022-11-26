@@ -27,7 +27,7 @@ export class WebtoonService {
     return [...naverWebtoons, ...kakaoWebtoons, ...kakaoPageWebtoons];
   }
 
-  private async getWebtoonsByDatabase() {
+  async getWebtoonsByDatabase() {
     return await this.webtoonModel.find().exec();
   }
 
