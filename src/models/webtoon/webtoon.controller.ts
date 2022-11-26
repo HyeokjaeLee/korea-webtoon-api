@@ -48,7 +48,8 @@ export class WebtoonController {
   async getWebtoons(
     @Query(`page`) page = 0,
     @Query(`perPage`) perPage = 10,
-    @Query(`service`) service = 'all',
+    @Query(`service`) service,
+    @Query(`updateDay`) updateDay,
   ) {
     const totalWebtoonCountOfService =
       {
@@ -62,6 +63,7 @@ export class WebtoonController {
       page,
       perPage,
       service,
+      updateDay,
     );
 
     const webtoonCount = webtoons.length;

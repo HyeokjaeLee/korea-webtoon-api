@@ -35,9 +35,20 @@ export class WebtoonService {
     page: number,
     perPage: number,
     service: string,
+    updateDay: string,
   ) {
+    const findParams = {};
+
+    if (service) {
+      findParams['service'] = service;
+    }
+
+    if (updateDay) {
+      findParams['updateDays'] = updateDay;
+    }
+
     const webtoons = await this.webtoonModel
-      .find(service === 'all' ? {} : { service })
+      .find(findParams)
       .skip(page * perPage)
       .limit(perPage)
       .exec();
