@@ -176,7 +176,7 @@ export enum DayTabUid {
   FRI = 5,
   SAT = 6,
   SUN = 7,
-  FINISH = 12,
+  FINISHED = 12,
 }
 
 export interface KakaoPageWebtoon {
