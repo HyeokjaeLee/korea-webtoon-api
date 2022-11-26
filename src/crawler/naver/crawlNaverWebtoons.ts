@@ -53,7 +53,9 @@ export async function crawlNaverWebtoons(
         .replaceAll('\n', '')
         .replaceAll('\t', '');
 
-      const titleId = path ? Number(path.split('?titleId=')[1]) : 0;
+      const titleId = path
+        ? Number(path.split('?titleId=')[1].split('&')[0])
+        : 0;
 
       const webtoon: Webtoon = {
         webtoonId: ServiceCode.NAVER + titleId,
