@@ -1,7 +1,8 @@
 import type { KakaoPageWebtoon } from './requestWebtoonsByDayTabUid';
-import { Webtoon, Singularity } from '../../types';
+import { Webtoon, Singularity, ServiceCode, Service } from '../../types';
+import { standardizeChars } from 'utils';
 
-export const standardizeKakaoPageWebtoons = (
+export const standardizeKakaoPageWebtoon = (
   kakaoPageWebtoon: KakaoPageWebtoon,
   author: string,
   updateDays: Webtoon['updateDays'],
@@ -36,13 +37,15 @@ export const standardizeKakaoPageWebtoons = (
     : null;
 
   return {
+    webtoonId: ServiceCode.KAKAO_PAGE + Number(id),
     title: name,
     author,
     url: `https://page.kakao.com/content/${id}`,
     img: kakaoPageWebtoon.thumbnail,
-    service: 'kakao-page',
+    service: Service.KAKAO_PAGE,
     updateDays,
     fanCount,
+    searchKeyword: standardizeChars(name + author),
     additional: {
       new: statusBadge === 'BadgeNewStatic',
       rest: false,

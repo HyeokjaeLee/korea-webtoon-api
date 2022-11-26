@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { consoleWithTime } from 'utils';
 import { KAKAO_PAGE_API_URL } from '.';
 
 const QUERY = `
@@ -42,9 +43,10 @@ export const requestAuthorsOfWebtoon = async (
     return data.data.contentHomeOverview.content.authors;
   } catch {
     errorCount++;
-    console.log('try again requestAuthorsOfWebtoon', errorCount);
+    const errorMessage = `카카오 페이지 웹툰 seriesId:${seriesId} authors 요청 실패`;
+    consoleWithTime(`${errorMessage}, ${errorCount}번째 재시도`);
     if (errorCount > 10) {
-      throw new Error('can not request kakao page authors');
+      throw new Error(errorMessage);
     }
     return requestAuthorsOfWebtoon(seriesId, errorCount);
   }

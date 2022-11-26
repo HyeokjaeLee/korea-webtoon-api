@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { consoleWithTime } from 'utils';
 import { KAKAO_PAGE_API_URL } from '.';
 
 const QUERY = `
@@ -234,9 +235,10 @@ const requestKakaoPageWebtoons = async (
     return data.data.staticLandingDayOfWeekSection;
   } catch {
     errorCount++;
-    console.log('try again requestKakaoPageWebtoons', errorCount);
+    const errorMessage = `카카오 페이지 웹툰 dayTabUid: ${dayTabUid}, page: ${page} 요청 실패`;
+    consoleWithTime(`${errorMessage} ${errorCount}번째 재시도`);
     if (errorCount > 10) {
-      throw new Error('can not request kakao page webtoons');
+      throw new Error(errorMessage);
     }
     return requestKakaoPageWebtoons(dayTabUid, page, errorCount + 1);
   }
