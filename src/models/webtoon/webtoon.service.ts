@@ -10,7 +10,6 @@ import {
 
 import { isEqual } from 'lodash';
 
-import { standardizeChars } from '../../utils';
 import type { LastUpdateInfo } from '../../types';
 
 @Injectable()
@@ -64,7 +63,7 @@ export class WebtoonService {
     return await this.webtoonModel
       .find()
       .where('searchKeyword')
-      .regex(standardizeChars(keyword))
+      .regex(keyword)
       .exec();
   }
 
