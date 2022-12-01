@@ -49,16 +49,16 @@ export class WebtoonController {
   async getWebtoons(
     @Query(`page`) page = 0,
     @Query(`perPage`) perPage = 10,
-    @Query(`service`) service,
-    @Query(`updateDay`) updateDay,
+    @Query(`service`) service: string,
+    @Query(`updateDay`) updateDay: string,
   ) {
-    const totalWebtoonCountOfService =
+    const { lastUpdateInfo } = this;
+    const totalWebtoonCountOfService: number =
       {
-        naver: this.lastUpdateInfo.naverWebtoonCount,
-        kakao: this.lastUpdateInfo.kakaoWebtoonCount,
-        kakaoPage: this.lastUpdateInfo.kakaoPageWebtoonCount,
-        all: this.lastUpdateInfo.totalWebtoonCount,
-      }[service] ?? 0;
+        naver: lastUpdateInfo.naverWebtoonCount,
+        kakao: lastUpdateInfo.kakaoWebtoonCount,
+        kakaoPage: lastUpdateInfo.kakaoPageWebtoonCount,
+      }[service] ?? lastUpdateInfo.totalWebtoonCount;
 
     const webtoons = await this.webtoonService.getLimitedWebtoonsByDatabase(
       page,
@@ -74,7 +74,7 @@ export class WebtoonController {
       : null;
 
     return {
-      ...this.lastUpdateInfo,
+      ...lastUpdateInfo,
       isLastPage,
       webtoons,
     };
