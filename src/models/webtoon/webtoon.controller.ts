@@ -2,6 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { WebtoonService } from './webtoon.service';
 import type { LastUpdateInfo } from '../../types';
 import { consoleWithTime } from 'utils';
+import { standardizeChars } from '../../utils';
 
 @Controller()
 export class WebtoonController {
@@ -81,8 +82,15 @@ export class WebtoonController {
 
   @Get('search')
   async search(@Query(`keyword`) keyword: string) {
-    if (keyword.length < 2) return { ...this.lastUpdateInfo, webtoons: [] };
-    const webtoons = await this.webtoonService.getWebtoonsByKeyword(keyword);
+    const standardizedKeyword = standardizeChars(keyword);
+    if (standardizedKeyword.length < 2) {
+      return { ...this.lastUpdateInfo, webtoons: [] };
+    }
+
+    const webtoons = await this.webtoonService.getWebtoonsByKeyword(
+      standardizedKeyword,
+    );
+
     return {
       ...this.lastUpdateInfo,
       webtoons,
