@@ -2,7 +2,7 @@
 
 ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white)&nbsp;&nbsp;&nbsp;![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=flat-square&logo=NestJS&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=MongoDB&logoColor=white) ![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
 
-# **About**
+# **📌 About**
 
 여러 가지 플랫폼의 웹툰에 대한 정보를 제공하며 정보는 한시간 간격으로 갱신됩니다.
 
@@ -12,7 +12,7 @@
 - 카카오웹툰
 - 카카오페이지
 
-# **Request**
+# **✉️ Request**
 
 ## **웹툰 정보 요청**
 
@@ -120,7 +120,7 @@
 }
 ```
 
-# **Response Element**
+# 📩 **Response Element**
 
 |           Name            | Required |  Type   | Default | Description                                                                                                                                                                                                        |
 | :-----------------------: | :------: | :-----: | :-----: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
