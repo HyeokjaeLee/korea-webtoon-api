@@ -44,7 +44,6 @@
   "updatedWebtoonCount": 56,
   "createdWebtoonCount": 0,
   "lastUpdate": "2022-12-01T00:41:49.961Z",
-  "isLastPage": false,
   "webtoons": [
     {
       "_id": "638250d60d980db259c72c02",
@@ -128,7 +127,6 @@
 |   **naverWebtoonCount**   |    Y     | number  |    0    | 네이버 웹툰 수                                                                                                                                                                                                     |
 |   **kakaoWebtoonCount**   |    Y     | number  |    0    | 카카오 웹툰 수                                                                                                                                                                                                     |
 | **kakaoPageWebtoonCount** |    Y     | number  |    0    | 카카오 페이지 웹툰 수                                                                                                                                                                                              |
-|      **isLastPage**       |    N     | boolean |  null   | 마지막 페이지 여부                                                                                                                                                                                                 |
 |      **lastUpdate**       |    N     | string  |  null   | 마지막 갱신 시간                                                                                                                                                                                                   |
 |  **updatedWebtoonCount**  |    Y     | number  |    0    | 마지막 갱신에서 정보가 변경된 웹툰 수                                                                                                                                                                              |
 |  **createdWebtoonCount**  |    Y     | number  |    0    | 마지막 갱신에서 정보가 새롭게 생성된 웹툰 수                                                                                                                                                                       |

@@ -67,15 +67,8 @@ export class WebtoonController {
       updateDay,
     );
 
-    const webtoonCount = webtoons.length;
-
-    const isLastPage = webtoonCount
-      ? page * perPage + webtoonCount >= totalWebtoonCountOfService
-      : null;
-
     return {
       ...lastUpdateInfo,
-      isLastPage,
       webtoons,
     };
   }
