@@ -15,16 +15,6 @@ export const getWeeklyKakaoWebtoons = async (
   const webtoons: Webtoon[] = [];
 
   for (const weeklyWebtoons of weeklyWebtoonsList) {
-    const updateDay = {
-      월: UpdateDay.MON,
-      화: UpdateDay.TUE,
-      수: UpdateDay.WED,
-      목: UpdateDay.THU,
-      금: UpdateDay.FRI,
-      토: UpdateDay.SAT,
-      일: UpdateDay.SUN,
-    }[weeklyWebtoons.title];
-
     const kakaoWebtoons = weeklyWebtoons.cardGroups[0].cards;
 
     //! 비동기적으로 요청시 카카오측 서버에서 요청을 막음
@@ -34,6 +24,16 @@ export const getWeeklyKakaoWebtoons = async (
         requestFanCount(id),
         requestSingularityInfo(id),
       ]);
+
+      const updateDay = {
+        월: UpdateDay.MON,
+        화: UpdateDay.TUE,
+        수: UpdateDay.WED,
+        목: UpdateDay.THU,
+        금: UpdateDay.FRI,
+        토: UpdateDay.SAT,
+        일: UpdateDay.SUN,
+      }[weeklyWebtoons.title];
 
       if (updateDay) {
         const webtoon = standardizeKakaoWebtoon(
@@ -48,7 +48,9 @@ export const getWeeklyKakaoWebtoons = async (
         );
 
         if (savedWebtoon) {
-          savedWebtoon.updateDays.push(...webtoon.updateDays);
+          savedWebtoon.updateDays = [
+            ...new Set([...savedWebtoon.updateDays, updateDay]),
+          ];
         } else {
           webtoons.push(webtoon);
         }

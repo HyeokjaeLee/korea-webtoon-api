@@ -19,15 +19,11 @@ export const crawlWeeklyNaverWebtoons = async () => {
       );
 
       if (savedWebtoon) {
-        const { updateDays } = savedWebtoon;
-
         const [updateDay] = webtoon.updateDays;
 
-        updateDays.includes(updateDay) || updateDays.push(updateDay);
-
-        if (updateDays.includes(UpdateDay.FINISHED)) {
-          savedWebtoon.updateDays = [UpdateDay.FINISHED];
-        }
+        savedWebtoon.updateDays = [
+          ...new Set([...savedWebtoon.updateDays, updateDay]),
+        ];
       } else {
         webtoonList.push(webtoon);
       }

@@ -19,7 +19,7 @@ export const getKakaoPageWebtoons = async () => {
       DayTabUid[dayTabName],
     );
 
-    //! 비동기적으로 처리하면 카카오 페이지 서버에서 막는 횟수가 많아짐
+    //! 비동기적으로 처리하면 카카오 페이지 서버가 블락하는 빈도가 높아짐
     for (const kakaoPageWebtoon of kakaoPageWebtoonsOfDay) {
       const author = await requestAuthorsOfWebtoon(
         kakaoPageWebtoon.eventLog.eventMeta.id,
@@ -29,16 +29,16 @@ export const getKakaoPageWebtoons = async () => {
         UpdateDay[dayTabName],
       ]);
 
-      //* 중복 저장 방지
       const savedWebtoon = webtoons.find(
         ({ webtoonId }) => webtoonId === webtoon.webtoonId,
       );
 
       if (savedWebtoon) {
-        const { updateDays } = savedWebtoon;
         const [updateDay] = webtoon.updateDays;
 
-        updateDays.includes(updateDay) || updateDays.push(updateDay);
+        savedWebtoon.updateDays = [
+          ...new Set([...savedWebtoon.updateDays, updateDay]),
+        ];
       } else {
         webtoons.push(webtoon);
       }
