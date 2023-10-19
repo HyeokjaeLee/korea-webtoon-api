@@ -17,16 +17,14 @@ export class WebtoonController {
           case 'kakao':
             this.lastUpdateInfo.kakaoWebtoonCount++;
             break;
-          case 'kakaoPage':
-            this.lastUpdateInfo.kakaoPageWebtoonCount++;
-            break;
         }
       }
     });
-    const ONE_HOUR = 1000 * 60 * 60;
+    const ONE_HOUR = 1_000 * 60 * 60;
+
     const updateWebtoons = async () => {
       try {
-        this.lastUpdateInfo = await this.webtoonService.updateWebtoons();
+        //this.lastUpdateInfo = await this.webtoonService.updateWebtoons();
       } catch {
         consoleWithTime('DB 업데이트 실패');
       }
@@ -35,12 +33,12 @@ export class WebtoonController {
     updateWebtoons();
     setInterval(updateWebtoons, ONE_HOUR);
   }
+
   private lastUpdateInfo: LastUpdateInfo = {
     lastUpdate: null,
     totalWebtoonCount: 0,
     naverWebtoonCount: 0,
     kakaoWebtoonCount: 0,
-    kakaoPageWebtoonCount: 0,
     updatedWebtoonCount: 0,
     createdWebtoonCount: 0,
   };
@@ -53,11 +51,11 @@ export class WebtoonController {
     @Query(`updateDay`) updateDay: string,
   ) {
     const { lastUpdateInfo } = this;
+
     const totalWebtoonCountOfService: number =
       {
         naver: lastUpdateInfo.naverWebtoonCount,
         kakao: lastUpdateInfo.kakaoWebtoonCount,
-        kakaoPage: lastUpdateInfo.kakaoPageWebtoonCount,
       }[service] ?? lastUpdateInfo.totalWebtoonCount;
 
     const webtoons = await this.webtoonService.getLimitedWebtoonsByDatabase(

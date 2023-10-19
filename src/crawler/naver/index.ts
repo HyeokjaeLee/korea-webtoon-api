@@ -12,6 +12,7 @@ export const getNaverWebtoons = async (errorCount = 0) => {
     const dailyWebtoons = await crawlDailyNaverWebtoons();
     const weeklyWebtoons = await crawlWeeklyNaverWebtoons();
     const finishedWebtoons = await crawlFinishedNaverWebtoons();
+
     consoleWithTime('네이버 웹툰 크롤링 완료');
     return [...dailyWebtoons, ...weeklyWebtoons, ...finishedWebtoons];
   } catch {

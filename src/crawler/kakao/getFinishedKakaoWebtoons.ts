@@ -1,4 +1,4 @@
-import { requestKakaoWebtoons, KakaoWebtoon } from './requestKakaoWebtoons';
+import { requestKakaoWebtoons } from './requestKakaoWebtoons';
 import { requestFanCount } from './requestFanCount';
 import { requestSingularityInfo } from './requestSingularityInfo';
 import { standardizeKakaoWebtoon } from './standardizeKakaoWebtoon';

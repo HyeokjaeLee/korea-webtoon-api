@@ -52,7 +52,6 @@ export interface LastUpdateInfo {
   totalWebtoonCount: number;
   naverWebtoonCount: number;
   kakaoWebtoonCount: number;
-  kakaoPageWebtoonCount: number;
   updatedWebtoonCount: number;
   createdWebtoonCount: number;
 }

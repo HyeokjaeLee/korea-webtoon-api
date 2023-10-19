@@ -2,11 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Webtoon, WebtoonDocument } from './schemas/webtoon.schema';
-import {
-  getKakaoPageWebtoons,
-  getKakaoWebtoons,
-  getNaverWebtoons,
-} from '../../crawler';
+import { getKakaoWebtoons, getNaverWebtoons } from '../../crawler';
 
 import { isEqual } from 'lodash';
 
@@ -20,10 +16,11 @@ export class WebtoonService {
   ) {}
 
   private async getWebtoonsByCrawler() {
-    const [naverWebtoons, kakaoWebtoons, kakaoPageWebtoons] = await Promise.all(
-      [getNaverWebtoons(), getKakaoWebtoons(), getKakaoPageWebtoons()],
-    );
-    return [...naverWebtoons, ...kakaoWebtoons, ...kakaoPageWebtoons];
+    const [naverWebtoons, kakaoWebtoons] = await Promise.all([
+      getNaverWebtoons(),
+      getKakaoWebtoons(),
+    ]);
+    return [...naverWebtoons, ...kakaoWebtoons];
   }
 
   async getWebtoonsByDatabase() {
@@ -73,8 +70,7 @@ export class WebtoonService {
 
     let totalWebtoonCount = 0,
       naverWebtoonCount = 0,
-      kakaoWebtoonCount = 0,
-      kakaoPageWebtoonCount = 0;
+      kakaoWebtoonCount = 0;
 
     const addWebtoonCount = (service: string) => {
       switch (service) {
@@ -83,9 +79,6 @@ export class WebtoonService {
           break;
         case 'kakao':
           kakaoWebtoonCount++;
-          break;
-        case 'kakaoPage':
-          kakaoPageWebtoonCount++;
           break;
       }
       totalWebtoonCount++;
@@ -126,7 +119,6 @@ export class WebtoonService {
       totalWebtoonCount,
       naverWebtoonCount,
       kakaoWebtoonCount,
-      kakaoPageWebtoonCount,
       updatedWebtoonCount,
       createdWebtoonCount,
       lastUpdate: new Date().toISOString(),
