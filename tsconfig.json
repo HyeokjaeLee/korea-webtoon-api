@@ -11,7 +11,8 @@
     "outDir": "./dist",
     "baseUrl": "./src",
     "paths": {
-      "functions/*": ["./functions/*"]
+      "functions/*": ["./functions/*"],
+      "@/*": ["./*"]
     },
     "incremental": true,
     "skipLibCheck": true,

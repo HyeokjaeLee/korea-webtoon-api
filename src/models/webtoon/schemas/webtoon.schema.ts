@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { UpdateDay, Singularity, Service } from '../../../types';
+import type { UpdateDay, Singularity, Service } from '@/types';
 
 @Schema({ versionKey: false, id: false })
 export class Webtoon {

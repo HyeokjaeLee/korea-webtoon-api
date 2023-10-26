@@ -16,6 +16,7 @@ export class WebtoonService {
   ) {}
 
   private async getWebtoonsByCrawler() {
+    console.log('test');
     const [naverWebtoons, kakaoWebtoons] = await Promise.all([
       getNaverWebtoons(),
       getKakaoWebtoons(),
