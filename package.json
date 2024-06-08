@@ -9,7 +9,7 @@
     "express": "^4.19.2"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "ts-node src/route.ts",
     "postinstall": "yarn dlx @yarnpkg/sdks vscode"
   },
   "devDependencies": {
