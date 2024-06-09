@@ -31,6 +31,8 @@ const RAW_RUNTIME_STATE =
           ["@types/axios", "npm:0.14.0"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/node", "npm:20.14.2"],\
+          ["@types/swagger-jsdoc", "npm:6.0.4"],\
+          ["@types/swagger-ui-express", "npm:4.1.6"],\
           ["@typescript-eslint/eslint-plugin", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:7.12.0"],\
           ["@typescript-eslint/parser", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:7.12.0"],\
           ["axios", "npm:1.7.2"],\
@@ -43,12 +45,73 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.3.1"],\
           ["reflect-metadata", "npm:0.2.2"],\
           ["sqlite3", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:5.1.7"],\
+          ["swagger-jsdoc", "npm:6.2.8"],\
+          ["swagger-ui-express", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:5.0.1"],\
           ["ts-node", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:10.9.2"],\
           ["ts-node-dev", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:2.0.0"],\
           ["typeorm", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:0.3.20"],\
           ["typescript", "patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"]\
         ],\
         "linkType": "SOFT"\
+      }]\
+    ]],\
+    ["@apidevtools/json-schema-ref-parser", [\
+      ["npm:9.1.2", {\
+        "packageLocation": "../.yarn/berry/cache/@apidevtools-json-schema-ref-parser-npm-9.1.2-563d0b267a-10c0.zip/node_modules/@apidevtools/json-schema-ref-parser/",\
+        "packageDependencies": [\
+          ["@apidevtools/json-schema-ref-parser", "npm:9.1.2"],\
+          ["@jsdevtools/ono", "npm:7.1.3"],\
+          ["@types/json-schema", "npm:7.0.15"],\
+          ["call-me-maybe", "npm:1.0.2"],\
+          ["js-yaml", "npm:4.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@apidevtools/openapi-schemas", [\
+      ["npm:2.1.0", {\
+        "packageLocation": "../.yarn/berry/cache/@apidevtools-openapi-schemas-npm-2.1.0-5401d2b368-10c0.zip/node_modules/@apidevtools/openapi-schemas/",\
+        "packageDependencies": [\
+          ["@apidevtools/openapi-schemas", "npm:2.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@apidevtools/swagger-methods", [\
+      ["npm:3.0.2", {\
+        "packageLocation": "../.yarn/berry/cache/@apidevtools-swagger-methods-npm-3.0.2-2f505abefb-10c0.zip/node_modules/@apidevtools/swagger-methods/",\
+        "packageDependencies": [\
+          ["@apidevtools/swagger-methods", "npm:3.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@apidevtools/swagger-parser", [\
+      ["npm:10.0.3", {\
+        "packageLocation": "../.yarn/berry/cache/@apidevtools-swagger-parser-npm-10.0.3-9e554f93c2-10c0.zip/node_modules/@apidevtools/swagger-parser/",\
+        "packageDependencies": [\
+          ["@apidevtools/swagger-parser", "npm:10.0.3"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:51abfd6363ba598b3ebd615b95bad5285983ddbd41321584e648eb4a3edbc6b47d6e42a130950a6afca601603c272722db94a177ccb3230fd61d4abbdd2996bf#npm:10.0.3", {\
+        "packageLocation": "./.yarn/__virtual__/@apidevtools-swagger-parser-virtual-1dd28218c1/2/.yarn/berry/cache/@apidevtools-swagger-parser-npm-10.0.3-9e554f93c2-10c0.zip/node_modules/@apidevtools/swagger-parser/",\
+        "packageDependencies": [\
+          ["@apidevtools/swagger-parser", "virtual:51abfd6363ba598b3ebd615b95bad5285983ddbd41321584e648eb4a3edbc6b47d6e42a130950a6afca601603c272722db94a177ccb3230fd61d4abbdd2996bf#npm:10.0.3"],\
+          ["@apidevtools/json-schema-ref-parser", "npm:9.1.2"],\
+          ["@apidevtools/openapi-schemas", "npm:2.1.0"],\
+          ["@apidevtools/swagger-methods", "npm:3.0.2"],\
+          ["@jsdevtools/ono", "npm:7.1.3"],\
+          ["@types/openapi-types", null],\
+          ["call-me-maybe", "npm:1.0.2"],\
+          ["openapi-types", null],\
+          ["z-schema", "npm:5.0.5"]\
+        ],\
+        "packagePeers": [\
+          "@types/openapi-types",\
+          "openapi-types"\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@cspotcode/source-map-support", [\
@@ -239,6 +302,15 @@ const RAW_RUNTIME_STATE =
           ["@jridgewell/trace-mapping", "npm:0.3.9"],\
           ["@jridgewell/resolve-uri", "npm:3.1.2"],\
           ["@jridgewell/sourcemap-codec", "npm:1.4.15"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@jsdevtools/ono", [\
+      ["npm:7.1.3", {\
+        "packageLocation": "../.yarn/berry/cache/@jsdevtools-ono-npm-7.1.3-cb2313543b-10c0.zip/node_modules/@jsdevtools/ono/",\
+        "packageDependencies": [\
+          ["@jsdevtools/ono", "npm:7.1.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -447,6 +519,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/json-schema", [\
+      ["npm:7.0.15", {\
+        "packageLocation": "../.yarn/berry/cache/@types-json-schema-npm-7.0.15-fd16381786-10c0.zip/node_modules/@types/json-schema/",\
+        "packageDependencies": [\
+          ["@types/json-schema", "npm:7.0.15"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/mime", [\
       ["npm:1.3.5", {\
         "packageLocation": "../.yarn/berry/cache/@types-mime-npm-1.3.5-48d28990db-10c0.zip/node_modules/@types/mime/",\
@@ -521,6 +602,26 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../.yarn/berry/cache/@types-strip-json-comments-npm-0.0.30-4d685379c3-10c0.zip/node_modules/@types/strip-json-comments/",\
         "packageDependencies": [\
           ["@types/strip-json-comments", "npm:0.0.30"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/swagger-jsdoc", [\
+      ["npm:6.0.4", {\
+        "packageLocation": "../.yarn/berry/cache/@types-swagger-jsdoc-npm-6.0.4-595c64efe2-10c0.zip/node_modules/@types/swagger-jsdoc/",\
+        "packageDependencies": [\
+          ["@types/swagger-jsdoc", "npm:6.0.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/swagger-ui-express", [\
+      ["npm:4.1.6", {\
+        "packageLocation": "../.yarn/berry/cache/@types-swagger-ui-express-npm-4.1.6-ce84a377b2-10c0.zip/node_modules/@types/swagger-ui-express/",\
+        "packageDependencies": [\
+          ["@types/swagger-ui-express", "npm:4.1.6"],\
+          ["@types/express", "npm:4.17.21"],\
+          ["@types/serve-static", "npm:1.15.7"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1211,6 +1312,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["call-me-maybe", [\
+      ["npm:1.0.2", {\
+        "packageLocation": "../.yarn/berry/cache/call-me-maybe-npm-1.0.2-a465269a37-10c0.zip/node_modules/call-me-maybe/",\
+        "packageDependencies": [\
+          ["call-me-maybe", "npm:1.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["callsites", [\
       ["npm:3.1.0", {\
         "packageLocation": "../.yarn/berry/cache/callsites-npm-3.1.0-268f989910-10c0.zip/node_modules/callsites/",\
@@ -1344,6 +1454,22 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["combined-stream", "npm:1.0.8"],\
           ["delayed-stream", "npm:1.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["commander", [\
+      ["npm:6.2.0", {\
+        "packageLocation": "../.yarn/berry/cache/commander-npm-6.2.0-5c82761f33-10c0.zip/node_modules/commander/",\
+        "packageDependencies": [\
+          ["commander", "npm:6.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:9.5.0", {\
+        "packageLocation": "../.yarn/berry/cache/commander-npm-9.5.0-993b3f2434-10c0.zip/node_modules/commander/",\
+        "packageDependencies": [\
+          ["commander", "npm:9.5.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1598,6 +1724,16 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["dir-glob", "npm:3.0.1"],\
           ["path-type", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["doctrine", [\
+      ["npm:3.0.0", {\
+        "packageLocation": "../.yarn/berry/cache/doctrine-npm-3.0.0-c6f1615f04-10c0.zip/node_modules/doctrine/",\
+        "packageDependencies": [\
+          ["doctrine", "npm:3.0.0"],\
+          ["esutils", "npm:2.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2414,6 +2550,19 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
+      ["npm:7.1.6", {\
+        "packageLocation": "../.yarn/berry/cache/glob-npm-7.1.6-1ce3a5189a-10c0.zip/node_modules/glob/",\
+        "packageDependencies": [\
+          ["glob", "npm:7.1.6"],\
+          ["fs.realpath", "npm:1.0.0"],\
+          ["inflight", "npm:1.0.6"],\
+          ["inherits", "npm:2.0.4"],\
+          ["minimatch", "npm:3.1.2"],\
+          ["once", "npm:1.4.0"],\
+          ["path-is-absolute", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:7.2.3", {\
         "packageLocation": "../.yarn/berry/cache/glob-npm-7.2.3-2d866d17a5-10c0.zip/node_modules/glob/",\
         "packageDependencies": [\
@@ -2936,6 +3085,8 @@ const RAW_RUNTIME_STATE =
           ["@types/axios", "npm:0.14.0"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/node", "npm:20.14.2"],\
+          ["@types/swagger-jsdoc", "npm:6.0.4"],\
+          ["@types/swagger-ui-express", "npm:4.1.6"],\
           ["@typescript-eslint/eslint-plugin", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:7.12.0"],\
           ["@typescript-eslint/parser", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:7.12.0"],\
           ["axios", "npm:1.7.2"],\
@@ -2948,6 +3099,8 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.3.1"],\
           ["reflect-metadata", "npm:0.2.2"],\
           ["sqlite3", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:5.1.7"],\
+          ["swagger-jsdoc", "npm:6.2.8"],\
+          ["swagger-ui-express", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:5.0.1"],\
           ["ts-node", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:10.9.2"],\
           ["ts-node-dev", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:2.0.0"],\
           ["typeorm", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:0.3.20"],\
@@ -2977,11 +3130,38 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["lodash.get", [\
+      ["npm:4.4.2", {\
+        "packageLocation": "../.yarn/berry/cache/lodash.get-npm-4.4.2-7bda64ed87-10c0.zip/node_modules/lodash.get/",\
+        "packageDependencies": [\
+          ["lodash.get", "npm:4.4.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["lodash.isequal", [\
+      ["npm:4.5.0", {\
+        "packageLocation": "../.yarn/berry/cache/lodash.isequal-npm-4.5.0-f8b0f64d63-10c0.zip/node_modules/lodash.isequal/",\
+        "packageDependencies": [\
+          ["lodash.isequal", "npm:4.5.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["lodash.merge", [\
       ["npm:4.6.2", {\
         "packageLocation": "../.yarn/berry/cache/lodash.merge-npm-4.6.2-77cb4416bf-10c0.zip/node_modules/lodash.merge/",\
         "packageDependencies": [\
           ["lodash.merge", "npm:4.6.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["lodash.mergewith", [\
+      ["npm:4.6.2", {\
+        "packageLocation": "../.yarn/berry/cache/lodash.mergewith-npm-4.6.2-7d2d4201ec-10c0.zip/node_modules/lodash.mergewith/",\
+        "packageDependencies": [\
+          ["lodash.mergewith", "npm:4.6.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4399,6 +4579,63 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["swagger-jsdoc", [\
+      ["npm:6.2.8", {\
+        "packageLocation": "../.yarn/berry/cache/swagger-jsdoc-npm-6.2.8-d69a72a086-10c0.zip/node_modules/swagger-jsdoc/",\
+        "packageDependencies": [\
+          ["swagger-jsdoc", "npm:6.2.8"],\
+          ["commander", "npm:6.2.0"],\
+          ["doctrine", "npm:3.0.0"],\
+          ["glob", "npm:7.1.6"],\
+          ["lodash.mergewith", "npm:4.6.2"],\
+          ["swagger-parser", "npm:10.0.3"],\
+          ["yaml", "npm:2.0.0-1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["swagger-parser", [\
+      ["npm:10.0.3", {\
+        "packageLocation": "../.yarn/berry/cache/swagger-parser-npm-10.0.3-51abfd6363-10c0.zip/node_modules/swagger-parser/",\
+        "packageDependencies": [\
+          ["swagger-parser", "npm:10.0.3"],\
+          ["@apidevtools/swagger-parser", "virtual:51abfd6363ba598b3ebd615b95bad5285983ddbd41321584e648eb4a3edbc6b47d6e42a130950a6afca601603c272722db94a177ccb3230fd61d4abbdd2996bf#npm:10.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["swagger-ui-dist", [\
+      ["npm:5.17.14", {\
+        "packageLocation": "../.yarn/berry/cache/swagger-ui-dist-npm-5.17.14-8eba082cca-10c0.zip/node_modules/swagger-ui-dist/",\
+        "packageDependencies": [\
+          ["swagger-ui-dist", "npm:5.17.14"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["swagger-ui-express", [\
+      ["npm:5.0.1", {\
+        "packageLocation": "../.yarn/berry/cache/swagger-ui-express-npm-5.0.1-a36db7d969-10c0.zip/node_modules/swagger-ui-express/",\
+        "packageDependencies": [\
+          ["swagger-ui-express", "npm:5.0.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:5.0.1", {\
+        "packageLocation": "./.yarn/__virtual__/swagger-ui-express-virtual-6c8542e0a1/2/.yarn/berry/cache/swagger-ui-express-npm-5.0.1-a36db7d969-10c0.zip/node_modules/swagger-ui-express/",\
+        "packageDependencies": [\
+          ["swagger-ui-express", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:5.0.1"],\
+          ["@types/express", "npm:4.17.21"],\
+          ["express", "npm:4.19.2"],\
+          ["swagger-ui-dist", "npm:5.17.14"]\
+        ],\
+        "packagePeers": [\
+          "@types/express",\
+          "express"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["tar", [\
       ["npm:6.2.1", {\
         "packageLocation": "../.yarn/berry/cache/tar-npm-6.2.1-237800bb20-10c0.zip/node_modules/tar/",\
@@ -4913,6 +5150,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["validator", [\
+      ["npm:13.12.0", {\
+        "packageLocation": "../.yarn/berry/cache/validator-npm-13.12.0-6c8a423cbf-10c0.zip/node_modules/validator/",\
+        "packageDependencies": [\
+          ["validator", "npm:13.12.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["vary", [\
       ["npm:1.1.2", {\
         "packageLocation": "../.yarn/berry/cache/vary-npm-1.1.2-b49f70ae63-10c0.zip/node_modules/vary/",\
@@ -5017,6 +5263,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["yaml", [\
+      ["npm:2.0.0-1", {\
+        "packageLocation": "../.yarn/berry/cache/yaml-npm-2.0.0-1-230a208429-10c0.zip/node_modules/yaml/",\
+        "packageDependencies": [\
+          ["yaml", "npm:2.0.0-1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["yargs", [\
       ["npm:16.2.0", {\
         "packageLocation": "../.yarn/berry/cache/yargs-npm-16.2.0-547873d425-10c0.zip/node_modules/yargs/",\
@@ -5077,6 +5332,19 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../.yarn/berry/cache/yocto-queue-npm-0.1.0-c6c9a7db29-10c0.zip/node_modules/yocto-queue/",\
         "packageDependencies": [\
           ["yocto-queue", "npm:0.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["z-schema", [\
+      ["npm:5.0.5", {\
+        "packageLocation": "../.yarn/berry/cache/z-schema-npm-5.0.5-94fb0e21a9-10c0.zip/node_modules/z-schema/",\
+        "packageDependencies": [\
+          ["z-schema", "npm:5.0.5"],\
+          ["commander", "npm:9.5.0"],\
+          ["lodash.get", "npm:4.4.2"],\
+          ["lodash.isequal", "npm:4.5.0"],\
+          ["validator", "npm:13.12.0"]\
         ],\
         "linkType": "HARD"\
       }]\
