@@ -14,7 +14,7 @@ export const getWebtoonList = async () => {
 
   while (!isEndPage) {
     //! 개발환경에서 테스트를 위해 요청 횟수 제한
-    if (process.env.NODE_ENV === 'development' && page > 1) break;
+    if (process.env.NODE_ENV === 'development' && page > 2) break;
 
     const res = await getStaticLandingGenreSection(page);
 

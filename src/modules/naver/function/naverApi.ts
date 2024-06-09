@@ -32,7 +32,7 @@ export const getDailyPlusWebtoonList = () =>
     titleList: NaverWebtoonTitle[];
   }>('/weekday?week=dailyPlus&order=user');
 
-export const getWeekleyWebtoonList = () =>
+export const getweeklyWebtoonList = () =>
   naverApi.get<{
     titleListMap: {
       FRIDAY: NaverWebtoonTitle[];

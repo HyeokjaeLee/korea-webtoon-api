@@ -1,67 +1,80 @@
+import type { NormalizedWebtoon } from '@/database/entity';
 import {
   getDailyPlusWebtoonList,
   getFinishedWebtoonList,
-  getWeekleyWebtoonList,
+  getweeklyWebtoonList,
 } from './function/naverApi';
 import { normalizeWebtoon } from './function/normalizeWebtoon';
 
-enum UpdateWeek {
-  MONDAY = '월',
-  TUESDAY = '화',
-  WEDNESDAY = '수',
-  THURSDAY = '목',
-  FRIDAY = '금',
-  SATURDAY = '토',
-  SUNDAY = '일',
+enum Weekday {
+  MONDAY = 'MON',
+  TUESDAY = 'TUE',
+  WEDNESDAY = 'WED',
+  THURSDAY = 'THU',
+  FRIDAY = 'FRI',
+  SATURDAY = 'SAT',
+  SUNDAY = 'SUN',
 }
 
 export const getNaverWebtoonList = async () => {
-  const weekleyWebtoonMap = new Map<number, NormalizedWebtoon>();
+  const weeklyWebtoonMap = new Map<number, NormalizedWebtoon>();
 
   const {
-    data: { titleListMap: weekleyWebtoonTitleMap },
-  } = await getWeekleyWebtoonList();
+    data: { titleListMap: weeklyWebtoonTitleMap },
+  } = await getweeklyWebtoonList();
 
-  for (const weekday in weekleyWebtoonTitleMap) {
-    const _weekday = weekday as keyof typeof weekleyWebtoonTitleMap;
-    const weekdayWebtoonList = weekleyWebtoonTitleMap[_weekday];
+  for (const weekday in weeklyWebtoonTitleMap) {
+    const _weekday = weekday as keyof typeof weeklyWebtoonTitleMap;
+    const weekdayWebtoonList = weeklyWebtoonTitleMap[_weekday];
 
     weekdayWebtoonList.forEach(({ titleId, ...webtoon }) => {
-      const duplicatedWebtoon = weekleyWebtoonMap.get(titleId);
+      const duplicatedWebtoon = weeklyWebtoonMap.get(titleId);
 
       //! 각 요일에 중복된 웹툰이 노출될수 있음
       if (duplicatedWebtoon) {
-        duplicatedWebtoon.updateWeek?.push(UpdateWeek[_weekday]);
+        duplicatedWebtoon.updateDays?.push(Weekday[_weekday]);
       }
 
-      const updateWeekday = UpdateWeek[_weekday];
+      const updateDay = Weekday[_weekday];
 
-      return weekleyWebtoonMap.set(titleId, {
+      return weeklyWebtoonMap.set(titleId, {
         ...normalizeWebtoon({
           ...webtoon,
           titleId,
         }),
-        updateWeek: [updateWeekday],
+        updateDays: [updateDay],
       });
     });
   }
 
-  const weekleyWebtoonList = Array.from(weekleyWebtoonMap.values());
+  const weeklyWebtoonList = Array.from(weeklyWebtoonMap.values());
 
   const {
     data: { titleList: dailyPlusWebtoonTitleList },
   } = await getDailyPlusWebtoonList();
 
-  const dailyPlusWebtoonList = dailyPlusWebtoonTitleList.map((webtoon) => ({
-    ...normalizeWebtoon(webtoon),
-    updateWeek: null,
-  }));
+  const dailyPlusWebtoonList: NormalizedWebtoon[] =
+    dailyPlusWebtoonTitleList.map((webtoon) => ({
+      ...normalizeWebtoon(webtoon),
+      updateDays: [],
+    }));
 
-  for (let page = 1, totalPages: number; page <= totalPages; page++) {
+  const finishedWebtoonList: NormalizedWebtoon[] = [];
+
+  for (let page = 1, totalPages = 2; page <= totalPages; page++) {
     const {
-      data: { pageInfo },
+      data: { pageInfo, titleList },
     } = await getFinishedWebtoonList(page);
 
     totalPages = pageInfo.totalPages;
+
+    finishedWebtoonList.push(
+      ...titleList.map((webtoon) => ({
+        ...normalizeWebtoon(webtoon),
+        updateDays: [],
+      })),
+    );
   }
+
+  return weeklyWebtoonList.concat(dailyPlusWebtoonList, finishedWebtoonList);
 };

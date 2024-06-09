@@ -1,7 +1,20 @@
+import type { NormalizedWebtoon, UpdateDay } from '@/database/entity';
 import { getWebtoonList } from './function/getWebtoonList';
 import { getContentHomeOverview } from './function/kakaoPageApi';
 
-export const getKakaoPageWebtoonList = async () => {
+enum Weekday {
+  월 = 'MON',
+  화 = 'TUE',
+  수 = 'WED',
+  목 = 'THU',
+  금 = 'FRI',
+  토 = 'SAT',
+  일 = 'SUN',
+}
+
+export const getKakaoPageWebtoonList = async (): Promise<
+  NormalizedWebtoon[]
+> => {
   const webtoonList = await getWebtoonList();
 
   //! 요청 제한을 위한 큐, 카카오 페이지는 동시 요청 횟수 제한이 있는듯
@@ -22,9 +35,14 @@ export const getKakaoPageWebtoonList = async () => {
       const { content } = (await getContentHomeOverview(seriesId)).data.data
         .contentHomeOverview;
 
-      const updateWeek = (
-        ['월', '화', '수', '목', '금', '토', '일'] as const
-      ).filter((day) => content.pubPeriod?.includes(day));
+      const updateDays: UpdateDay[] = [];
+
+      Object.keys(Weekday).forEach((key) => {
+        const weekdayKor = key as keyof typeof Weekday;
+
+        if (content.pubPeriod?.includes(weekdayKor))
+          updateDays.push(Weekday[weekdayKor]);
+      });
 
       queue -= 1;
 
@@ -37,7 +55,7 @@ export const getKakaoPageWebtoonList = async () => {
         provider: 'KAKAO_PAGE',
         title: content.title,
         url: `https://page.kakao.com/content/${seriesId}`,
-        updateWeek: updateWeek.length ? updateWeek : null,
+        updateDays,
         thumbnail: 'https:' + content.thumbnail,
         isUpdated: webtoon.statusBadge === 'BadgeUpStatic',
         ageGrade: {
