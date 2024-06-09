@@ -1,5 +1,6 @@
 import express from 'express';
-import { getKakaoPageWebtoonList } from './crawler/kakao-page';
+import { getKakaoPageWebtoonList } from './modules/kakao-page';
+import { getNaverWebtoonList } from './modules/naver';
 
 const app = express();
 const PORT = 3000;
@@ -9,6 +10,6 @@ app.listen(PORT, () => {
 });
 
 app.get('/', (_, res) => {
-  getKakaoPageWebtoonList();
+  getNaverWebtoonList();
   res.send('Hello World!');
 });

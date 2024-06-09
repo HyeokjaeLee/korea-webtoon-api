@@ -35,6 +35,7 @@ const RAW_RUNTIME_STATE =
           ["@typescript-eslint/eslint-plugin", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:7.12.0"],\
           ["@typescript-eslint/parser", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:7.12.0"],\
           ["axios", "npm:1.7.2"],\
+          ["axios-retry", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:4.4.0"],\
           ["eslint", "npm:9.4.0"],\
           ["eslint-config-airbnb", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:19.0.4"],\
           ["eslint-config-prettier", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:9.1.0"],\
@@ -1034,6 +1035,29 @@ const RAW_RUNTIME_STATE =
           ["follow-redirects", "virtual:c89264f6f79513b22a07db5e53adf77eba9e48634cf471fb55eb2e75d910809bbac48d9ce7a920c63c8ff2780624fff91866270d8acf614cbd0c4cb748a8b29a#npm:1.15.6"],\
           ["form-data", "npm:4.0.0"],\
           ["proxy-from-env", "npm:1.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["axios-retry", [\
+      ["npm:4.4.0", {\
+        "packageLocation": "../.yarn/berry/cache/axios-retry-npm-4.4.0-3e6a76d203-10c0.zip/node_modules/axios-retry/",\
+        "packageDependencies": [\
+          ["axios-retry", "npm:4.4.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:4.4.0", {\
+        "packageLocation": "./.yarn/__virtual__/axios-retry-virtual-f19e0ea4af/2/.yarn/berry/cache/axios-retry-npm-4.4.0-3e6a76d203-10c0.zip/node_modules/axios-retry/",\
+        "packageDependencies": [\
+          ["axios-retry", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:4.4.0"],\
+          ["@types/axios", "npm:0.14.0"],\
+          ["axios", "npm:1.7.2"],\
+          ["is-retry-allowed", "npm:2.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/axios",\
+          "axios"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2768,6 +2792,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["is-retry-allowed", [\
+      ["npm:2.2.0", {\
+        "packageLocation": "../.yarn/berry/cache/is-retry-allowed-npm-2.2.0-b4b58fc581-10c0.zip/node_modules/is-retry-allowed/",\
+        "packageDependencies": [\
+          ["is-retry-allowed", "npm:2.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["isexe", [\
       ["npm:2.0.0", {\
         "packageLocation": "../.yarn/berry/cache/isexe-npm-2.0.0-b58870bd2e-10c0.zip/node_modules/isexe/",\
@@ -2864,6 +2897,7 @@ const RAW_RUNTIME_STATE =
           ["@typescript-eslint/eslint-plugin", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:7.12.0"],\
           ["@typescript-eslint/parser", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:7.12.0"],\
           ["axios", "npm:1.7.2"],\
+          ["axios-retry", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:4.4.0"],\
           ["eslint", "npm:9.4.0"],\
           ["eslint-config-airbnb", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:19.0.4"],\
           ["eslint-config-prettier", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:9.1.0"],\

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 
 const kakaoPageApi = axios.create({
   baseURL: 'https://page.kakao.com/graphql',
@@ -7,6 +8,11 @@ const kakaoPageApi = axios.create({
     //! Referer를 설정하지 않으면 403 에러 발생
     Referer: 'https://page.kakao.com',
   },
+});
+
+axiosRetry(kakaoPageApi, {
+  retries: 3,
+  retryDelay: (retryCount) => retryCount * 3_000,
 });
 
 export interface GetStaticLandingGenreSectionResponse {
