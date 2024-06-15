@@ -15,20 +15,22 @@ axiosRetry(kakaoPageApi, {
   retryDelay: (retryCount) => retryCount * 3_000,
 });
 
+export interface KakoPageStaticLandingGenreSectionItem {
+  seriesId: number;
+
+  /**
+   * @description 'BadgeUpStatic' - 신규 업데이트 존재
+   */
+  statusBadge: 'BadgeUpStatic' | null;
+}
+
 export interface GetStaticLandingGenreSectionResponse {
   data: {
     staticLandingGenreSection: {
       isEnd: boolean;
       groups: [
         {
-          items: {
-            seriesId: number;
-
-            /**
-             * @description 'BadgeUpStatic' - 신규 업데이트 존재
-             */
-            statusBadge: 'BadgeUpStatic' | null;
-          }[];
+          items: KakoPageStaticLandingGenreSectionItem[];
         },
       ];
     };

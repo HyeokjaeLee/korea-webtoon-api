@@ -34,13 +34,13 @@ export const createUpdateMethod =
       return res.json({
         ...dataInfo,
         updateRunningTime: dataInfo.updateEndAt
-          ? (dataInfo.updateEndAt.getTime() - updateStartAt.getTime()) / 60_000
-          : (new Date().getTime() - updateStartAt.getTime()) / 60_000,
+          ? (dataInfo.updateEndAt.getTime() - updateStartAt.getTime()) / 1_000
+          : (new Date().getTime() - updateStartAt.getTime()) / 1_000,
       });
     }
 
     const updatingDataInfo = {
-      provider,
+      ...dataInfo,
       updateStartAt: new Date(),
       updateEndAt: null,
     };
@@ -48,28 +48,40 @@ export const createUpdateMethod =
     await dataInfoRepository.save(updatingDataInfo);
 
     (async () => {
-      console.log(`[${provider}] 업데이트 시작`);
-      console.time('update');
+      try {
+        console.log(`[${provider}] 업데이트 시작`);
+        console.time('update');
 
-      const webtoonList = await webtoonCrawler();
+        const webtoonList = await webtoonCrawler();
 
-      const webtoonRepository = AppDataSource.getRepository(NormalizedWebtoon);
+        const webtoonRepository =
+          AppDataSource.getRepository(NormalizedWebtoon);
 
-      await webtoonRepository.save(webtoonList);
+        await webtoonRepository.save(webtoonList);
 
-      await dataInfoRepository.save({
-        ...updatingDataInfo,
-        updateEndAt: new Date(),
-      });
+        await dataInfoRepository.save({
+          ...updatingDataInfo,
+          isHealthy: true,
+          updateEndAt: new Date(),
+        });
 
-      console.log(`[${provider}] 업데이트 완료`);
-      console.timeEnd('update');
+        console.log(`[${provider}] 업데이트 완료`);
+        console.timeEnd('update');
+      } catch (err) {
+        await dataInfoRepository.save({
+          ...updatingDataInfo,
+          isHealthy: false,
+          updateEndAt: new Date(),
+        });
+        console.error(`[${provider}] 업데이트 중 오류 발생`);
+        console.error(err);
+      }
     })();
 
     return res.json({
       ...updatingDataInfo,
       updateRunningTime:
         (new Date().getTime() - updatingDataInfo.updateStartAt.getTime()) /
-        60_000,
+        1_000,
     });
   };

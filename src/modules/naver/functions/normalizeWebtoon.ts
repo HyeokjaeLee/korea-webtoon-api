@@ -14,7 +14,7 @@ export const normalizeWebtoon = ({
   isFree: true,
   id: `naver_${titleId}`,
   provider: 'NAVER',
-  thumbnail: webtoon.thumbnailUrl,
+  thumbnail: [webtoon.thumbnailUrl],
   isUpdated: webtoon.up,
   url: `https://comic.naver.com/webtoon/list?titleId=${titleId}`,
 });

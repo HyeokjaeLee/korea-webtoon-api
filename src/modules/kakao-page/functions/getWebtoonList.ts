@@ -1,13 +1,11 @@
 import {
   type GetStaticLandingGenreSectionResponse,
   getStaticLandingGenreSection,
+  KakoPageStaticLandingGenreSectionItem,
 } from './kakaoPageApi';
 
-type WebtoonList =
-  GetStaticLandingGenreSectionResponse['data']['staticLandingGenreSection']['groups'][number]['items'];
-
 export const getWebtoonList = async () => {
-  const webtoonList: WebtoonList = [];
+  const webtoonList: KakoPageStaticLandingGenreSectionItem[] = [];
 
   let page = 0;
   let isEndPage = false;

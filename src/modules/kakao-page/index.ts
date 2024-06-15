@@ -1,6 +1,6 @@
 import type { NormalizedWebtoon, UpdateDay } from '@/database/entity';
-import { getWebtoonList } from './function/getWebtoonList';
-import { getContentHomeOverview } from './function/kakaoPageApi';
+import { getWebtoonList } from './functions/getWebtoonList';
+import { getContentHomeOverview } from './functions/kakaoPageApi';
 
 enum Weekday {
   월 = 'MON',
@@ -54,7 +54,7 @@ export const getKakaoPageWebtoonList = async (): Promise<
         title: content.title,
         url: `https://page.kakao.com/content/${seriesId}`,
         updateDays,
-        thumbnail: 'https:' + content.thumbnail,
+        thumbnail: [`https:${content.thumbnail}`],
         isUpdated: webtoon.statusBadge === 'BadgeUpStatic',
         ageGrade: {
           Nineteen: 19,

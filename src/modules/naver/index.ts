@@ -3,8 +3,8 @@ import {
   getDailyPlusWebtoonList,
   getFinishedWebtoonList,
   getweeklyWebtoonList,
-} from './function/naverApi';
-import { normalizeWebtoon } from './function/normalizeWebtoon';
+} from './functions/naverApi';
+import { normalizeWebtoon } from './functions/normalizeWebtoon';
 
 enum Weekday {
   MONDAY = 'MON',

@@ -19,6 +19,7 @@ import { createUpdateMethod } from './functions/createUpdateMethod';
  *                 provider:
  *                   type: string
  *                   enum: [KAKAO, NAVER, KAKAO_PAGE, RIDI]
+ *                   example: KAKAO_PAGE
  *                   description: 웹툰 공급자
  *                 updateStartAt:
  *                   type: string

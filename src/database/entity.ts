@@ -21,8 +21,8 @@ export class NormalizedWebtoon {
   @Column()
   url: string;
 
-  @Column()
-  thumbnail: string;
+  @Column('simple-array')
+  thumbnail: string[];
 
   @Column({ default: false })
   isEnd: boolean;
@@ -53,4 +53,7 @@ export class DataInfo {
 
   @Column({ nullable: true, type: 'datetime' })
   updateEndAt: Date | null;
+
+  @Column({ default: true })
+  isHealthy: boolean;
 }
