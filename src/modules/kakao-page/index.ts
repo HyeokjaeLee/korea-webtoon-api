@@ -48,8 +48,6 @@ export const getKakaoPageWebtoonList = async (): Promise<
 
       const id = `kakopage_${seriesId}`;
 
-      console.info(id);
-
       return {
         id,
         provider: 'KAKAO_PAGE',

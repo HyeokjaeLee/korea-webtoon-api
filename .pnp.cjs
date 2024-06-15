@@ -49,6 +49,7 @@ const RAW_RUNTIME_STATE =
           ["swagger-ui-express", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:5.0.1"],\
           ["ts-node", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:10.9.2"],\
           ["ts-node-dev", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:2.0.0"],\
+          ["tsconfig-paths", "npm:4.2.0"],\
           ["typeorm", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:0.3.20"],\
           ["typescript", "patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"]\
         ],\
@@ -3066,6 +3067,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["json5", [\
+      ["npm:2.2.3", {\
+        "packageLocation": "../.yarn/berry/cache/json5-npm-2.2.3-9962c55073-10c0.zip/node_modules/json5/",\
+        "packageDependencies": [\
+          ["json5", "npm:2.2.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["keyv", [\
       ["npm:4.5.4", {\
         "packageLocation": "../.yarn/berry/cache/keyv-npm-4.5.4-4c8e2cf7f7-10c0.zip/node_modules/keyv/",\
@@ -3103,6 +3113,7 @@ const RAW_RUNTIME_STATE =
           ["swagger-ui-express", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:5.0.1"],\
           ["ts-node", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:10.9.2"],\
           ["ts-node-dev", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:2.0.0"],\
+          ["tsconfig-paths", "npm:4.2.0"],\
           ["typeorm", "virtual:49355444234e00678e0e579622291e03b30c8a4ba23b03f6a8ef2f012d8944aee8ae15d705e7571cfec5e2e92673965a13811af837e92ade62cf8ff5a3b56ded#npm:0.3.20"],\
           ["typescript", "patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"]\
         ],\
@@ -4896,6 +4907,18 @@ const RAW_RUNTIME_STATE =
           ["@types/strip-json-comments", "npm:0.0.30"],\
           ["strip-bom", "npm:3.0.0"],\
           ["strip-json-comments", "npm:2.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tsconfig-paths", [\
+      ["npm:4.2.0", {\
+        "packageLocation": "../.yarn/berry/cache/tsconfig-paths-npm-4.2.0-ac1edf8677-10c0.zip/node_modules/tsconfig-paths/",\
+        "packageDependencies": [\
+          ["tsconfig-paths", "npm:4.2.0"],\
+          ["json5", "npm:2.2.3"],\
+          ["minimist", "npm:1.2.8"],\
+          ["strip-bom", "npm:3.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
