@@ -8,7 +8,7 @@ interface NormalizeWebtoonProps {
 }
 
 export interface TempNormalizedWebtoon
-  extends Omit<NormalizedWebtoon, 'freeWaitHour' | 'id'> {
+  extends Omit<NormalizedWebtoon, 'freeWaitHour' | 'id' | 'isFree'> {
   /**
    * @description 'undefined'는 티켓 정보를 확인후 추가
    */
@@ -44,8 +44,8 @@ export const normalizeWebtoonList = ({
       })
       .map(({ name }) => name);
 
-    let freeWaitHour;
-    let isFree = false;
+    let freeWaitHour: TempNormalizedWebtoon['freeWaitHour'];
+
     let isUpdated = false;
 
     content.badges.forEach(({ title }) => {
@@ -55,7 +55,6 @@ export const normalizeWebtoonList = ({
           break;
         case 'FREE_PUBLISHING':
           freeWaitHour = null;
-          isFree = true;
           break;
         case 'WAIT_FOR_FREE':
           freeWaitHour = undefined;
@@ -75,7 +74,6 @@ export const normalizeWebtoonList = ({
       ),
       authors,
       freeWaitHour,
-      isFree,
       isEnd,
       isUpdated,
       updateDays: updateDay ? [updateDay] : [],

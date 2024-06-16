@@ -74,7 +74,8 @@ export const getWebtoonListByPlacement = (placement: KAKAO_PLACEMENT) => {
 
 interface TicketData {
   data: {
-    waitForFree: {
+    //! 없는 경우가 웹툰 하나 정도 있었음 (id: 3574), 유료 결제만 가능한 웹툰인듯
+    waitForFree?: {
       /**
        * @example "PT72H" - 72시간
        */

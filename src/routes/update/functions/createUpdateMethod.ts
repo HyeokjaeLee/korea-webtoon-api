@@ -1,13 +1,21 @@
 import { AppDataSource } from '@/database/datasource';
-import { DataInfo, NormalizedWebtoon, Provider } from '@/database/entity';
+import {
+  DataInfo,
+  type NormalizedWebtoon,
+  Provider,
+  NaverWebtoon,
+  KakaoWebtoon,
+  KakaoPageWebtoon,
+} from '@/database/entity';
 import type { Response, Request } from 'express';
 
 interface CreateUpdateMethodProps {
-  provider: Provider;
+  provider: Exclude<Provider, 'RIDI'>;
   webtoonCrawler: () => Promise<NormalizedWebtoon[]>;
 }
 
 const SIX_HOURS = 21_600_000;
+const BATCH_SIZE = 100;
 
 export const createUpdateMethod =
   ({ provider, webtoonCrawler }: CreateUpdateMethodProps) =>
@@ -25,7 +33,6 @@ export const createUpdateMethod =
       ? new Date().getTime() - updateStartAt.getTime() > SIX_HOURS
       : true;
 
-    //! 오래된 정보가 아니면서 업데이트 시작날짜가 없는 경우는 에러
     if (updateStartAt && !isOld) {
       if (!dataInfo) {
         return res.status(500);
@@ -49,16 +56,26 @@ export const createUpdateMethod =
     await dataInfoRepository.save(updatingDataInfo);
 
     (async () => {
+      const connection = AppDataSource.createQueryRunner();
+      await connection.startTransaction();
+
       try {
         console.log(`🚀 [${provider}] 업데이트 시작`);
-        console.time('update');
+        console.time(`${provider}-update`);
 
         const webtoonList = await webtoonCrawler();
 
-        const webtoonRepository =
-          AppDataSource.getRepository(NormalizedWebtoon);
+        const EntityTarget = {
+          NAVER: NaverWebtoon,
+          KAKAO: KakaoWebtoon,
+          KAKAO_PAGE: KakaoPageWebtoon,
+        }[provider];
 
-        await webtoonRepository.save(webtoonList);
+        for (let i = 0; i < webtoonList.length; i += BATCH_SIZE) {
+          console.log(`🔍 [${provider}] ${i + 1} ~ ${i + BATCH_SIZE} 업데이트`);
+          const batch = webtoonList.slice(i, i + BATCH_SIZE);
+          await connection.manager.save(EntityTarget, batch);
+        }
 
         await dataInfoRepository.save({
           ...updatingDataInfo,
@@ -66,9 +83,12 @@ export const createUpdateMethod =
           updateEndAt: new Date(),
         });
 
+        await connection.commitTransaction();
+
         console.log(`✅ [${provider}] 업데이트 완료`);
-        console.timeEnd('update');
+        console.timeEnd(`${provider}-update`);
       } catch (err) {
+        await connection.rollbackTransaction();
         await dataInfoRepository.save({
           ...updatingDataInfo,
           isHealthy: false,
@@ -76,6 +96,8 @@ export const createUpdateMethod =
         });
         console.error(`🚧 [${provider}] 업데이트 중 오류 발생`);
         console.error(String(err));
+      } finally {
+        await connection.release();
       }
     })();
 

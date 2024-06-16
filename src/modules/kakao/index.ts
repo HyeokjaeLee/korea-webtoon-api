@@ -61,9 +61,7 @@ export const getKakaoWebtoonList = async () => {
         tempNormalizedWeeklyWebtoonMap.values(),
       );
 
-      return process.env.NODE_ENV === 'development'
-        ? [weeklyWebtoonList[0], ...finishedWebtoon.slice(0, 10)]
-        : [...weeklyWebtoonList, ...finishedWebtoon];
+      return [...weeklyWebtoonList, ...finishedWebtoon];
     });
 
   let queue = 0;
@@ -73,7 +71,8 @@ export const getKakaoWebtoonList = async () => {
       async ({ freeWaitHour, id: kakaoWebtoonId, ...webtoon }) => {
         const id = `kakao_${kakaoWebtoonId}`;
 
-        if (freeWaitHour !== undefined) return { id, ...webtoon, freeWaitHour };
+        if (freeWaitHour !== undefined)
+          return { id, ...webtoon, freeWaitHour, isFree: true };
 
         //! 요청 제한을 위한 큐, 카카오 동시 요청 제한 회피
         if (queue > LIMIT_QUEUE) {
@@ -89,12 +88,13 @@ export const getKakaoWebtoonList = async () => {
 
         queue -= 1;
 
+        const waitInterval = data.data.waitForFree?.interval.replace(/\D/g, '');
+
         return {
           ...webtoon,
           id,
-          freeWaitHour: Number(
-            data.data.waitForFree.interval.replace(/\D/g, ''),
-          ),
+          isFree: !!waitInterval,
+          freeWaitHour: waitInterval ? Number(waitInterval) : null,
         };
       },
     ),

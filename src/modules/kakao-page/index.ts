@@ -12,7 +12,7 @@ enum Weekday {
   일 = 'SUN',
 }
 
-const LIMIT_QUEUE = 10;
+const LIMIT_QUEUE = 100;
 
 export const getKakaoPageWebtoonList = async (): Promise<
   NormalizedWebtoon[]

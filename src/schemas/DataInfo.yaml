@@ -1,0 +1,22 @@
+components:
+  schemas:
+    DataInfo:
+      type: object
+      properties:
+        provider:
+          type: string
+          example: 'NAVER'
+        updateStartAt:
+          type: string
+          format: date-time
+          example: '2024-06-16T13:26:29.174Z'
+        updateEndAt:
+          type: string
+          format: date-time
+          example: '2024-06-16T13:26:44.673Z'
+        isHealthy:
+          type: boolean
+          example: true
+        updateRunningTime:
+          type: number
+          example: 15.499

@@ -57,3 +57,12 @@ export class DataInfo {
   @Column({ default: true })
   isHealthy: boolean;
 }
+
+@Entity()
+export class NaverWebtoon extends NormalizedWebtoon {}
+
+@Entity()
+export class KakaoWebtoon extends NormalizedWebtoon {}
+
+@Entity()
+export class KakaoPageWebtoon extends NormalizedWebtoon {}
