@@ -1,13 +1,13 @@
-import { getKakaoPageWebtoonList } from '@/modules/kakao-page';
+import { getKakaoWebtoonList } from '@/modules/kakao';
 import { createUpdateMethod } from './functions/createUpdateMethod';
 
 /**
  * @swagger
- * /update/kakao-page:
+ * /update/kakao:
  *   put:
  *     tags:
  *       - DB Update
- *     summary: 카카오 페이지 웹툰 업데이트 정보를 최신화합니다. (6시간 이상 경과 시)
+ *     summary: 카카오 웹툰 업데이트 정보를 최신화합니다. (6시간 이상 경과 시)
  *     responses:
  *       200:
  *         description: Successfully updated
@@ -19,7 +19,7 @@ import { createUpdateMethod } from './functions/createUpdateMethod';
  *                 provider:
  *                   type: string
  *                   enum: [KAKAO, NAVER, KAKAO_PAGE, RIDI]
- *                   example: KAKAO_PAGE
+ *                   example: KAKAO
  *                   description: 웹툰 공급자
  *                 updateStartAt:
  *                   type: string
@@ -37,7 +37,7 @@ import { createUpdateMethod } from './functions/createUpdateMethod';
  *       500:
  *         description: Internal server error
  */
-export const putKakaoPage = createUpdateMethod({
-  provider: 'KAKAO_PAGE',
-  webtoonCrawler: getKakaoPageWebtoonList,
+export const putKakao = createUpdateMethod({
+  provider: 'KAKAO',
+  webtoonCrawler: getKakaoWebtoonList,
 });

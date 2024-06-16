@@ -12,13 +12,15 @@ enum Weekday {
   일 = 'SUN',
 }
 
+const LIMIT_QUEUE = 10;
+
 export const getKakaoPageWebtoonList = async (): Promise<
   NormalizedWebtoon[]
 > => {
   const webtoonList = await getWebtoonList();
 
   //! 요청 제한을 위한 큐, 카카오 페이지는 동시 요청 횟수 제한이 있는듯
-  const LIMIT_QUEUE = 10;
+
   let queue = 0;
 
   return Promise.all(

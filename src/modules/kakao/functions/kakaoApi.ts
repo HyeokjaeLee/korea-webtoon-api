@@ -2,15 +2,19 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 
 const kakaoApi = axios.create({
-  baseURL: 'https://gateway-kw.kakao.com/section/v2/timetables',
+  baseURL: 'https://gateway-kw.kakao.com',
+  timeout: 30_000,
 });
 
 axiosRetry(kakaoApi, {
   retries: 3,
   retryDelay: (retryCount) => retryCount * 3_000,
+  onRetry: (retry, _, config) => {
+    console.error(`🚧 [KAKAO] ${config.url} - retry: ${retry}`);
+  },
 });
 
-export enum KAKAO_PAGE_PLACEMENT {
+export enum KAKAO_PLACEMENT {
   COMPLETE = 'timetable_completed',
   MON = 'timetable_mon',
   TUE = 'timetable_tue',
@@ -23,13 +27,19 @@ export enum KAKAO_PAGE_PLACEMENT {
 
 interface KakaoWebtoonCard {
   content: {
-    id: string;
-    //! 실제 웹툰 페이지 URL에 쓰임
+    id: number;
+    /**
+     * @description 실제 웹툰 페이지 URL에 쓰임
+     * @example "내일도-출근"
+     */
     seoId: string;
     title: string;
     badges: {
-      title: 'FREE_PUBLISHING' | 'WAIT_FOR_FREE_PLUS';
-      type: 'INFO';
+      /**
+       * @description 'WAIT_FOR_FREE'는 티켓정보를 확인해야함
+       */
+      title: 'FREE_PUBLISHING' | 'WAIT_FOR_FREE_PLUS' | 'up' | 'WAIT_FOR_FREE';
+      type: 'INFO' | 'UP';
     }[];
     adult: boolean;
     authors: {
@@ -43,7 +53,7 @@ interface KakaoWebtoonCard {
   };
 }
 
-interface GetWebtoonListByPlacementResponse {
+export interface GetWebtoonListByPlacementResponse {
   data: [
     {
       cardGroups: [
@@ -55,11 +65,33 @@ interface GetWebtoonListByPlacementResponse {
   ];
 }
 
-export const getWebtoonListByPlacement = (placement: KAKAO_PAGE_PLACEMENT) =>
-  kakaoApi.get<GetWebtoonListByPlacementResponse>(
-    `/days?placement=${placement}`,
+export const getWebtoonListByPlacement = (placement: KAKAO_PLACEMENT) => {
+  console.info(`⌛️ [KAKAO] placement: ${placement} - 웹툰 리스트 정보 요청`);
+  return kakaoApi.get<GetWebtoonListByPlacementResponse>(
+    `/section/v2/timetables/days?placement=${placement}`,
   );
+};
 
-//https://gateway-kw.kakao.com/section/v2/timetables/days?placement=timetable_completed
+interface TicketData {
+  data: {
+    waitForFree: {
+      /**
+       * @example "PT72H" - 72시간
+       */
+      interval: string;
+    };
+  };
+}
 
-//https://gateway-kw.kakao.com/section/v2/timetables/days?placement=timetable_tue
+export const getTicketInfo = (id: number) => {
+  console.info(`⌛️ [KAKAO] id: ${id} - 티켓 정보 요청`);
+  return kakaoApi.get<TicketData>(
+    `/ticket/v1/views/ticket-charged-summary?contentId=${id}&limit=30`,
+    {
+      headers: {
+        //! 해당 헤더가 없으면 403 에러 발생
+        'Accept-Language': 'ko',
+      },
+    },
+  );
+};

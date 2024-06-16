@@ -3,11 +3,15 @@ import axiosRetry from 'axios-retry';
 
 const naverApi = axios.create({
   baseURL: 'https://comic.naver.com/api/webtoon/titlelist',
+  timeout: 30_000,
 });
 
 axiosRetry(naverApi, {
   retries: 3,
   retryDelay: (retryCount) => retryCount * 3_000,
+  onRetry: (retry, _, config) => {
+    console.error(`🚧 [NAVER] ${config.url} - retry: ${retry}`);
+  },
 });
 
 export interface NaverWebtoonTitle {
@@ -32,8 +36,9 @@ export const getDailyPlusWebtoonList = () =>
     titleList: NaverWebtoonTitle[];
   }>('/weekday?week=dailyPlus&order=user');
 
-export const getweeklyWebtoonList = () =>
-  naverApi.get<{
+export const getweeklyWebtoonList = () => {
+  console.info(`⌛️ [NAVER] - 요일별 웹툰 정보 요청`);
+  return naverApi.get<{
     titleListMap: {
       FRIDAY: NaverWebtoonTitle[];
       MONDAY: NaverWebtoonTitle[];
@@ -44,9 +49,13 @@ export const getweeklyWebtoonList = () =>
       WEDNESDAY: NaverWebtoonTitle[];
     };
   }>('/weekday?order=user');
+};
 
-export const getFinishedWebtoonList = (page: number) =>
-  naverApi.get<{
+export const getFinishedWebtoonList = (page: number) => {
+  console.info(`⌛️ [NAVER] - 완결 웹툰 정보 요청`);
+
+  return naverApi.get<{
     titleList: NaverWebtoonTitle[];
     pageInfo: { totalPages: number };
   }>(`/finished?page=${page}&order=UPDATE`);
+};

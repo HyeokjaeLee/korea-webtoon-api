@@ -41,6 +41,7 @@ export const createUpdateMethod =
 
     const updatingDataInfo = {
       ...dataInfo,
+      provider,
       updateStartAt: new Date(),
       updateEndAt: null,
     };
@@ -49,7 +50,7 @@ export const createUpdateMethod =
 
     (async () => {
       try {
-        console.log(`[${provider}] 업데이트 시작`);
+        console.log(`🚀 [${provider}] 업데이트 시작`);
         console.time('update');
 
         const webtoonList = await webtoonCrawler();
@@ -65,7 +66,7 @@ export const createUpdateMethod =
           updateEndAt: new Date(),
         });
 
-        console.log(`[${provider}] 업데이트 완료`);
+        console.log(`✅ [${provider}] 업데이트 완료`);
         console.timeEnd('update');
       } catch (err) {
         await dataInfoRepository.save({
@@ -73,8 +74,8 @@ export const createUpdateMethod =
           isHealthy: false,
           updateEndAt: new Date(),
         });
-        console.error(`[${provider}] 업데이트 중 오류 발생`);
-        console.error(err);
+        console.error(`🚧 [${provider}] 업데이트 중 오류 발생`);
+        console.error(String(err));
       }
     })();
 
