@@ -42,9 +42,5 @@
     "prettier": "^3.3.1",
     "ts-node-dev": "^2.0.0"
   },
-  "engines": {
-    "node": "22.x",
-    "yarn": "4.3.x"
-  },
   "packageManager": "yarn@4.3.0"
 }
