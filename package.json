@@ -22,7 +22,6 @@
   "scripts": {
     "dev": "NODE_ENV=development && ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/index.ts",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
-    "heroku-postbuild": "yarn install --immutable",
     "postinstall": "yarn dlx @yarnpkg/sdks vscode"
   },
   "devDependencies": {
@@ -41,6 +40,5 @@
     "eslint-plugin-node": "^11.1.0",
     "prettier": "^3.3.1",
     "ts-node-dev": "^2.0.0"
-  },
-  "packageManager": "yarn@4.3.0"
+  }
 }
