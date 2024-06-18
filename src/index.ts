@@ -45,4 +45,6 @@ const PORT = 3000;
   app.get(ROUTES.HEALTH_CHECK, getHealthCheck);
 
   app.get(ROUTES.GET_WEBTOONS, getWebtoons);
+
+  app.get('/', (_, res) => res.redirect(ROUTES.SWAGGER));
 })();

@@ -6,7 +6,6 @@
   "author": "HyeokjaeLee <leehyeokjae97@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@yarnpkg/pnpify": "^4.1.0",
     "axios": "^1.7.2",
     "axios-retry": "^4.4.0",
     "cors": "^2.8.5",
@@ -22,7 +21,7 @@
   },
   "scripts": {
     "dev": "NODE_ENV=development && ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/index.ts",
-    "start": "pnpify ts-node -r tsconfig-paths/register src/index.ts",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "postinstall": "yarn dlx @yarnpkg/sdks vscode"
   },
   "devDependencies": {
@@ -42,9 +41,9 @@
     "prettier": "^3.3.1",
     "ts-node-dev": "^2.0.0"
   },
-  "packageManager": "yarn@4.3.0",
   "engines": {
     "node": "22.x",
     "yarn": "4.3.x"
-  }
+  },
+  "packageManager": "yarn@4.3.0"
 }
