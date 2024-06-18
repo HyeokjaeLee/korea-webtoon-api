@@ -22,6 +22,7 @@
   "scripts": {
     "dev": "NODE_ENV=development && ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/index.ts",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "heroku-postbuild": "yarn install --immutable",
     "postinstall": "yarn dlx @yarnpkg/sdks vscode"
   },
   "devDependencies": {
