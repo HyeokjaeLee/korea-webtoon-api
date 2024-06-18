@@ -14,4 +14,4 @@
 
 # **🙏 Request**
 
-웹툰 정보를 요청하는 API에 대한 자세한 설명은 [Swagger 문서](https://korea-webtoon-api.herokuapp.com/api-docs)에서 확인할 수 있습니다.
+웹툰 정보를 요청하는 API에 대한 자세한 설명은 [Swagger 문서](https://korea-webtoon-api-cc7dda2f0d77.herokuapp.com/api-docs)에서 확인할 수 있습니다.
